@@ -7,4 +7,5 @@
 
 ### 🖼️ Diagrama de Classes UML
 
-<img alt="diagramaUML" src="https://github.com/user-attachments/assets/49d9a7d1-8a1d-4b0e-9db0-6394ea2d54f9" />
+<img width="859" height="836" alt="DiagramaAtualizado" src="https://github.com/user-attachments/assets/4567fde9-d02f-402b-b828-0170973a18ae" />
+
