@@ -145,6 +145,7 @@ Ajuda o usuário a aproveitar ingredientes em casa antes que vençam:
 
 <img width="859" height="836" alt="Diagrama de Classes NutriConect" src="https://github.com/user-attachments/assets/4567fde9-d02f-402b-b828-0170973a18ae" />
 
+
 ## Funcionalidades
 
 _(Seção a ser detalhada)_
