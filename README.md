@@ -93,25 +93,29 @@ A principal característica do público-alvo do NutriConect é justamente a cone
 
 Nesse contexto, o NutriConect atua como uma ponte entre quem pode doar e quem precisa receber, tornando o processo mais organizado, acessível e eficiente. A proposta não é apenas reduzir o desperdício de alimentos, mas também fortalecer a colaboração entre comerciantes, moradores e instituições sociais, transformando um problema cotidiano em uma oportunidade de gerar impacto positivo na comunidade.
 
-## Inteligência Artificial no Aplicativo
 
-O aplicativo utiliza duas abordagens complementares de Inteligência Artificial para combater o desperdício de alimentos e promover a segurança alimentar:
+## Inteligência Artificial (`IAGenerativaReceitas`)
 
-### 1. Algoritmo de Matching Geográfico por Raio (Localização de ONGs)
+Um dos grandes diferenciais do projeto é a integração com **Inteligência Artificial Generativa**, focada no **Aproveitamento Total dos Alimentos** e no combate ao desperdício.
 
-Mapeia e conecta pessoas que precisam de alimento às ONGs parceiras mais próximas para retirada imediata:
+###  Como Funciona
+Enquanto o sistema gerencia as doações e a logística de estoque, o serviço de IA auxilia as ONGs e doadores a reaproveitarem ao máximo os insumos disponíveis (incluindo sobras próprias para consumo, talos e cascas).
 
-- **Mapeamento:** Cadastro geolocalizado de ONGs parceiras com pontos de coleta e distribuição.
-- **Busca por Proximidade:** Identificação da localização do usuário e cálculo do raio de distância até os pontos de distribuição.
-- **Recomendação Inteligente:** Priorização das ONGs mais próximas com itens disponíveis para facilitar o deslocamento.
+1. **Entrada de Dados:** O usuário ou ONG seleciona ou digita a lista de ingredientes disponíveis em mãos (ex: *arroz de ontem, casca de abóbora, frango*).
+2. **Processamento:** A aplicação envia essa lista para a classe de serviço `IAGenerativaReceitas`.
+3. **Resposta Criativa:** A IA processa os itens e retorna uma receita culinária passo a passo, criativa e nutritiva, evitando o descarte desnecessário de alimentos.
 
-### 2. IA Generativa de Receitas (Visão Computacional e Culinária)
 
-Ajuda o usuário a aproveitar ingredientes em casa antes que vençam:
+### Estrutura Técnica (UML)
 
-- **Reconhecimento por Foto:** Identificação automática dos alimentos a partir de uma foto tirada pelo usuário.
-- **Geração de Receitas:** Sugestões personalizadas de preparo prático e rápido com base nos ingredientes detectados.
-- **Aproveitamento Total:** Foco em consumo consciente e desperdício zero.
+Conforme a arquitetura do sistema:
+
+* **Integração:** A classe `IAGenerativaReceitas` está associada à classe `PedidoDoacao` pela relação `Envia ingredientes >`.
+* **Chave de API (`apiKey: String`):** Atributo responsável pela autenticação com o provedor de IA Generativa.
+* **Método principal:** 
+  ```java
+  gerarReceitaAproveitamentoTotal(ingredientes: List<String>): String
+
 
 ## Modelagem do Sistema (UML)
 
