@@ -1,1 +1,1 @@
-# NutriConect
+NutriConect. As principais classes identificadas são: Entidade, Doador, ONG, Usuário, Alimento, Estoque, PedidoDoacao e Avaliacao, além dos serviços ServicoGeocodificacao, ServicoGeolocalizacao e IAGenerativaReceitas. Essas classes são responsáveis pelo cadastro de participantes, gerenciamento de alimentos e estoque, solicitação de doações, geolocalização, geração de receitas por IA e avaliação das doações realizadas, atendendo aos requisitos definidos para o sistema.
