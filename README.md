@@ -123,4 +123,4 @@ Estrutura de relacionamento
                 /            \
      calcularMelhorMatch   sugerirReceitaNutritiva
 
-Em UML, a relação de Doador e ONG com Usuario deve ser uma generalização/herança, enquanto Doacao associa o doador aos alimentos e à ONG. O GerenciadorIA atua como serviço responsável pelas funcionalidades inteligentes do sistema.
+Em UML, a relação de Doador e ONG com Usuario deve ser uma generalização/herança, enquanto Doação associa o doador aos alimentos e à ONG. O GerenciadorIA atua como serviço responsável pelas funcionalidades inteligentes do sistema.
