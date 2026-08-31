@@ -10,4 +10,4 @@
   
 ### 🖼️ Diagrama de Classes UML
 
-<img width="859" height="836" alt="DiagramaAtualizado" src="https://github.com/user-attachments/assets/ef381f95-dd6f-42c6-8d3f-707ce8f5c590" />
+<img width="1370" height="836" alt="diagrama_UML2semestre" src="https://github.com/user-attachments/assets/199b9122-330a-4605-a348-d3095d034390" />
