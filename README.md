@@ -115,8 +115,6 @@ Ajuda o usuário a aproveitar ingredientes em casa antes que vençam:
 
 ## Modelagem do Sistema (UML)
 
-# NutriConect
-
 ### 📐 Especificação das Entidades e Métodos (UML)
 
 * **Entidade (Classe Base):** Centraliza os dados cadastrais gerais e geolocalização (`id: int`, `razaoSocial: String`, `cnpj: String`, `cep: String`, `telefone: String`, `endereco: String`, `latitude: double`, `longitude: double`).
