@@ -1,60 +1,21 @@
 # NutriConect
 
-Perfil do Público-Alvo
-Dentro do projeto NutriConect, existem dois principais públicos-alvo: os
-Doadores e os Receptores. Embora possuam necessidades e objetivos
-diferentes, ambos estão diretamente relacionados à proposta do aplicativo, que
-busca criar uma ponte entre alimentos que poderiam ser desperdiçados e
-pessoas ou instituições que necessitam desses recursos.
+Dentro do projeto NutriConect, existem dois principais públicos-alvo: os Doadores e os Receptores. Embora possuam funções diferentes dentro da plataforma, ambos estão diretamente conectados pelo objetivo de facilitar a destinação de alimentos que ainda estão próprios para consumo e que poderiam ser desperdiçados.
 
-Doadores
-O primeiro público-alvo é formado pelos doadores, que podem ser
-comerciantes, feirantes, supermercados locais, pequenos estabelecimentos e
-também moradores que possuam alimentos próprios para consumo que não
-serão mais utilizados. Esses usuários terão um papel fundamental no
-funcionamento do NutriConect, pois serão responsáveis por disponibilizar os
-alimentos que poderão ser destinados a instituições e comunidades em
-situação de vulnerabilidade social.
-Entre as principais características desse público está a necessidade de
-encontrar uma forma simples, rápida e segura de realizar doações, evitando
-que alimentos ainda próprios para consumo sejam descartados. No caso de
-comerciantes e estabelecimentos, por exemplo, podem existir produtos
-próximos da data de validade, alimentos que não atendem mais aos padrões
-comerciais de aparência ou itens que não foram vendidos dentro do período
-esperado, mas que ainda apresentam condições adequadas para consumo.
-O aplicativo pretende facilitar esse processo, permitindo que o doador informe
-quais alimentos estão disponíveis, a quantidade, as condições para retirada e
-outras informações necessárias. Dessa forma, além de contribuir para a
-redução do desperdício, o doador poderá participar de uma ação social de
-maneira prática e organizada.
+O primeiro público-alvo é formado pelos doadores, que podem ser comerciantes, feirantes, supermercados locais, pequenos estabelecimentos e outros responsáveis por disponibilizar alimentos para doação. Também podem fazer parte desse grupo moradores que possuam alimentos excedentes e que não serão utilizados. No sistema, o doador possui informações cadastrais, como razão social, CNPJ, CEP, telefone e endereço, além de dados de localização, como latitude e longitude. Essas informações são importantes para que o aplicativo consiga identificar a localização dos alimentos disponíveis e facilitar a conexão com instituições próximas.
 
-Receptores
-O segundo público-alvo é formado pelos receptores, que incluem gestores de
-Organizações Não Governamentais (ONGs), abrigos, cozinhas comunitárias,
-projetos sociais e outras instituições que atendam pessoas em situação de
-vulnerabilidade social.
-Esse público enfrenta, em muitos casos, dificuldades relacionadas à falta de
-recursos financeiros para a aquisição regular de alimentos, além dos
-desafios para encontrar doações e organizar sua logística de recebimento. Por
-esse motivo, o NutriConect busca oferecer uma maneira mais direta de
-localizar alimentos disponíveis para doação e estabelecer contato com
-possíveis doadores.
-Para os receptores, o aplicativo poderá facilitar a identificação de
-oportunidades de doação de acordo com suas necessidades, localização e
-capacidade de recebimento. Isso contribui para que os alimentos sejam
-destinados de maneira mais eficiente, reduzindo o tempo entre a oferta e o
-recebimento da doação.
+Cada doador também possui um estoque, no qual podem ser cadastrados os alimentos disponíveis para doação. Esses alimentos possuem informações como nome, quantidade, unidade de medida, data de validade e status. Dessa forma, o sistema consegue organizar os itens disponíveis e acompanhar sua movimentação, desde o cadastro até a doação ou reserva. Um dos principais problemas enfrentados por esse público é a dificuldade de encontrar uma destinação adequada para alimentos que, apesar de próximos da data de validade ou fora dos padrões comerciais, ainda podem ser consumidos. O NutriConect busca tornar esse processo mais simples, permitindo que o doador disponibilize os alimentos na plataforma e encontre instituições interessadas em recebê-los.
 
-Relação entre os públicos
-A principal característica do público-alvo do NutriConect é justamente a
-conexão entre esses dois grupos. De um lado, existem pessoas e
-estabelecimentos que possuem alimentos excedentes e que, sem uma
-alternativa adequada, poderiam acabar sendo descartados. Do outro, existem
-instituições que necessitam desses alimentos para atender pessoas em
-situação de vulnerabilidade.
-Nesse contexto, o NutriConect atua como uma ponte entre quem pode doar e
-quem precisa receber, tornando o processo mais organizado, acessível e
-eficiente. A proposta não é apenas reduzir o desperdício de alimentos, mas
-também fortalecer a colaboração entre comerciantes, moradores e instituições
-sociais, transformando um problema cotidiano em uma oportunidade de gerar
-impacto positivo na comunidade
+O segundo público-alvo é formado pelos receptores, principalmente ONGs, abrigos, cozinhas comunitárias e outras instituições que atendem pessoas em situação de vulnerabilidade social. No sistema, as ONGs possuem informações próprias de identificação, como registro social e limite de reservas ativas. Essas instituições podem utilizar o NutriConect para localizar doações disponíveis em sua região, realizar pedidos de alimentos e acompanhar as reservas realizadas. A localização é um elemento importante nesse processo, pois o sistema possui recursos de geolocalização capazes de calcular a distância entre os envolvidos e organizar os alimentos de acordo com a proximidade.
+
+Além da necessidade de alimentos, os receptores enfrentam dificuldades relacionadas à falta de recursos financeiros, à disponibilidade irregular de doações e à organização da logística de recebimento. Dessa maneira, o aplicativo busca reduzir essas dificuldades ao aproximar diretamente instituições que precisam de alimentos dos locais que possuem itens disponíveis para doação.
+
+Além dos dois públicos principais, o sistema possui a entidade Usuário, responsável pelo acesso e pelas operações realizadas na plataforma. Cada usuário possui informações como nome, e-mail, função ou papel no sistema e dados de autenticação. Isso permite que diferentes pessoas possam utilizar a plataforma de acordo com sua função, realizando ações como gerenciar estoques, disponibilizar alimentos, solicitar doações e acompanhar pedidos.
+
+A principal função do NutriConect é estabelecer uma ponte entre os doadores e os receptores. O doador cadastra os alimentos disponíveis em seu estoque, enquanto as instituições receptoras podem localizar essas oportunidades e realizar pedidos de doação. Após a solicitação, o sistema permite organizar o pedido de doação, contendo informações como data da solicitação, previsão de retirada, código de validação por QR Code e status do pedido. Essa estrutura contribui para que o processo seja mais seguro e organizado, permitindo acompanhar a doação desde sua solicitação até a retirada.
+
+O aplicativo também prevê um sistema de avaliação, no qual podem ser registradas notas e comentários relacionados às interações realizadas. Esse recurso pode contribuir para aumentar a confiabilidade entre os participantes da plataforma. Outro recurso importante é a geolocalização, que permite identificar instituições e alimentos próximos, utilizando informações de CEP, latitude e longitude. Dessa forma, o NutriConect não apenas conecta quem possui alimentos com quem precisa deles, mas procura realizar essa conexão de maneira mais eficiente, considerando também a proximidade entre os envolvidos.
+
+Dessa forma, o público-alvo do NutriConect pode ser dividido em dois grupos principais: os doadores, representados por comerciantes, feirantes, supermercados locais, pequenos estabelecimentos e moradores que possuem alimentos excedentes próprios para consumo; e os receptores, representados por ONGs, abrigos, cozinhas comunitárias e outras instituições que utilizam os alimentos recebidos para atender pessoas em situação de vulnerabilidade social. A relação entre esses públicos é o principal elemento da proposta do NutriConect. Enquanto os doadores possuem alimentos que poderiam ser desperdiçados, os receptores possuem a necessidade de obter esses alimentos para suas atividades sociais. O aplicativo busca conectar essas duas necessidades de forma organizada, utilizando recursos de estoque, pedidos, reservas, geolocalização e avaliações.
+
+Assim, o NutriConect contribui para a redução do desperdício de alimentos e para o fortalecimento da distribuição de alimentos a pessoas em situação de vulnerabilidade, estando alinhado ao ODS 2 — Fome Zero e Agricultura Sustentável.
