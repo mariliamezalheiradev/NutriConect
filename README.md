@@ -11,3 +11,7 @@
 ### 🖼️ Diagrama de Classes UML
 
 <img width="1370" height="836" alt="diagrama_UML2semestre" src="https://github.com/user-attachments/assets/199b9122-330a-4605-a348-d3095d034390" />
+
+### 🖼️ Diagrama C4 - Nível 2
+
+<img width="1026" height="896" alt="Sistema c4 (nivel 2)" src="https://github.com/user-attachments/assets/915075c4-62c4-4966-8722-d8ce2d7b091e" />
