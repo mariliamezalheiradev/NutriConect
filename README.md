@@ -11,4 +11,7 @@
 
 <img width="1370" height="836" alt="diagrama_UML2semestre" src="https://github.com/user-attachments/assets/95108537-80f0-4c71-8c8b-7c4a93809f5f" />
 
+### 🖼️ Diagrama C4 - Nível 1
+
+<img width="815" height="796" alt="sistema c4 (nivel 1)" src="https://github.com/user-attachments/assets/1e418fee-9709-4397-8060-a98c8c773f8d" />
 
