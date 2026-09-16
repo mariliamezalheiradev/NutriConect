@@ -113,7 +113,7 @@ O diagrama de contexto ilustra a visão macro do NutriConect, mostrando nossos p
 
 > **Nota:** O Nível 1 demonstra a relação de atores externos com o ecossistema NutriConect.
 
-<img width="1370" height="836" alt="c4-nivel1" src="https://github.com/NutriConect/docs/33c9f330-de06-4be3-9c03-261a01cbf627" />
+![c4 nível 1](docs/c4-nivel1.jpeg)
 
 ### Diagrama de Contêineres (Nível 2)
 
