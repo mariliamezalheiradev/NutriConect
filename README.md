@@ -98,9 +98,11 @@ Um dos grandes diferenciais do projeto é a integração com **Inteligência Art
 ###  Como Funciona
 Enquanto o sistema gerencia as doações e a logística de estoque, o serviço de IA auxilia as ONGs e doadores a reaproveitarem ao máximo os insumos disponíveis (incluindo sobras próprias para consumo, talos e cascas).
 
-1. **Entrada de Dados:** O usuário ou ONG seleciona ou digita a lista de ingredientes disponíveis em mãos (ex: *arroz de ontem, casca de abóbora, frango*).
-2. **Processamento:** A aplicação envia essa lista para a classe de serviço `IAGenerativaReceitas`.
-3. **Resposta Criativa:** A IA processa os itens e retorna uma receita culinária passo a passo, criativa e nutritiva, evitando o descarte desnecessário de alimentos.
+**Entrada de Dados:** O usuário ou ONG seleciona ou digita a lista de ingredientes disponíveis em mãos (ex: *arroz de ontem, casca de abóbora, frango*).
+
+**Processamento:** A aplicação envia essa lista para a classe de serviço `IAGenerativaReceitas`.
+
+**Resposta Criativa:** A IA processa os itens e retorna uma receita culinária passo a passo, criativa e nutritiva, evitando o descarte desnecessário de alimentos.
   
 ## Arquitetura do Sistema (Modelo C4)
 
