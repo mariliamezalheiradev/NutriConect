@@ -20,9 +20,10 @@ O diagrama de contexto ilustra a visão macro do NutriConect, mostrando nossos p
 > ![Diagrama de Contexto - Nível 1](docs/c4-nivel1.jpeg) 
 
 ### Diagrama de Contêineres (Nível 2)
-Este diagrama faz um "zoom" no nosso sistema, detalhando os grandes blocos de execução, suas tecnologias e como os dados fluem entre eles.
 
-![Diagrama de Contêineres - Nível 2](docs/c4-nivel2.jpeg) 
+> **Nota:** O Nível 2 deste diagrama faz um "zoom" no nosso sistema, detalhando os grandes blocos de execução, suas tecnologias e como os dados fluem entre eles.
+>
+> ![Diagrama de Contêineres - Nível 2](docs/c4-nivel2.jpeg) 
 
 ### Justificativas Técnicas
 
