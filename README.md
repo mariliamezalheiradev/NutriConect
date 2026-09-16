@@ -129,12 +129,12 @@ As escolhas arquiteturais foram feitas pensando no crescimento sustentável da p
 * **Banco de Dados Relacional (PostgreSQL/MySQL):** Garante a integridade referencial complexa necessária para vincular de forma consistente os Doadores, ONGs, Estoques e Históricos de Transações.
 * **Integração com API de Geocodificação:** Vital para o nosso algoritmo de Matching Geográfico por Raio. O backend converte os CEPs cadastrados em coordenadas (Latitude e Longitude), permitindo que o sistema calcule a distância e sugira as ONGs mais próximas de forma eficiente.
 
-### Funcionalidades
+## Funcionalidades
 
-### Tecnologias Utilizadas
+## Tecnologias Utilizadas
 
-### Instalação
+## Instalação
 
-### Como Usar
+## Como Usar
 
-### Contribuição
+## Contribuição
