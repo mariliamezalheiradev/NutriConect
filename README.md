@@ -36,10 +36,10 @@ No contexto local, observa se um paradoxo recorrente: enquanto estabelecimentos 
 
 Supermercados, feiras, padarias, restaurantes e outros estabelecimentos comerciais descartam, diariamente, grandes volumes de alimentos que ainda estão em condições adequadas para consumo. Esse desperdício ocorre por diversos motivos, entre eles:
 
-- Vencimento de prazos comerciais, muitas vezes anteriores à data real de validade;
-- Excesso de produção ou compra, gerando sobras não comercializadas;
-- Padrões estéticos de mercado, que descartam alimentos com aparência fora do padrão, mesmo estando próprios para consumo;
-- Ausência de processos estruturados de doação, que fazem com que o descarte se torne o caminho mais simples e imediato para o comerciante.
+* Vencimento de prazos comerciais, muitas vezes anteriores à data real de validade;
+* Excesso de produção ou compra, gerando sobras não comercializadas;
+* Padrões estéticos de mercado, que descartam alimentos com aparência fora do padrão, mesmo estando próprios para consumo;
+* Ausência de processos estruturados de doação, que fazem com que o descarte se torne o caminho mais simples e imediato para o comerciante.
 
 Esse cenário resulta em perdas econômicas para os comércios, impacto ambiental significativo (como emissão de gases de efeito estufa por alimentos em decomposição em aterros) e, sobretudo, no desperdício de um recurso que poderia estar suprindo necessidades básicas da população.
 
@@ -58,10 +58,10 @@ Essa combinação de fatores evidencia a necessidade de uma solução que organi
 
 Diante desse cenário, o sistema desenvolvido neste projeto tem como objetivo oferecer às ONGs uma ferramenta de gestão que permita:
 
-- Registrar e organizar doações recebidas de comércios locais;
-- Gerenciar estoque de alimentos de forma simples e acessível;
-- Acompanhar a distribuição para beneficiários;
-- Facilitar a comunicação e o histórico de parcerias com doadores.
+* Registrar e organizar doações recebidas de comércios locais;
+* Gerenciar estoque de alimentos de forma simples e acessível;
+* Acompanhar a distribuição para beneficiários;
+* Facilitar a comunicação e o histórico de parcerias com doadores.
 
 Com isso, busca se reduzir o desperdício de alimentos, fortalecer a capacidade operacional das ONGs e contribuir de forma concreta para as metas do ODS 2 no contexto local.
 
@@ -85,15 +85,11 @@ Esse público enfrenta, em muitos casos, dificuldades relacionadas à falta de r
 
 ## Modelagem do Sistema (UML)
 
-**Entidade (Classe Base):** Centraliza os dados cadastrais gerais e geolocalização (id: int, razaoSocial: String, cnpj: String, cep: String, telefone: String, endereco: String, latitude: double, longitude: double).
-
-**Usuario:** Gerencia autenticação e papéis de acesso no sistema (id: int, authId: String, nome: String, email: String, papel: String) com o método fazerLogin(): boolean.
-
-**Doador (Especialização de Entidade):** Representa o doador da plataforma, contendo o atributo de negócio tipoComercio: Enum.
-
-**ONG (Especialização de Entidade):** Representa a instituição receptora com registroSocial: String e limiteReservasAtivas: int.
-
-**Serviços de Localização:** O ServicoGeocodificacao faz a conversão via buscarCoordenadasPorCep(cep: String): Coordenadas, enquanto o ServicoGeolocalizacao realiza o cálculo via calcularDistanciaHaversine(...) e a ordenação de feed por proximidade via ordenarFeedPorProximidade(...).
+* **Entidade (Classe Base):** Centraliza os dados cadastrais gerais e geolocalização (id: int, razaoSocial: String, cnpj: String, cep: String, telefone: String, endereco: String, latitude: double, longitude: double).
+* **Usuario:** Gerencia autenticação e papéis de acesso no sistema (id: int, authId: String, nome: String, email: String, papel: String) com o método fazerLogin(): boolean.
+* **Doador (Especialização de Entidade):** Representa o doador da plataforma, contendo o atributo de negócio tipoComercio: Enum.
+* **ONG (Especialização de Entidade):** Representa a instituição receptora com registroSocial: String e limiteReservasAtivas: int.
+* **Serviços de Localização:** O ServicoGeocodificacao faz a conversão via buscarCoordenadasPorCep(cep: String): Coordenadas, enquanto o ServicoGeolocalizacao realiza o cálculo via calcularDistanciaHaversine(...) e a ordenação de feed por proximidade via ordenarFeedPorProximidade(...).
 
 ## Inteligência Artificial (IAGenerativaReceitas)
 
@@ -103,11 +99,9 @@ Um dos grandes diferenciais do projeto é a integração com Inteligência Artif
 
 Enquanto o sistema gerencia as doações e a logística de estoque, o serviço de IA auxilia as ONGs e doadores a reaproveitarem ao máximo os insumos disponíveis (incluindo sobras próprias para consumo, talos e cascas).
 
-**Entrada de Dados:** O usuário ou ONG seleciona ou digita a lista de ingredientes disponíveis em mãos (ex: arroz de ontem, casca de abóbora, frango).
-
-**Processamento:** A aplicação envia essa lista para a classe de serviço IAGenerativaReceitas.
-
-**Resposta Criativa:** A IA processa os itens e retorna uma receita culinária passo a passo, criativa e nutritiva, evitando o descarte desnecessário de alimentos.
+* **Entrada de Dados:** O usuário ou ONG seleciona ou digita a lista de ingredientes disponíveis em mãos (ex: arroz de ontem, casca de abóbora, frango).
+* **Processamento:** A aplicação envia essa lista para a classe de serviço IAGenerativaReceitas.
+* **Resposta Criativa:** A IA processa os itens e retorna uma receita culinária passo a passo, criativa e nutritiva, evitando o descarte desnecessário de alimentos.
 
 ## Arquitetura do Sistema (Modelo C4)
 
@@ -127,10 +121,7 @@ O diagrama de contexto ilustra a visão macro do NutriConect, mostrando nossos p
 
 As escolhas arquiteturais foram feitas pensando no crescimento sustentável da plataforma e na segurança dos dados:
 
-**Backend em Java com Spring Boot:** A escolha deste ecossistema garante alta escalabilidade para lidar com um volume crescente de doações e acessos simultâneos. Além disso, oferece um módulo nativo rigoroso de segurança (Spring Security), essencial para proteger dados sensíveis de usuários e organizações.
-
-**Consumo Isolado da Google Gemini API (Inteligência Artificial):** A comunicação com o Google AI Studio para a nossa geração de receitas focada no ODS 2 é feita exclusivamente pelo nosso servidor Backend (Java). Esse isolamento protege nossas chaves de API contra interceptação no lado do cliente e centraliza as regras de negócio. O aplicativo apenas interage com a nossa API, que por sua vez consome a IA e devolve o resultado seguro.
-
-**Banco de Dados Relacional (PostgreSQL/MySQL):** Garante a integridade referencial complexa necessária para vincular de forma consistente os Doadores, ONGs, Estoques e Históricos de Transações.
-
-**Integração com API de Geocodificação:** Vital para o nosso algoritmo de Matching Geográfico por Raio. O backend converte os CEPs cadastrados em coordenadas (Latitude e Longitude), permitindo que o sistema calcule a distância e sugira as ONGs mais próximas de forma eficiente.
+* **Backend em Java com Spring Boot:** A escolha deste ecossistema garante alta escalabilidade para lidar com um volume crescente de doações e acessos simultâneos. Além disso, oferece um módulo nativo rigoroso de segurança (Spring Security), essencial para proteger dados sensíveis de usuários e organizações.
+* **Consumo Isolado da Google Gemini API (Inteligência Artificial):** A comunicação com o Google AI Studio para a nossa geração de receitas focada no ODS 2 é feita exclusivamente pelo nosso servidor Backend (Java). Esse isolamento protege nossas chaves de API contra interceptação no lado do cliente e centraliza as regras de negócio. O aplicativo apenas interage com a nossa API, que por sua vez consome a IA e devolve o resultado seguro.
+* **Banco de Dados Relacional (PostgreSQL/MySQL):** Garante a integridade referencial complexa necessária para vincular de forma consistente os Doadores, ONGs, Estoques e Históricos de Transações.
+* **Integração com API de Geocodificação:** Vital para o nosso algoritmo de Matching Geográfico por Raio. O backend converte os CEPs cadastrados em coordenadas (Latitude e Longitude), permitindo que o sistema calcule a distância e sugira as ONGs mais próximas de forma eficiente.
