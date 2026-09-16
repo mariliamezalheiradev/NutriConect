@@ -17,7 +17,6 @@ Sistema de gestão desenvolvido para apoiar Organizações Não Governamentais (
 * [Instalação](#instalação)
 * [Como Usar](#como-usar)
 * [Contribuição](#contribuição)
-* [Licença](#licença)
 ## Sobre o Projeto
 
 Este repositório contém o código fonte de um sistema de gestão desenvolvido para apoiar Organizações Não Governamentais (ONGs) no processo de captação, organização e distribuição de alimentos doados por comércios locais. O sistema busca reduzir o desperdício alimentar e fortalecer a capacidade operacional de instituições que atuam diretamente no combate à fome.
@@ -129,3 +128,13 @@ As escolhas arquiteturais foram feitas pensando no crescimento sustentável da p
 * **Consumo Isolado da Google Gemini API (Inteligência Artificial):** A comunicação com o Google AI Studio para a nossa geração de receitas focada no ODS 2 é feita exclusivamente pelo nosso servidor Backend (Java). Esse isolamento protege nossas chaves de API contra interceptação no lado do cliente e centraliza as regras de negócio. O aplicativo apenas interage com a nossa API, que por sua vez consome a IA e devolve o resultado seguro.
 * **Banco de Dados Relacional (PostgreSQL/MySQL):** Garante a integridade referencial complexa necessária para vincular de forma consistente os Doadores, ONGs, Estoques e Históricos de Transações.
 * **Integração com API de Geocodificação:** Vital para o nosso algoritmo de Matching Geográfico por Raio. O backend converte os CEPs cadastrados em coordenadas (Latitude e Longitude), permitindo que o sistema calcule a distância e sugira as ONGs mais próximas de forma eficiente.
+
+### Funcionalidades
+
+### Tecnologias Utilizadas
+
+### Instalação
+
+### Como Usar
+
+### Contribuição
