@@ -119,6 +119,8 @@ O diagrama de contexto ilustra a visão macro do NutriConect, mostrando nossos p
 
 > **Nota:** O Nível 2 deste diagrama faz um zoom no nosso sistema, detalhando os grandes blocos de execução, suas tecnologias e como os dados fluem entre eles.
 
+![c4 nível 2](docs/c4-nivel2.jpeg)
+
 ### Justificativas Técnicas
 
 As escolhas arquiteturais foram feitas pensando no crescimento sustentável da plataforma e na segurança dos dados:
