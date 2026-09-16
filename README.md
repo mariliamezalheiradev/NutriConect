@@ -131,10 +131,20 @@ As escolhas arquiteturais foram feitas pensando no crescimento sustentável da p
 
 ## Funcionalidades
 
+(A ser adicionado)
+
 ## Tecnologias Utilizadas
+
+(A ser adicionado)
 
 ## Instalação
 
+(A ser adicionado)
+
 ## Como Usar
 
+(A ser adicionado)
+
 ## Contribuição
+
+(A ser adicionado)
