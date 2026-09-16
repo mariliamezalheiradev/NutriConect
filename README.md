@@ -4,20 +4,20 @@ Sistema de gestão desenvolvido para apoiar Organizações Não Governamentais (
 
 ## Índice
 
-* Sobre o Projeto
-* Contextualização: por que o ODS 2
-* O Problema
-* Objetivo do Sistema
-* Público Alvo
-* Inteligência Artificial no Aplicativo
-* Modelagem do Sistema (UML)
-* Funcionalidades
-* Tecnologias Utilizadas
-* Instalação
-* Como Usar
-* Contribuição
-* Licença
-
+* [Sobre o Projeto](#sobre-o-projeto)
+* [Contextualização: por que o ODS 2](#contextualização-por-que-o-ods-2-fome-zero-e-agricultura-sustentável)
+* [O Problema](#o-problema-desperdício-de-alimentos-no-comércio-local-e-vulnerabilidade-das-ongs)
+* [Objetivo do Sistema](#objetivo-do-sistema)
+* [Público Alvo](#público-alvo)
+* [Inteligência Artificial no Aplicativo](#inteligência-artificial-iagenerativareceitas)
+* [Modelagem do Sistema (UML)](#modelagem-do-sistema-uml)
+* [Arquitetura do Sistema (Modelo C4)](#arquitetura-do-sistema-modelo-c4)
+* [Funcionalidades](#funcionalidades)
+* [Tecnologias Utilizadas](#tecnologias-utilizadas)
+* [Instalação](#instalação)
+* [Como Usar](#como-usar)
+* [Contribuição](#contribuição)
+* [Licença](#licença)
 ## Sobre o Projeto
 
 Este repositório contém o código fonte de um sistema de gestão desenvolvido para apoiar Organizações Não Governamentais (ONGs) no processo de captação, organização e distribuição de alimentos doados por comércios locais. O sistema busca reduzir o desperdício alimentar e fortalecer a capacidade operacional de instituições que atuam diretamente no combate à fome.
