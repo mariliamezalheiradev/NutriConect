@@ -149,6 +149,35 @@ Conforme a arquitetura do sistema:
 
 <img width="859" height="836" alt="Diagrama de Classes NutriConect" src="https://github.com/user-attachments/assets/4567fde9-d02f-402b-b828-0170973a18ae" />
 
+## Diagrama Banco de Dados 
+
+O banco de dados foi estruturado para organizar as informações
+relacionadas ao sistema de doações.
+
+O modelo é composto por 10 tabelas principais:
+
+- USUARIO
+- DOADOR
+- RECEPTOR
+- DOACAO
+- ITEM_DOACAO
+- STATUS_DOACAO
+- INGREDIENTE
+- ESTOQUE
+- RECEITA
+- RECEITA_INGREDIENTE
+
+O diagrama apresenta as entidades, seus atributos, chaves
+primárias (PK), chaves estrangeiras (FK) e os relacionamentos
+entre as tabelas.
+
+### Diagrama do Banco de Dados
+
+<img width="859" height="836" alt="<img width="592" height="1592" alt="Diagrama NutriConnect drawio" src="https://github.com/user-attachments/assets/cf15c6bb-9332-4bff-a270-3cf1000e4ad9" />
+
+
+
+
 
 ## Funcionalidades
 
