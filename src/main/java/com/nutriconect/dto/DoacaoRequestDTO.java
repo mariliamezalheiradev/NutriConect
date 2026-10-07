@@ -1,10 +1,18 @@
 package com.nutriconect.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+
 import java.util.List;
 
 public class DoacaoRequestDTO {
+
+    @NotNull(message = "O doador é obrigatório")
     private Long doadorId;
-    private List<String> ingredientes;
+
+    @NotEmpty(message = "Informe ao menos um ingrediente")
+    private List<@NotBlank(message = "Ingrediente não pode ser vazio") String> ingredientes;
 
     public Long getDoadorId() {
         return doadorId;
