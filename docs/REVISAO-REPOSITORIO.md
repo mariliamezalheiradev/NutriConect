@@ -15,12 +15,12 @@ Este documento registra o que foi encontrado e como cada ponto foi resolvido.
 | 6 | `DoacaoService` apenas validava e devolvia texto; DTOs duplicados | **Resolvido.** O serviço grava a doação; `DoacaoDTO` validado substitui o `DoacaoRequestDTO`. |
 | 7 | Senha do usuário em texto puro | **Resolvido.** BCrypt no cadastro; respostas nunca devolvem a senha. |
 | 8 | Branches antigas sem uso (`parte-*`) | **Resolvido.** Conteúdo integrado à `main` e branches removidas. |
+| 9 | Entidades divergiam do diagrama conceitual do banco (sem `item_doacao`, `status_doacao` e `receita_ingrediente`) | **Resolvido.** Modelo alinhado às 10 tabelas do diagrama. |
 
 ## 2. Pendências em aberto
 
 * **Autenticação e autorização:** os endpoints ainda são abertos.
 * **Endpoints que faltam:** cadastro de receptor e de estoque, listagem e atualização de status das doações, persistência das receitas geradas.
-* **Modelo de dados:** alinhar as entidades ao diagrama conceitual (`item_doacao`, `status_doacao`, `receita_ingrediente`), ou atualizar o diagrama para refletir o código.
 * **Migrações de banco:** `spring.jpa.hibernate.ddl-auto=update` serve para desenvolvimento; para produção usar uma ferramenta de migração (Flyway ou Liquibase).
 * **Integração contínua:** não há workflow no GitHub Actions; hoje os testes (`mvn clean test`) são executados manualmente.
 * **Geolocalização:** o matching geográfico por raio, descrito na arquitetura, ainda não foi implementado.

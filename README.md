@@ -96,7 +96,7 @@ Proposta de modelagem relacional elaborada pelo grupo:
 
 ![Diagrama do banco de dados](docs/diagrama-banco-de-dados.drawio.png)
 
-> **Observação:** este diagrama é o modelo conceitual. A implementação atual (entidades JPA) é uma versão mais enxuta: cada `Doacao` referencia um único ingrediente diretamente (sem `item_doacao`), o status da doação é um enum (`StatusDoacao`) em vez de tabela, e `Estoque` guarda doador, ingrediente, quantidade e validade. Evoluir o código para o modelo completo está na lista de próximos passos.
+> **Observação:** as entidades JPA implementam este diagrama (10 tabelas: `tb_usuario`, `tb_doador`, `tb_receptor`, `tb_doacao`, `tb_status_doacao`, `tb_item_doacao`, `tb_ingrediente`, `tb_estoque`, `tb_receita` e `tb_receita_ingrediente`). Pequenas diferenças: `doador` e `receptor` compartilham o `id` do `usuario` (herança JPA, equivalente à relação 1:1 do diagrama), e foram mantidos os campos extras `doador.documento`, `receptor.cnpj`, `receptor.endereco` e `ingrediente.categoria`.
 
 ### Material de referência
 
