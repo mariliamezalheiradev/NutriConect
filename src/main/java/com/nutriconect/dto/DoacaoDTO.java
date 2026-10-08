@@ -2,13 +2,12 @@ package com.nutriconect.dto;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
 public class DoacaoDTO {
 
-    @NotNull(message = "O doador é obrigatório")
+    /** Opcional: se informado, precisa ser o próprio usuário logado. */
     private Long doadorId;
 
     private Long receptorId;

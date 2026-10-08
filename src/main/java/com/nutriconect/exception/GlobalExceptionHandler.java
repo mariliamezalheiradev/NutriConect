@@ -7,6 +7,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -83,6 +85,22 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErroResposta> tratarArgumentoInvalido(IllegalArgumentException ex,
                                                                 HttpServletRequest req) {
         return montar(HttpStatus.BAD_REQUEST, "Dados inválidos", ex.getMessage(), req, null);
+    }
+
+    // ---------- 401 / 403: autenticação e permissão ----------
+
+    @ExceptionHandler({CredenciaisInvalidasException.class, AuthenticationException.class})
+    public ResponseEntity<ErroResposta> tratarNaoAutenticado(RuntimeException ex, HttpServletRequest req) {
+        String mensagem = (ex instanceof CredenciaisInvalidasException)
+                ? ex.getMessage() : "Autenticação necessária ou inválida.";
+        return montar(HttpStatus.UNAUTHORIZED, "Não autenticado", mensagem, req, null);
+    }
+
+    @ExceptionHandler({AcessoNegadoException.class, AccessDeniedException.class})
+    public ResponseEntity<ErroResposta> tratarAcessoNegado(RuntimeException ex, HttpServletRequest req) {
+        String mensagem = (ex instanceof AcessoNegadoException)
+                ? ex.getMessage() : "Você não tem permissão para acessar este recurso.";
+        return montar(HttpStatus.FORBIDDEN, "Acesso negado", mensagem, req, null);
     }
 
     // ---------- 404 / 405 ----------
