@@ -149,7 +149,7 @@ As escolhas arquiteturais foram feitas pensando no crescimento sustentável da p
 * **Cadastro e listagem de ingredientes** (nome, categoria, unidade e validade).
 * **Registro de doações com vários itens**: cada doação tem um doador, um ou mais itens (ingrediente + quantidade) e, opcionalmente, um receptor; nasce com o status `PENDENTE` (os status ficam em uma tabela própria).
 * **Geração de receitas com IA (Google Gemini)**: a partir de uma lista de ingredientes, devolve uma receita de aproveitamento total, alinhada ao ODS 2. Inclui tempo limite e novas tentativas automáticas quando o serviço está sobrecarregado.
-* **Validação de dados e respostas de erro padronizadas** (`400`, `404` e `503`).
+* **Validação de dados e respostas de erro padronizadas** em JSON (`400`, `404`, `405`, `422`, `500` e `503`), sem expor detalhes internos.
 * **Modelo de dados relacional alinhado ao diagrama do grupo**: usuário, doador, receptor, doação, item da doação, status da doação, ingrediente, estoque, receita e receita–ingrediente (10 tabelas).
 
 ### Planejadas
@@ -286,10 +286,25 @@ curl -X POST http://localhost:8080/api/receitas/gerar \
 Resposta (`200`): `{"receita":"..."}`. A resposta da IA pode levar até cerca de 30 segundos.
 
 ### Respostas de erro
+Todo erro volta em JSON, no mesmo formato:
+```json
+{
+  "timestamp": "2026-10-08T22:35:28.68",
+  "status": 422,
+  "erro": "Regra de negócio violada",
+  "mensagem": "Já existe um usuário com este e-mail.",
+  "caminho": "/api/doadores"
+}
+```
+Nos erros de validação, o objeto também traz `"campos"`, com a mensagem de cada campo inválido.
+
 | Código | Quando acontece |
 |---|---|
-| `400` | Dados inválidos ou ausentes, e-mail já cadastrado, doação sem itens, quantidade menor ou igual a zero, ingrediente repetido na doação |
-| `404` | Doador, ingrediente ou receptor informado não existe |
+| `400` | Campos inválidos ou ausentes, JSON malformado ou corpo ausente, parâmetro com tipo errado, doação sem itens, quantidade menor ou igual a zero |
+| `404` | Doador, ingrediente ou receptor informado não existe, ou o endereço não existe |
+| `405` | Método HTTP não aceito naquele endereço |
+| `422` | Regra de negócio violada: e-mail já cadastrado, ingrediente repetido na doação |
+| `500` | Erro inesperado. A resposta traz uma mensagem genérica e o detalhe fica só no log do servidor |
 | `503` | A IA não está configurada, falhou ou está sobrecarregada. Em caso de sobrecarga (`503` ou `429` do Google), o sistema tenta até 3 vezes antes de desistir |
 
 > **Atenção:** a API ainda não tem login, então os endpoints estão abertos. Não a exponha na internet nesta versão.

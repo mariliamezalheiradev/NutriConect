@@ -66,6 +66,7 @@ class DoacaoControllerTest {
         mvc.perform(post("/api/doacoes").contentType(MediaType.APPLICATION_JSON)
                         .content("{\"doadorId\":9,\"itens\":[{\"ingredienteId\":2,\"quantidade\":5}]}"))
                 .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.erro").value("Doador não encontrado: 9"));
+                .andExpect(jsonPath("$.erro").value("Não encontrado"))
+                .andExpect(jsonPath("$.mensagem").value("Doador não encontrado: 9"));
     }
 }

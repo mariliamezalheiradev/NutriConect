@@ -16,6 +16,7 @@ Este documento registra o que foi encontrado e como cada ponto foi resolvido.
 | 7 | Senha do usuário em texto puro | **Resolvido.** BCrypt no cadastro; respostas nunca devolvem a senha. |
 | 8 | Branches antigas sem uso (`parte-*`) | **Resolvido.** Conteúdo integrado à `main` e branches removidas. |
 | 9 | Entidades divergiam do diagrama conceitual do banco (sem `item_doacao`, `status_doacao` e `receita_ingrediente`) | **Resolvido.** Modelo alinhado às 10 tabelas do diagrama. |
+| 10 | Tratamento de erros incompleto (só validação, 404 e IA; rota inexistente, JSON inválido e erros inesperados caíam no padrão do servidor) | **Resolvido.** `GlobalExceptionHandler` cobre 400, 404, 405, 422, 500 e 503 com formato único (`ErroResposta`). |
 
 ## 2. Pendências em aberto
 
