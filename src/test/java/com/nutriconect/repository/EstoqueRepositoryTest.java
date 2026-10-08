@@ -1,6 +1,5 @@
 package com.nutriconect.repository;
 
-import com.nutriconect.model.Doador;
 import com.nutriconect.model.Estoque;
 import com.nutriconect.model.Ingrediente;
 import org.junit.jupiter.api.BeforeEach;
@@ -8,80 +7,65 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.dao.DataIntegrityViolationException;
 
-import java.time.LocalDate;
-import java.util.List;
+import java.math.BigDecimal;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DataJpaTest
 class EstoqueRepositoryTest {
 
     @Autowired private EstoqueRepository estoqueRepository;
-    @Autowired private DoadorRepository doadorRepository;
     @Autowired private IngredienteRepository ingredienteRepository;
 
-    private Doador doador;
-    private Ingrediente ingrediente;
+    private Ingrediente arroz;
+    private Ingrediente feijao;
 
     @BeforeEach
     void setup() {
-        doador = new Doador();
-        doador.setNome("Doador A");
-        doador.setEmail("doador@a.com");
-        doador.setSenha("123");
-        doador.setDocumento("77777777000177");
-        doador = doadorRepository.save(doador);
-
-        ingrediente = new Ingrediente();
-        ingrediente.setNome("Arroz");
-        ingrediente.setCategoria("Grão");
-        ingrediente.setUnidadeMedida("kg");
-        ingrediente = ingredienteRepository.save(ingrediente);
+        arroz = novoIngrediente("Arroz");
+        feijao = novoIngrediente("Feijão");
     }
 
-    private Estoque criarEstoque(Double qtd, LocalDate validade) {
+    private Ingrediente novoIngrediente(String nome) {
+        Ingrediente i = new Ingrediente();
+        i.setNome(nome);
+        i.setUnidade("kg");
+        return ingredienteRepository.save(i);
+    }
+
+    private Estoque novoEstoque(Ingrediente ingrediente, String quantidade) {
         Estoque e = new Estoque();
-        e.setQuantidade(qtd);
-        e.setDataValidade(validade);
-        e.setDoador(doador);
         e.setIngrediente(ingrediente);
+        e.setQuantidade(new BigDecimal(quantidade));
         return e;
     }
 
     @Test
-    @DisplayName("Deve buscar estoque por doador")
-    void deveBuscarPorDoador() {
-        estoqueRepository.save(criarEstoque(10.0, LocalDate.now().plusDays(30)));
-        estoqueRepository.save(criarEstoque(5.0, LocalDate.now().plusDays(60)));
-        List<Estoque> estoques = estoqueRepository.findByDoadorId(doador.getId());
-        assertThat(estoques).hasSize(2);
-    }
-
-    @Test
-    @DisplayName("Deve buscar estoque por ingrediente")
+    @DisplayName("Deve buscar o estoque pelo ingrediente")
     void deveBuscarPorIngrediente() {
-        estoqueRepository.save(criarEstoque(10.0, LocalDate.now().plusDays(30)));
-        List<Estoque> estoques = estoqueRepository.findByIngredienteId(ingrediente.getId());
-        assertThat(estoques).hasSize(1);
+        estoqueRepository.save(novoEstoque(arroz, "10.50"));
+        assertThat(estoqueRepository.findByIngredienteId(arroz.getId()))
+                .get().extracting(Estoque::getQuantidade).isEqualTo(new BigDecimal("10.50"));
+        assertThat(estoqueRepository.findByIngredienteId(feijao.getId())).isEmpty();
     }
 
     @Test
-    @DisplayName("Deve buscar estoques vencidos")
-    void deveBuscarVencidos() {
-        estoqueRepository.save(criarEstoque(10.0, LocalDate.now().minusDays(5)));
-        estoqueRepository.save(criarEstoque(5.0, LocalDate.now().plusDays(10)));
-        List<Estoque> vencidos = estoqueRepository.findByDataValidadeBefore(LocalDate.now());
-        assertThat(vencidos).hasSize(1);
+    @DisplayName("Deve listar estoques abaixo de uma quantidade")
+    void deveListarEstoqueBaixo() {
+        estoqueRepository.save(novoEstoque(arroz, "2.00"));
+        estoqueRepository.save(novoEstoque(feijao, "50.00"));
+        assertThat(estoqueRepository.findByQuantidadeLessThan(new BigDecimal("5")))
+                .extracting(e -> e.getIngrediente().getNome()).containsExactly("Arroz");
     }
 
     @Test
-    @DisplayName("Deve buscar estoques ainda válidos")
-    void deveBuscarValidos() {
-        estoqueRepository.save(criarEstoque(10.0, LocalDate.now().minusDays(5)));
-        estoqueRepository.save(criarEstoque(5.0, LocalDate.now().plusDays(10)));
-        estoqueRepository.save(criarEstoque(3.0, LocalDate.now().plusDays(20)));
-        List<Estoque> validos = estoqueRepository.findByDataValidadeAfter(LocalDate.now());
-        assertThat(validos).hasSize(2);
+    @DisplayName("Cada ingrediente só pode ter uma linha de estoque (relação 1:1)")
+    void deveImpedirEstoqueDuplicado() {
+        estoqueRepository.saveAndFlush(novoEstoque(arroz, "1"));
+        assertThatThrownBy(() -> estoqueRepository.saveAndFlush(novoEstoque(arroz, "2")))
+                .isInstanceOf(DataIntegrityViolationException.class);
     }
 }

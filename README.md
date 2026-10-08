@@ -133,11 +133,11 @@ As escolhas arquiteturais foram feitas pensando no crescimento sustentável da p
 
 ### Disponíveis nesta versão
 * **Cadastro de doadores**, com senha criptografada (BCrypt) e verificação de e-mail duplicado.
-* **Cadastro e listagem de ingredientes** (nome, categoria e unidade de medida).
-* **Registro de doações**: vincula doador, ingrediente e quantidade; a doação nasce com o status `PENDENTE` e pode, opcionalmente, ter um receptor.
+* **Cadastro e listagem de ingredientes** (nome, categoria, unidade e validade).
+* **Registro de doações com vários itens**: cada doação tem um doador, um ou mais itens (ingrediente + quantidade) e, opcionalmente, um receptor; nasce com o status `PENDENTE` (os status ficam em uma tabela própria).
 * **Geração de receitas com IA (Google Gemini)**: a partir de uma lista de ingredientes, devolve uma receita de aproveitamento total, alinhada ao ODS 2. Inclui tempo limite e novas tentativas automáticas quando o serviço está sobrecarregado.
 * **Validação de dados e respostas de erro padronizadas** (`400`, `404` e `503`).
-* **Modelo de dados relacional** já preparado para doadores, receptores, doações, estoque, ingredientes e receitas.
+* **Modelo de dados relacional alinhado ao diagrama do grupo**: usuário, doador, receptor, doação, item da doação, status da doação, ingrediente, estoque, receita e receita–ingrediente (10 tabelas).
 
 ### Planejadas
 * Autenticação e autorização (login).
@@ -181,6 +181,8 @@ No pgAdmin ou no `psql`:
 CREATE DATABASE nutriconect;
 ```
 As tabelas são criadas automaticamente na primeira execução.
+
+> **Já rodou uma versão anterior do projeto?** O modelo de dados mudou (por exemplo, `tb_doacao` agora tem itens e status em tabelas próprias). Como não há ferramenta de migração, recrie o banco antes de subir esta versão: no pgAdmin, apague o banco `nutriconect` e crie-o de novo, ou execute `DROP SCHEMA public CASCADE; CREATE SCHEMA public;` conectado a ele.
 
 ### 3. Configurar as variáveis de ambiente
 Nenhum segredo fica no código: a aplicação lê tudo de variáveis de ambiente.
@@ -251,16 +253,16 @@ Resposta (`201`): `{"id":1,"nome":"Mercado Bom Preço","email":"contato@bompreco
 ```bash
 curl -X POST http://localhost:8080/api/ingredientes \
   -H "Content-Type: application/json" \
-  -d '{"nome":"Arroz","categoria":"Grãos","unidadeMedida":"kg"}'
+  -d '{"nome":"Arroz","categoria":"Grãos","unidade":"kg","validade":"2026-12-31"}'
 ```
 
 **3. Registrar uma doação** (use os `id` devolvidos nos passos anteriores)
 ```bash
 curl -X POST http://localhost:8080/api/doacoes \
   -H "Content-Type: application/json" \
-  -d '{"quantidade":10,"doadorId":1,"ingredienteId":1}'
+  -d '{"doadorId":1,"itens":[{"ingredienteId":1,"quantidade":10.5}]}'
 ```
-A doação nasce com o status `PENDENTE`. O campo `receptorId` é opcional.
+Uma doação pode ter vários itens (um por ingrediente, sem repetir o mesmo ingrediente) e nasce com o status `PENDENTE`. O campo `receptorId` é opcional.
 
 **4. Gerar uma receita de aproveitamento total**
 ```bash
@@ -273,7 +275,7 @@ Resposta (`200`): `{"receita":"..."}`. A resposta da IA pode levar até cerca de
 ### Respostas de erro
 | Código | Quando acontece |
 |---|---|
-| `400` | Dados inválidos ou ausentes, e-mail já cadastrado, quantidade menor ou igual a zero |
+| `400` | Dados inválidos ou ausentes, e-mail já cadastrado, doação sem itens, quantidade menor ou igual a zero, ingrediente repetido na doação |
 | `404` | Doador, ingrediente ou receptor informado não existe |
 | `503` | A IA não está configurada, falhou ou está sobrecarregada. Em caso de sobrecarga (`503` ou `429` do Google), o sistema tenta até 3 vezes antes de desistir |
 

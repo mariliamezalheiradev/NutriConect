@@ -1,10 +1,12 @@
 package com.nutriconect.dto;
 
-import com.nutriconect.model.StatusDoacao;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.List;
 
-import java.time.LocalDateTime;
+public record DoacaoResponseDTO(Long id, String status, LocalDate dataDoacao,
+                                Long doadorId, Long receptorId, List<Item> itens) {
 
-public record DoacaoResponseDTO(Long id, Double quantidade, StatusDoacao status,
-                                LocalDateTime dataCriacao, Long doadorId,
-                                Long receptorId, Long ingredienteId) {
+    public record Item(Long ingredienteId, BigDecimal quantidade) {
+    }
 }

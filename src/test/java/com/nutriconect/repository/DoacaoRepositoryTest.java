@@ -7,8 +7,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import java.time.LocalDateTime;
-import java.util.List;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -16,92 +16,94 @@ import static org.assertj.core.api.Assertions.assertThat;
 class DoacaoRepositoryTest {
 
     @Autowired private DoacaoRepository doacaoRepository;
+    @Autowired private ItemDoacaoRepository itemDoacaoRepository;
     @Autowired private DoadorRepository doadorRepository;
     @Autowired private ReceptorRepository receptorRepository;
     @Autowired private IngredienteRepository ingredienteRepository;
+    @Autowired private StatusDoacaoRepository statusDoacaoRepository;
 
     private Doador doador;
     private Receptor receptor;
-    private Ingrediente ingrediente;
+    private Ingrediente arroz;
+    private Ingrediente feijao;
+    private StatusDoacao pendente;
+    private StatusDoacao concluido;
 
     @BeforeEach
     void setup() {
         doador = new Doador();
-        doador.setNome("Mercado A");
-        doador.setEmail("mercado@a.com");
-        doador.setSenha("123");
-        doador.setDocumento("11111111000111");
+        doador.setNome("Mercado");
+        doador.setEmail("mercado@email.com");
+        doador.setSenha("hash");
         doador = doadorRepository.save(doador);
 
         receptor = new Receptor();
-        receptor.setNome("ONG X");
-        receptor.setEmail("ong@x.org");
-        receptor.setSenha("123");
-        receptor.setCnpj("22222222000122");
+        receptor.setNome("ONG");
+        receptor.setEmail("ong@email.com");
+        receptor.setSenha("hash");
+        receptor.setEndereco("Rua A, 1");
         receptor = receptorRepository.save(receptor);
 
-        ingrediente = new Ingrediente();
-        ingrediente.setNome("Arroz");
-        ingrediente.setCategoria("Grão");
-        ingrediente.setUnidadeMedida("kg");
-        ingrediente = ingredienteRepository.save(ingrediente);
+        arroz = novoIngrediente("Arroz");
+        feijao = novoIngrediente("Feijão");
+        pendente = statusDoacaoRepository.save(new StatusDoacao(StatusDoacao.PENDENTE));
+        concluido = statusDoacaoRepository.save(new StatusDoacao(StatusDoacao.CONCLUIDO));
     }
 
-    private Doacao criarDoacao(StatusDoacao status, LocalDateTime data) {
+    private Ingrediente novoIngrediente(String nome) {
+        Ingrediente i = new Ingrediente();
+        i.setNome(nome);
+        i.setUnidade("kg");
+        return ingredienteRepository.save(i);
+    }
+
+    private Doacao novaDoacao(StatusDoacao status, Receptor receptor, Ingrediente... ingredientes) {
         Doacao d = new Doacao();
-        d.setQuantidade(10.0);
-        d.setDataCriacao(data);
-        d.setStatus(status);
         d.setDoador(doador);
-        d.setIngrediente(ingrediente);
-        return d;
+        d.setReceptor(receptor);
+        d.setStatus(status);
+        for (Ingrediente ing : ingredientes) {
+            d.adicionarItem(new ItemDoacao(ing, new BigDecimal("3.50")));
+        }
+        return doacaoRepository.save(d);
     }
 
     @Test
-    @DisplayName("Deve salvar doação e buscar por doador")
-    void deveBuscarPorDoador() {
-        doacaoRepository.save(criarDoacao(StatusDoacao.PENDENTE, LocalDateTime.now()));
-        doacaoRepository.save(criarDoacao(StatusDoacao.CONCLUIDO, LocalDateTime.now()));
-        List<Doacao> doacoes = doacaoRepository.findByDoadorId(doador.getId());
-        assertThat(doacoes).hasSize(2);
+    @DisplayName("Deve gravar a doação junto com seus itens")
+    void deveGravarItensEmCascata() {
+        Doacao salva = novaDoacao(pendente, null, arroz, feijao);
+        doacaoRepository.flush();
+        assertThat(itemDoacaoRepository.findByDoacaoId(salva.getId())).hasSize(2);
+        assertThat(itemDoacaoRepository.findByIngredienteId(arroz.getId()))
+                .extracting(ItemDoacao::getQuantidade).containsExactly(new BigDecimal("3.50"));
+    }
+
+    @Test
+    @DisplayName("Deve buscar doações por doador, receptor e ingrediente")
+    void deveBuscarPorRelacionamentos() {
+        novaDoacao(pendente, receptor, arroz);
+        novaDoacao(pendente, null, feijao);
+        assertThat(doacaoRepository.findByDoadorId(doador.getId())).hasSize(2);
+        assertThat(doacaoRepository.countByDoadorId(doador.getId())).isEqualTo(2);
+        assertThat(doacaoRepository.findByReceptorId(receptor.getId())).hasSize(1);
+        assertThat(doacaoRepository.findDistinctByItensIngredienteId(feijao.getId())).hasSize(1);
     }
 
     @Test
     @DisplayName("Deve buscar doações por status")
     void deveBuscarPorStatus() {
-        doacaoRepository.save(criarDoacao(StatusDoacao.PENDENTE, LocalDateTime.now()));
-        doacaoRepository.save(criarDoacao(StatusDoacao.PENDENTE, LocalDateTime.now()));
-        doacaoRepository.save(criarDoacao(StatusDoacao.CONCLUIDO, LocalDateTime.now()));
-        List<Doacao> pendentes = doacaoRepository.findByStatus(StatusDoacao.PENDENTE);
-        assertThat(pendentes).hasSize(2);
+        novaDoacao(pendente, null, arroz);
+        novaDoacao(concluido, null, feijao);
+        assertThat(doacaoRepository.findByStatusDescricao(StatusDoacao.CONCLUIDO)).hasSize(1);
+        assertThat(doacaoRepository.findByStatusDescricao(StatusDoacao.PENDENTE)).hasSize(1);
     }
 
     @Test
-    @DisplayName("Deve buscar doações por ingrediente")
-    void deveBuscarPorIngrediente() {
-        doacaoRepository.save(criarDoacao(StatusDoacao.PENDENTE, LocalDateTime.now()));
-        List<Doacao> doacoes = doacaoRepository.findByIngredienteId(ingrediente.getId());
-        assertThat(doacoes).hasSize(1);
-    }
-
-    @Test
-    @DisplayName("Deve buscar doações em intervalo de datas")
-    void deveBuscarPorIntervalo() {
-        LocalDateTime hoje = LocalDateTime.now();
-        doacaoRepository.save(criarDoacao(StatusDoacao.PENDENTE, hoje.minusDays(10)));
-        doacaoRepository.save(criarDoacao(StatusDoacao.PENDENTE, hoje.minusDays(2)));
-        doacaoRepository.save(criarDoacao(StatusDoacao.PENDENTE, hoje));
-        List<Doacao> ultimos7 = doacaoRepository.findByDataCriacaoBetween(
-                hoje.minusDays(7), hoje.plusDays(1));
-        assertThat(ultimos7).hasSize(2);
-    }
-
-    @Test
-    @DisplayName("Deve contar doações por doador")
-    void deveContarPorDoador() {
-        doacaoRepository.save(criarDoacao(StatusDoacao.PENDENTE, LocalDateTime.now()));
-        doacaoRepository.save(criarDoacao(StatusDoacao.CONCLUIDO, LocalDateTime.now()));
-        long total = doacaoRepository.countByDoadorId(doador.getId());
-        assertThat(total).isEqualTo(2);
+    @DisplayName("Deve buscar doações por período")
+    void deveBuscarPorPeriodo() {
+        novaDoacao(pendente, null, arroz);
+        LocalDate hoje = LocalDate.now();
+        assertThat(doacaoRepository.findByDataDoacaoBetween(hoje.minusDays(1), hoje.plusDays(1))).hasSize(1);
+        assertThat(doacaoRepository.findByDataDoacaoBetween(hoje.plusDays(1), hoje.plusDays(5))).isEmpty();
     }
 }

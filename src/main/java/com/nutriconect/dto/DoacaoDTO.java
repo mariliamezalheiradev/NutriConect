@@ -1,49 +1,26 @@
 package com.nutriconect.dto;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
-public class DoacaoDTO {
+import java.util.List;
 
-    @NotNull(message = "A quantidade é obrigatória")
-    private Double quantidade;
+public class DoacaoDTO {
 
     @NotNull(message = "O doador é obrigatório")
     private Long doadorId;
 
     private Long receptorId;
 
-    @NotNull(message = "O ingrediente é obrigatório")
-    private Long ingredienteId;
+    @NotEmpty(message = "Informe ao menos um item")
+    @Valid
+    private List<ItemDoacaoDTO> itens;
 
-    public Double getQuantidade() {
-        return quantidade;
-    }
-
-    public void setQuantidade(Double quantidade) {
-        this.quantidade = quantidade;
-    }
-
-    public Long getDoadorId() {
-        return doadorId;
-    }
-
-    public void setDoadorId(Long doadorId) {
-        this.doadorId = doadorId;
-    }
-
-    public Long getReceptorId() {
-        return receptorId;
-    }
-
-    public void setReceptorId(Long receptorId) {
-        this.receptorId = receptorId;
-    }
-
-    public Long getIngredienteId() {
-        return ingredienteId;
-    }
-
-    public void setIngredienteId(Long ingredienteId) {
-        this.ingredienteId = ingredienteId;
-    }
+    public Long getDoadorId() { return doadorId; }
+    public void setDoadorId(Long doadorId) { this.doadorId = doadorId; }
+    public Long getReceptorId() { return receptorId; }
+    public void setReceptorId(Long receptorId) { this.receptorId = receptorId; }
+    public List<ItemDoacaoDTO> getItens() { return itens; }
+    public void setItens(List<ItemDoacaoDTO> itens) { this.itens = itens; }
 }
