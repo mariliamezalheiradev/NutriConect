@@ -3,6 +3,7 @@ package com.nutriconect.service;
 import com.nutriconect.dto.DoacaoDTO;
 import com.nutriconect.dto.DoacaoResponseDTO;
 import com.nutriconect.dto.ItemDoacaoDTO;
+import com.nutriconect.exception.AcessoNegadoException;
 import com.nutriconect.exception.RecursoNaoEncontradoException;
 import com.nutriconect.exception.RegraNegocioException;
 import com.nutriconect.model.*;
@@ -37,14 +38,22 @@ public class DoacaoService {
     }
 
     @Transactional
-    public DoacaoResponseDTO registrar(DoacaoDTO dto) {
+    /**
+     * Registra uma doação em nome do doador logado.
+     *
+     * @param doadorLogadoId id do usuário autenticado (vem do token, nunca do corpo da requisição)
+     */
+    public DoacaoResponseDTO registrar(DoacaoDTO dto, Long doadorLogadoId) {
+        if (dto.getDoadorId() != null && !dto.getDoadorId().equals(doadorLogadoId)) {
+            throw new AcessoNegadoException("Você só pode registrar doações em seu próprio nome.");
+        }
         if (dto.getItens() == null || dto.getItens().isEmpty()) {
             throw new IllegalArgumentException("Informe ao menos um item na doação.");
         }
 
-        Doador doador = doadorRepository.findById(dto.getDoadorId())
+        Doador doador = doadorRepository.findById(doadorLogadoId)
                 .orElseThrow(() -> new RecursoNaoEncontradoException(
-                        "Doador não encontrado: " + dto.getDoadorId()));
+                        "Doador não encontrado: " + doadorLogadoId));
 
         Doacao doacao = new Doacao();
         doacao.setDoador(doador);

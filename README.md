@@ -146,6 +146,7 @@ As escolhas arquiteturais foram feitas pensando no crescimento sustentável da p
 
 ### Disponíveis nesta versão
 * **Cadastro de doadores**, com senha criptografada (BCrypt) e verificação de e-mail duplicado.
+* **Login com Spring Security e token JWT**: as rotas, exceto o cadastro de doador e o login, exigem o token. Os papéis `DOADOR` e `RECEPTOR` definem o que cada usuário pode fazer; só um doador registra doações, e sempre em seu próprio nome.
 * **Cadastro e listagem de ingredientes** (nome, categoria, unidade e validade).
 * **Registro de doações com vários itens**: cada doação tem um doador, um ou mais itens (ingrediente + quantidade) e, opcionalmente, um receptor; nasce com o status `PENDENTE` (os status ficam em uma tabela própria).
 * **Geração de receitas com IA (Google Gemini)**: a partir de uma lista de ingredientes, devolve uma receita de aproveitamento total, alinhada ao ODS 2. Inclui tempo limite e novas tentativas automáticas quando o serviço está sobrecarregado.
@@ -153,7 +154,6 @@ As escolhas arquiteturais foram feitas pensando no crescimento sustentável da p
 * **Modelo de dados relacional alinhado ao diagrama do grupo**: usuário, doador, receptor, doação, item da doação, status da doação, ingrediente, estoque, receita e receita–ingrediente (10 tabelas).
 
 ### Planejadas
-* Autenticação e autorização (login).
 * Cadastro de receptores (ONGs) e gestão de estoque com data de validade.
 * Listagem, acompanhamento e atualização do status das doações.
 * Matching geográfico por raio, sugerindo as ONGs mais próximas do doador.
@@ -168,7 +168,7 @@ As escolhas arquiteturais foram feitas pensando no crescimento sustentável da p
 | Framework | Spring Boot 3.2.5 (Spring Web, Spring Data JPA, Bean Validation) |
 | Banco de dados | PostgreSQL (produção/desenvolvimento) e H2 em memória (testes) |
 | Persistência | JPA / Hibernate |
-| Segurança | Spring Security Crypto (BCrypt) para senhas |
+| Segurança | Spring Security (filtros, papéis), tokens JWT assinados com HS256 e BCrypt para senhas |
 | Inteligência Artificial | Google Gemini API, consumida apenas pelo backend |
 | Build | Maven |
 | Testes | JUnit 5, Mockito e Spring Test (`MockRestServiceServer`) |
@@ -207,8 +207,16 @@ Nenhum segredo fica no código: a aplicação lê tudo de variáveis de ambiente
 | `DB_PASSWORD` | sim, se o usuário tiver senha | vazio | Senha do banco |
 | `GEMINI_API_KEY` | só para gerar receitas | vazio | Chave da API do Gemini |
 | `GEMINI_MODEL` | não | `gemini-flash-latest` | Modelo do Gemini, caso o padrão seja descontinuado |
+| `JWT_SECRET` | recomendada | gerada ao iniciar | Segredo que assina os tokens de login, com **no mínimo 32 caracteres**. Sem ela, a aplicação gera um segredo aleatório a cada início e os tokens deixam de valer ao reiniciar |
+| `JWT_EXPIRACAO_MINUTOS` | não | `60` | Validade do token, em minutos |
 
 > **Nunca** escreva a chave ou a senha em arquivos do projeto nem as envie ao Git.
+
+**Gerando o `JWT_SECRET`** (uma vez, e guarde o valor só no seu computador). No PowerShell:
+```powershell
+$b = New-Object byte[] 48; [Security.Cryptography.RandomNumberGenerator]::Create().GetBytes($b); [Convert]::ToBase64String($b)
+```
+ou, onde houver o `openssl` (Linux, macOS, Git Bash): `openssl rand -base64 48`. Se você trocar o segredo, os tokens já emitidos deixam de valer e é preciso fazer login de novo.
 
 ### 4. Executar
 
@@ -216,7 +224,7 @@ Nenhum segredo fica no código: a aplicação lê tudo de variáveis de ambiente
 1. Abra a pasta do projeto (**File → Open**) e aguarde o Maven carregar as dependências.
 2. Abra `NutriConectApplication.java` e clique no triângulo verde ao lado do `main`.
 3. Em **Edit Configurations → Modify options → Environment variables**, informe, por exemplo:
-   `DB_PASSWORD=sua_senha;GEMINI_API_KEY=sua_chave`
+   `DB_PASSWORD=sua_senha;GEMINI_API_KEY=sua_chave;JWT_SECRET=seu_segredo`
 
 **Pelo terminal**
 
@@ -224,12 +232,14 @@ Linux/macOS:
 ```bash
 export DB_PASSWORD=sua_senha
 export GEMINI_API_KEY=sua_chave
+export JWT_SECRET=seu_segredo
 mvn spring-boot:run
 ```
 Windows (PowerShell):
 ```powershell
 $env:DB_PASSWORD = "sua_senha"
 $env:GEMINI_API_KEY = "sua_chave"
+$env:JWT_SECRET = "seu_segredo"
 mvn spring-boot:run
 ```
 
@@ -245,13 +255,16 @@ Os testes usam um banco H2 em memória e não precisam de PostgreSQL nem de chav
 
 A API recebe e devolve JSON. Os exemplos abaixo usam `curl`; no IntelliJ você pode colar o mesmo conteúdo em um arquivo `.http`, e no Postman basta criar as requisições com o mesmo método, endereço e corpo.
 
-| Método | Endereço | Função |
-|---|---|---|
-| `POST` | `/api/doadores` | Cadastra um doador |
-| `POST` | `/api/ingredientes` | Cadastra um ingrediente |
-| `GET` | `/api/ingredientes` | Lista os ingredientes |
-| `POST` | `/api/doacoes` | Registra uma doação |
-| `POST` | `/api/receitas/gerar` | Gera uma receita com IA |
+Com exceção do cadastro de doador e do login, **todas as rotas exigem o token** no cabeçalho `Authorization: Bearer <token>`.
+
+| Método | Endereço | Quem acessa | Função |
+|---|---|---|---|
+| `POST` | `/api/doadores` | público | Cadastra um doador |
+| `POST` | `/api/auth/login` | público | Faz login e devolve o token |
+| `POST` | `/api/ingredientes` | qualquer usuário logado | Cadastra um ingrediente |
+| `GET` | `/api/ingredientes` | qualquer usuário logado | Lista os ingredientes |
+| `POST` | `/api/doacoes` | somente `DOADOR` | Registra uma doação em nome do próprio doador |
+| `POST` | `/api/receitas/gerar` | qualquer usuário logado | Gera uma receita com IA |
 
 ### Fluxo básico
 **1. Cadastrar um doador**
@@ -262,24 +275,35 @@ curl -X POST http://localhost:8080/api/doadores \
 ```
 Resposta (`201`): `{"id":1,"nome":"Mercado Bom Preço","email":"contato@bompreco.com"}`. A senha é guardada criptografada (BCrypt) e nunca é devolvida.
 
-**2. Cadastrar um ingrediente**
+**2. Fazer login**
+```bash
+curl -X POST http://localhost:8080/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"contato@bompreco.com","senha":"senha123"}'
+```
+Resposta (`200`): `{"token":"eyJ...","tipo":"Bearer","expiraEmSegundos":3600,"papel":"DOADOR"}`. Copie o valor de `token`; nos próximos passos ele vai no cabeçalho `Authorization`. Se o e-mail ou a senha estiverem errados, a resposta é `401` com a mesma mensagem nos dois casos.
+
+**3. Cadastrar um ingrediente**
 ```bash
 curl -X POST http://localhost:8080/api/ingredientes \
+  -H "Authorization: Bearer SEU_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{"nome":"Arroz","categoria":"Grãos","unidade":"kg","validade":"2026-12-31"}'
 ```
 
-**3. Registrar uma doação** (use os `id` devolvidos nos passos anteriores)
+**4. Registrar uma doação** (use o `id` do ingrediente devolvido no passo anterior)
 ```bash
 curl -X POST http://localhost:8080/api/doacoes \
+  -H "Authorization: Bearer SEU_TOKEN" \
   -H "Content-Type: application/json" \
-  -d '{"doadorId":1,"itens":[{"ingredienteId":1,"quantidade":10.5}]}'
+  -d '{"itens":[{"ingredienteId":1,"quantidade":10.5}]}'
 ```
-Uma doação pode ter vários itens (um por ingrediente, sem repetir o mesmo ingrediente) e nasce com o status `PENDENTE`. O campo `receptorId` é opcional.
+O doador é sempre o usuário logado, identificado pelo token. Se você enviar `doadorId`, ele precisa ser o seu próprio id, senão a resposta é `403`. Uma doação pode ter vários itens (um por ingrediente, sem repetir o mesmo ingrediente) e nasce com o status `PENDENTE`. O campo `receptorId` é opcional.
 
-**4. Gerar uma receita de aproveitamento total**
+**5. Gerar uma receita de aproveitamento total**
 ```bash
 curl -X POST http://localhost:8080/api/receitas/gerar \
+  -H "Authorization: Bearer SEU_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{"ingredientes":["arroz","frango","casca de abóbora"]}'
 ```
@@ -301,13 +325,15 @@ Nos erros de validação, o objeto também traz `"campos"`, com a mensagem de ca
 | Código | Quando acontece |
 |---|---|
 | `400` | Campos inválidos ou ausentes, JSON malformado ou corpo ausente, parâmetro com tipo errado, doação sem itens, quantidade menor ou igual a zero |
+| `401` | Sem token, token inválido ou expirado, e-mail ou senha incorretos no login |
+| `403` | Usuário logado sem permissão: por exemplo, um receptor tentando registrar doação, ou um doador tentando doar em nome de outro |
 | `404` | Doador, ingrediente ou receptor informado não existe, ou o endereço não existe |
 | `405` | Método HTTP não aceito naquele endereço |
 | `422` | Regra de negócio violada: e-mail já cadastrado, ingrediente repetido na doação |
 | `500` | Erro inesperado. A resposta traz uma mensagem genérica e o detalhe fica só no log do servidor |
 | `503` | A IA não está configurada, falhou ou está sobrecarregada. Em caso de sobrecarga (`503` ou `429` do Google), o sistema tenta até 3 vezes antes de desistir |
 
-> **Atenção:** a API ainda não tem login, então os endpoints estão abertos. Não a exponha na internet nesta versão.
+> **Segurança:** em qualquer ambiente real, defina `JWT_SECRET` com um valor longo e secreto e use HTTPS, porque o token viaja em cada requisição. Ainda não há limite de tentativas de login nem cadastro de receptor pela API.
 
 ## Contribuição
 

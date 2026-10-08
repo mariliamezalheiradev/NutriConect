@@ -17,10 +17,11 @@ Este documento registra o que foi encontrado e como cada ponto foi resolvido.
 | 8 | Branches antigas sem uso (`parte-*`) | **Resolvido.** Conteúdo integrado à `main` e branches removidas. |
 | 9 | Entidades divergiam do diagrama conceitual do banco (sem `item_doacao`, `status_doacao` e `receita_ingrediente`) | **Resolvido.** Modelo alinhado às 10 tabelas do diagrama. |
 | 10 | Tratamento de erros incompleto (só validação, 404 e IA; rota inexistente, JSON inválido e erros inesperados caíam no padrão do servidor) | **Resolvido.** `GlobalExceptionHandler` cobre 400, 404, 405, 422, 500 e 503 com formato único (`ErroResposta`). |
+| 11 | Endpoints abertos, sem autenticação nem autorização | **Resolvido.** Login com Spring Security e token JWT; papéis `DOADOR` e `RECEPTOR`; doação sempre em nome do usuário logado. |
 
 ## 2. Pendências em aberto
 
-* **Autenticação e autorização:** os endpoints ainda são abertos.
+* **Segurança do login:** ainda não há limite de tentativas de login (proteção contra tentativa e erro), renovação de token nem CORS para o frontend.
 * **Endpoints que faltam:** cadastro de receptor e de estoque, listagem e atualização de status das doações, persistência das receitas geradas.
 * **Migrações de banco:** `spring.jpa.hibernate.ddl-auto=update` serve para desenvolvimento; para produção usar uma ferramenta de migração (Flyway ou Liquibase).
 * **Integração contínua:** não há workflow no GitHub Actions; hoje os testes (`mvn clean test`) são executados manualmente.

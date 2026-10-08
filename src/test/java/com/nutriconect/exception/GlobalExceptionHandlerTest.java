@@ -59,6 +59,15 @@ class GlobalExceptionHandlerTest {
         @GetMapping("/rede")
         public String rede() { throw new RestClientException("detalhe interno: timeout em https://servico.exemplo"); }
 
+        @GetMapping("/login-invalido")
+        public String loginInvalido() { throw new CredenciaisInvalidasException("E-mail ou senha inválidos."); }
+
+        @GetMapping("/negado")
+        public String negado() { throw new AcessoNegadoException("Você só pode registrar doações em seu próprio nome."); }
+
+        @GetMapping("/negado-spring")
+        public String negadoSpring() { throw new org.springframework.security.access.AccessDeniedException("detalhe interno"); }
+
         @GetMapping("/bug")
         public String bug() { throw new IllegalStateException("senha=segredo123 vazou"); }
     }
@@ -161,6 +170,30 @@ class GlobalExceptionHandlerTest {
                 .andExpect(jsonPath("$.erro").value("Erro interno"))
                 .andReturn().getResponse().getContentAsString();
         assertTrue(!corpo.contains("segredo123"), "o detalhe interno não pode aparecer na resposta");
+    }
+
+    @Test
+    void credenciaisInvalidasDevolve401() throws Exception {
+        mvc.perform(get("/login-invalido"))
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.erro").value("Não autenticado"))
+                .andExpect(jsonPath("$.mensagem").value("E-mail ou senha inválidos."));
+    }
+
+    @Test
+    void acessoNegadoDevolve403() throws Exception {
+        mvc.perform(get("/negado"))
+                .andExpect(status().isForbidden())
+                .andExpect(jsonPath("$.erro").value("Acesso negado"))
+                .andExpect(jsonPath("$.mensagem").value("Você só pode registrar doações em seu próprio nome."));
+    }
+
+    @Test
+    void acessoNegadoDoSpringDevolve403SemVazarDetalhes() throws Exception {
+        String corpo = mvc.perform(get("/negado-spring"))
+                .andExpect(status().isForbidden())
+                .andReturn().getResponse().getContentAsString();
+        assertTrue(!corpo.contains("detalhe interno"));
     }
 
     @Test

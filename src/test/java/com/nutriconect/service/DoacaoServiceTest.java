@@ -3,6 +3,7 @@ package com.nutriconect.service;
 import com.nutriconect.dto.DoacaoDTO;
 import com.nutriconect.dto.DoacaoResponseDTO;
 import com.nutriconect.dto.ItemDoacaoDTO;
+import com.nutriconect.exception.AcessoNegadoException;
 import com.nutriconect.exception.RecursoNaoEncontradoException;
 import com.nutriconect.exception.RegraNegocioException;
 import com.nutriconect.model.*;
@@ -37,6 +38,11 @@ class DoacaoServiceTest {
         statusRepository = Mockito.mock(StatusDoacaoRepository.class);
         service = new DoacaoService(doacaoRepository, doadorRepository, receptorRepository,
                 ingredienteRepository, statusRepository);
+    }
+
+    /** Registra como se o usuário logado fosse o doador de id 1. */
+    private DoacaoResponseDTO registrar(DoacaoDTO dto) {
+        return service.registrar(dto, 1L);
     }
 
     private ItemDoacaoDTO item(Long ingredienteId, String quantidade) {
@@ -78,7 +84,7 @@ class DoacaoServiceTest {
             return d;
         });
 
-        DoacaoResponseDTO resposta = service.registrar(dto(1L, item(2L, "5"), item(3L, "1.5")));
+        DoacaoResponseDTO resposta = registrar(dto(1L, item(2L, "5"), item(3L, "1.5")));
 
         assertEquals(10L, resposta.id());
         assertEquals("PENDENTE", resposta.status());
@@ -96,14 +102,14 @@ class DoacaoServiceTest {
         when(statusRepository.save(any(StatusDoacao.class))).thenAnswer(inv -> inv.getArgument(0));
         when(doacaoRepository.save(any(Doacao.class))).thenAnswer(inv -> inv.getArgument(0));
 
-        assertEquals("PENDENTE", service.registrar(dto(1L, item(2L, "1"))).status());
+        assertEquals("PENDENTE", registrar(dto(1L, item(2L, "1"))).status());
         verify(statusRepository).save(any(StatusDoacao.class));
     }
 
     @Test
     void rejeitaQuantidadeZeroOuNegativa() {
         when(doadorRepository.findById(1L)).thenReturn(Optional.of(doador(1L)));
-        assertThrows(IllegalArgumentException.class, () -> service.registrar(dto(1L, item(2L, "0"))));
+        assertThrows(IllegalArgumentException.class, () -> registrar(dto(1L, item(2L, "0"))));
         verify(doacaoRepository, never()).save(any());
     }
 
@@ -112,14 +118,14 @@ class DoacaoServiceTest {
         when(doadorRepository.findById(1L)).thenReturn(Optional.of(doador(1L)));
         when(ingredienteRepository.findById(2L)).thenReturn(Optional.of(ingrediente(2L)));
         assertThrows(RegraNegocioException.class,
-                () -> service.registrar(dto(1L, item(2L, "1"), item(2L, "2"))));
+                () -> registrar(dto(1L, item(2L, "1"), item(2L, "2"))));
         verify(doacaoRepository, never()).save(any());
     }
 
     @Test
     void falhaQuandoDoadorNaoExiste() {
         when(doadorRepository.findById(1L)).thenReturn(Optional.empty());
-        assertThrows(RecursoNaoEncontradoException.class, () -> service.registrar(dto(1L, item(2L, "1"))));
+        assertThrows(RecursoNaoEncontradoException.class, () -> registrar(dto(1L, item(2L, "1"))));
         verify(doacaoRepository, never()).save(any());
     }
 
@@ -129,7 +135,25 @@ class DoacaoServiceTest {
         when(ingredienteRepository.findById(2L)).thenReturn(Optional.empty());
         when(statusRepository.findByDescricao(StatusDoacao.PENDENTE))
                 .thenReturn(Optional.of(new StatusDoacao(StatusDoacao.PENDENTE)));
-        assertThrows(RecursoNaoEncontradoException.class, () -> service.registrar(dto(1L, item(2L, "1"))));
+        assertThrows(RecursoNaoEncontradoException.class, () -> registrar(dto(1L, item(2L, "1"))));
+        verify(doacaoRepository, never()).save(any());
+    }
+
+    @Test
+    void usaOUsuarioLogadoQuandoOCorpoNaoTrazDoador() {
+        when(doadorRepository.findById(1L)).thenReturn(Optional.of(doador(1L)));
+        when(ingredienteRepository.findById(2L)).thenReturn(Optional.of(ingrediente(2L)));
+        when(statusRepository.findByDescricao(StatusDoacao.PENDENTE))
+                .thenReturn(Optional.of(new StatusDoacao(StatusDoacao.PENDENTE)));
+        when(doacaoRepository.save(any(Doacao.class))).thenAnswer(inv -> inv.getArgument(0));
+
+        assertEquals(1L, registrar(dto(null, item(2L, "1"))).doadorId());
+    }
+
+    @Test
+    void impedeRegistrarDoacaoEmNomeDeOutroDoador() {
+        assertThrows(AcessoNegadoException.class, () -> service.registrar(dto(7L, item(2L, "1")), 1L));
+        verify(doadorRepository, never()).findById(any());
         verify(doacaoRepository, never()).save(any());
     }
 }
