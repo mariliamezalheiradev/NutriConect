@@ -131,20 +131,161 @@ As escolhas arquiteturais foram feitas pensando no crescimento sustentável da p
 
 ## Funcionalidades
 
-(A ser adicionado)
+### Disponíveis nesta versão
+* **Cadastro de doadores**, com senha criptografada (BCrypt) e verificação de e-mail duplicado.
+* **Cadastro e listagem de ingredientes** (nome, categoria e unidade de medida).
+* **Registro de doações**: vincula doador, ingrediente e quantidade; a doação nasce com o status `PENDENTE` e pode, opcionalmente, ter um receptor.
+* **Geração de receitas com IA (Google Gemini)**: a partir de uma lista de ingredientes, devolve uma receita de aproveitamento total, alinhada ao ODS 2. Inclui tempo limite e novas tentativas automáticas quando o serviço está sobrecarregado.
+* **Validação de dados e respostas de erro padronizadas** (`400`, `404` e `503`).
+* **Modelo de dados relacional** já preparado para doadores, receptores, doações, estoque, ingredientes e receitas.
+
+### Planejadas
+* Autenticação e autorização (login).
+* Cadastro de receptores (ONGs) e gestão de estoque com data de validade.
+* Listagem, acompanhamento e atualização do status das doações.
+* Matching geográfico por raio, sugerindo as ONGs mais próximas do doador.
+* Salvar no banco as receitas geradas pela IA.
+* Interface (frontend) para doadores e ONGs.
 
 ## Tecnologias Utilizadas
 
-(A ser adicionado)
+| Área | Tecnologia |
+|---|---|
+| Linguagem | Java 17 |
+| Framework | Spring Boot 3.2.5 (Spring Web, Spring Data JPA, Bean Validation) |
+| Banco de dados | PostgreSQL (produção/desenvolvimento) e H2 em memória (testes) |
+| Persistência | JPA / Hibernate |
+| Segurança | Spring Security Crypto (BCrypt) para senhas |
+| Inteligência Artificial | Google Gemini API, consumida apenas pelo backend |
+| Build | Maven |
+| Testes | JUnit 5, Mockito e Spring Test (`MockRestServiceServer`) |
+| Arquitetura e modelagem | Modelo C4 e diagramas UML (veja as seções acima) |
 
 ## Instalação
 
-(A ser adicionado)
+### Pré-requisitos
+* **JDK 17 ou superior**
+* **PostgreSQL 15 ou superior** (testado com a 17)
+* **Maven 3.9+**, ou o IntelliJ IDEA, que já traz o Maven embutido
+* Uma **chave da API do Google Gemini** (criada no [Google AI Studio](https://aistudio.google.com/apikey)), necessária só para gerar receitas
+
+### 1. Clonar o repositório
+```bash
+git clone https://github.com/mariliamezalheiradev/NutriConect.git
+cd NutriConect
+```
+
+### 2. Criar o banco de dados
+No pgAdmin ou no `psql`:
+```sql
+CREATE DATABASE nutriconect;
+```
+As tabelas são criadas automaticamente na primeira execução.
+
+### 3. Configurar as variáveis de ambiente
+Nenhum segredo fica no código: a aplicação lê tudo de variáveis de ambiente.
+
+| Variável | Obrigatória | Padrão | Descrição |
+|---|---|---|---|
+| `DB_URL` | não | `jdbc:postgresql://localhost:5432/nutriconect` | URL do banco |
+| `DB_USER` | não | `postgres` | Usuário do banco |
+| `DB_PASSWORD` | sim, se o usuário tiver senha | vazio | Senha do banco |
+| `GEMINI_API_KEY` | só para gerar receitas | vazio | Chave da API do Gemini |
+| `GEMINI_MODEL` | não | `gemini-flash-latest` | Modelo do Gemini, caso o padrão seja descontinuado |
+
+> **Nunca** escreva a chave ou a senha em arquivos do projeto nem as envie ao Git.
+
+### 4. Executar
+
+**Pelo IntelliJ IDEA**
+1. Abra a pasta do projeto (**File → Open**) e aguarde o Maven carregar as dependências.
+2. Abra `NutriConectApplication.java` e clique no triângulo verde ao lado do `main`.
+3. Em **Edit Configurations → Modify options → Environment variables**, informe, por exemplo:
+   `DB_PASSWORD=sua_senha;GEMINI_API_KEY=sua_chave`
+
+**Pelo terminal**
+
+Linux/macOS:
+```bash
+export DB_PASSWORD=sua_senha
+export GEMINI_API_KEY=sua_chave
+mvn spring-boot:run
+```
+Windows (PowerShell):
+```powershell
+$env:DB_PASSWORD = "sua_senha"
+$env:GEMINI_API_KEY = "sua_chave"
+mvn spring-boot:run
+```
+
+A aplicação sobe em `http://localhost:8080`. O console termina com `Started NutriConectApplication`.
+
+### 5. Executar os testes
+```bash
+mvn clean test
+```
+Os testes usam um banco H2 em memória e não precisam de PostgreSQL nem de chave do Gemini.
 
 ## Como Usar
 
-(A ser adicionado)
+A API recebe e devolve JSON. Os exemplos abaixo usam `curl`; no IntelliJ você pode colar o mesmo conteúdo em um arquivo `.http`, e no Postman basta criar as requisições com o mesmo método, endereço e corpo.
+
+| Método | Endereço | Função |
+|---|---|---|
+| `POST` | `/api/doadores` | Cadastra um doador |
+| `POST` | `/api/ingredientes` | Cadastra um ingrediente |
+| `GET` | `/api/ingredientes` | Lista os ingredientes |
+| `POST` | `/api/doacoes` | Registra uma doação |
+| `POST` | `/api/receitas/gerar` | Gera uma receita com IA |
+
+### Fluxo básico
+**1. Cadastrar um doador**
+```bash
+curl -X POST http://localhost:8080/api/doadores \
+  -H "Content-Type: application/json" \
+  -d '{"nome":"Mercado Bom Preço","email":"contato@bompreco.com","senha":"senha123","telefone":"11999990000","documento":"12345678000199"}'
+```
+Resposta (`201`): `{"id":1,"nome":"Mercado Bom Preço","email":"contato@bompreco.com"}`. A senha é guardada criptografada (BCrypt) e nunca é devolvida.
+
+**2. Cadastrar um ingrediente**
+```bash
+curl -X POST http://localhost:8080/api/ingredientes \
+  -H "Content-Type: application/json" \
+  -d '{"nome":"Arroz","categoria":"Grãos","unidadeMedida":"kg"}'
+```
+
+**3. Registrar uma doação** (use os `id` devolvidos nos passos anteriores)
+```bash
+curl -X POST http://localhost:8080/api/doacoes \
+  -H "Content-Type: application/json" \
+  -d '{"quantidade":10,"doadorId":1,"ingredienteId":1}'
+```
+A doação nasce com o status `PENDENTE`. O campo `receptorId` é opcional.
+
+**4. Gerar uma receita de aproveitamento total**
+```bash
+curl -X POST http://localhost:8080/api/receitas/gerar \
+  -H "Content-Type: application/json" \
+  -d '{"ingredientes":["arroz","frango","casca de abóbora"]}'
+```
+Resposta (`200`): `{"receita":"..."}`. A resposta da IA pode levar até cerca de 30 segundos.
+
+### Respostas de erro
+| Código | Quando acontece |
+|---|---|
+| `400` | Dados inválidos ou ausentes, e-mail já cadastrado, quantidade menor ou igual a zero |
+| `404` | Doador, ingrediente ou receptor informado não existe |
+| `503` | A IA não está configurada, falhou ou está sobrecarregada. Em caso de sobrecarga (`503` ou `429` do Google), o sistema tenta até 3 vezes antes de desistir |
+
+> **Atenção:** a API ainda não tem login, então os endpoints estão abertos. Não a exponha na internet nesta versão.
 
 ## Contribuição
 
-(A ser adicionado)
+Contribuições são bem-vindas! Para manter o projeto organizado:
+
+1. **Crie uma branch** a partir da `main`, com um nome que descreva o trabalho. Exemplos: `feature/cadastro-receptor`, `fix/validacao-doacao`, `docs/atualiza-readme`.
+2. **Faça commits pequenos e claros**, com o prefixo do tipo de mudança: `feat:`, `fix:`, `docs:`, `test:`, `refactor:` ou `chore:`.
+3. **Rode os testes** antes de enviar: `mvn clean test`. Eles precisam passar.
+4. **Não versione arquivos gerados nem segredos**: `target/`, `.idea/`, chaves de API e senhas ficam de fora (o `.gitignore` já cobre os principais). Use variáveis de ambiente.
+5. **Abra um Pull Request** para a `main`, descrevendo o que mudou e como foi testado. Sempre que existir uma issue relacionada, cite-a (por exemplo, `Closes #28`).
+6. Aguarde a revisão de pelo menos uma pessoa do grupo antes do merge.
