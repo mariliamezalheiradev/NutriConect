@@ -1,8 +1,10 @@
 package com.nutriconect.controller;
 
-import com.nutriconect.dto.DoacaoRequestDTO;
+import com.nutriconect.dto.DoacaoDTO;
+import com.nutriconect.dto.DoacaoResponseDTO;
 import com.nutriconect.service.DoacaoService;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,12 +12,14 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/doacoes")
 public class DoacaoController {
 
-    @Autowired
-    private DoacaoService doacaoService;
+    private final DoacaoService doacaoService;
+
+    public DoacaoController(DoacaoService doacaoService) {
+        this.doacaoService = doacaoService;
+    }
 
     @PostMapping
-    public ResponseEntity<String> criarDoacao(@RequestBody DoacaoRequestDTO dto) {
-        String resultado = doacaoService.processarDoacao(dto);
-        return ResponseEntity.ok(resultado);
+    public ResponseEntity<DoacaoResponseDTO> criarDoacao(@Valid @RequestBody DoacaoDTO dto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(doacaoService.registrar(dto));
     }
 }

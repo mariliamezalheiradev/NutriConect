@@ -40,6 +40,12 @@
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
 
+        <!-- BCrypt para criptografar senhas (sem ativar o Spring Security completo) -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-crypto</artifactId>
+        </dependency>
+
         <!-- Driver PostgreSQL -->
         <dependency>
             <groupId>org.postgresql</groupId>
