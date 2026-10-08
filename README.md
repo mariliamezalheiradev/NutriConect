@@ -90,6 +90,19 @@ Esse público enfrenta, em muitos casos, dificuldades relacionadas à falta de r
 * **ONG (Especialização de Entidade):** Representa a instituição receptora com registroSocial: String e limiteReservasAtivas: int.
 * **Serviços de Localização:** O ServicoGeocodificacao faz a conversão via buscarCoordenadasPorCep(cep: String): Coordenadas, enquanto o ServicoGeolocalizacao realiza o cálculo via calcularDistanciaHaversine(...) e a ordenação de feed por proximidade via ordenarFeedPorProximidade(...).
 
+### Diagrama do Banco de Dados (modelo conceitual)
+
+Proposta de modelagem relacional elaborada pelo grupo:
+
+![Diagrama do banco de dados](docs/diagrama-banco-de-dados.drawio.png)
+
+> **Observação:** este diagrama é o modelo conceitual. A implementação atual (entidades JPA) é uma versão mais enxuta: cada `Doacao` referencia um único ingrediente diretamente (sem `item_doacao`), o status da doação é um enum (`StatusDoacao`) em vez de tabela, e `Estoque` guarda doador, ingrediente, quantidade e validade. Evoluir o código para o modelo completo está na lista de próximos passos.
+
+### Material de referência
+
+* [`docs/nutriconect-esqueleto-diana.zip`](docs/nutriconect-esqueleto-diana.zip): esqueleto Spring Boot elaborado pela Diana (pacote `br.com.nutriconect`), com um `GlobalExceptionHandler` e exemplos de controllers. Serve como consulta e **não faz parte da aplicação**; o tratamento de erros em uso está em `com.nutriconect.exception`.
+* [`docs/REVISAO-REPOSITORIO.md`](docs/REVISAO-REPOSITORIO.md): histórico da revisão do repositório, com o status de cada problema encontrado.
+
 ## Inteligência Artificial (IAGenerativaReceitas)
 
 Um dos grandes diferenciais do projeto é a integração com Inteligência Artificial Generativa, focada no Aproveitamento Total dos Alimentos e no combate ao desperdício.

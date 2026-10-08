@@ -23,9 +23,21 @@
 hs_err_pid*
 replay_pid*
 
-# Build / IDE / segredos
+# Build do Maven
 target/
+
+# IDEs
 .idea/
 *.iml
+.vscode/
+.settings/
+.classpath
+.project
+
+# Segredos e configuracao local (nunca versionar chaves de API)
 .env
 application-local.properties
+application-local.yml
+
+# Excecao: material de referencia versionado em docs/
+!docs/*.zip
