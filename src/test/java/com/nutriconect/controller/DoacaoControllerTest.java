@@ -4,7 +4,6 @@ import com.nutriconect.dto.DoacaoDTO;
 import com.nutriconect.dto.DoacaoResponseDTO;
 import com.nutriconect.exception.GlobalExceptionHandler;
 import com.nutriconect.exception.RecursoNaoEncontradoException;
-import com.nutriconect.model.StatusDoacao;
 import com.nutriconect.service.DoacaoService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,7 +13,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
-import java.time.LocalDateTime;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -41,10 +42,11 @@ class DoacaoControllerTest {
     @Test
     void retorna201AoCriarDoacao() throws Exception {
         when(service.registrar(any(DoacaoDTO.class))).thenReturn(
-                new DoacaoResponseDTO(1L, 5.0, StatusDoacao.PENDENTE, LocalDateTime.now(), 1L, null, 2L));
+                new DoacaoResponseDTO(1L, "PENDENTE", LocalDate.now(), 1L, null,
+                        List.of(new DoacaoResponseDTO.Item(2L, new BigDecimal("5")))));
 
         mvc.perform(post("/api/doacoes").contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"quantidade\":5,\"doadorId\":1,\"ingredienteId\":2}"))
+                        .content("{\"doadorId\":1,\"itens\":[{\"ingredienteId\":2,\"quantidade\":5}]}"))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.status").value("PENDENTE"));
     }
@@ -53,7 +55,7 @@ class DoacaoControllerTest {
     void retorna400QuandoFaltamCamposObrigatorios() throws Exception {
         mvc.perform(post("/api/doacoes").contentType(MediaType.APPLICATION_JSON).content("{}"))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.campos.quantidade").exists());
+                .andExpect(jsonPath("$.campos.doadorId").exists());
     }
 
     @Test
@@ -62,7 +64,7 @@ class DoacaoControllerTest {
                 .thenThrow(new RecursoNaoEncontradoException("Doador não encontrado: 9"));
 
         mvc.perform(post("/api/doacoes").contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"quantidade\":5,\"doadorId\":9,\"ingredienteId\":2}"))
+                        .content("{\"doadorId\":9,\"itens\":[{\"ingredienteId\":2,\"quantidade\":5}]}"))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.erro").value("Doador não encontrado: 9"));
     }

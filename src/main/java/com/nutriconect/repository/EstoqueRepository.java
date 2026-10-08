@@ -4,17 +4,14 @@ import com.nutriconect.model.Estoque;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface EstoqueRepository extends JpaRepository<Estoque, Long> {
 
-    List<Estoque> findByDoadorId(Long doadorId);
+    Optional<Estoque> findByIngredienteId(Long ingredienteId);
 
-    List<Estoque> findByIngredienteId(Long ingredienteId);
-
-    List<Estoque> findByDataValidadeBefore(LocalDate data);
-
-    List<Estoque> findByDataValidadeAfter(LocalDate data);
+    List<Estoque> findByQuantidadeLessThan(BigDecimal quantidade);
 }

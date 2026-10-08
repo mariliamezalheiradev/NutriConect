@@ -3,6 +3,8 @@ package com.nutriconect.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
+import java.time.LocalDate;
+
 public class IngredienteDTO {
 
     @NotBlank(message = "O nome do ingrediente é obrigatório")
@@ -13,29 +15,16 @@ public class IngredienteDTO {
     private String categoria;
 
     @Size(max = 20)
-    private String unidadeMedida;
+    private String unidade;
 
-    public String getNome() {
-        return nome;
-    }
+    private LocalDate validade;
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public String getCategoria() {
-        return categoria;
-    }
-
-    public void setCategoria(String categoria) {
-        this.categoria = categoria;
-    }
-
-    public String getUnidadeMedida() {
-        return unidadeMedida;
-    }
-
-    public void setUnidadeMedida(String unidadeMedida) {
-        this.unidadeMedida = unidadeMedida;
-    }
+    public String getNome() { return nome; }
+    public void setNome(String nome) { this.nome = nome; }
+    public String getCategoria() { return categoria; }
+    public void setCategoria(String categoria) { this.categoria = categoria; }
+    public String getUnidade() { return unidade; }
+    public void setUnidade(String unidade) { this.unidade = unidade; }
+    public LocalDate getValidade() { return validade; }
+    public void setValidade(LocalDate validade) { this.validade = validade; }
 }

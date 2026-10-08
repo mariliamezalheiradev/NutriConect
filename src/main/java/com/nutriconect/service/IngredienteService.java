@@ -20,7 +20,8 @@ public class IngredienteService {
         Ingrediente ingrediente = new Ingrediente();
         ingrediente.setNome(dto.getNome());
         ingrediente.setCategoria(dto.getCategoria());
-        ingrediente.setUnidadeMedida(dto.getUnidadeMedida());
+        ingrediente.setUnidade(dto.getUnidade());
+        ingrediente.setValidade(dto.getValidade());
         return ingredienteRepository.save(ingrediente);
     }
 

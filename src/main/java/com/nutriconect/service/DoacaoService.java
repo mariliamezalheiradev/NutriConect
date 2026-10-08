@@ -2,17 +2,18 @@ package com.nutriconect.service;
 
 import com.nutriconect.dto.DoacaoDTO;
 import com.nutriconect.dto.DoacaoResponseDTO;
+import com.nutriconect.dto.ItemDoacaoDTO;
 import com.nutriconect.exception.RecursoNaoEncontradoException;
-import com.nutriconect.model.Doacao;
-import com.nutriconect.model.Doador;
-import com.nutriconect.model.Ingrediente;
-import com.nutriconect.model.Receptor;
-import com.nutriconect.repository.DoacaoRepository;
-import com.nutriconect.repository.DoadorRepository;
-import com.nutriconect.repository.IngredienteRepository;
-import com.nutriconect.repository.ReceptorRepository;
+import com.nutriconect.exception.RegraNegocioException;
+import com.nutriconect.model.*;
+import com.nutriconect.repository.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Service
 public class DoacaoService {
@@ -21,34 +22,33 @@ public class DoacaoService {
     private final DoadorRepository doadorRepository;
     private final ReceptorRepository receptorRepository;
     private final IngredienteRepository ingredienteRepository;
+    private final StatusDoacaoRepository statusDoacaoRepository;
 
     public DoacaoService(DoacaoRepository doacaoRepository,
                          DoadorRepository doadorRepository,
                          ReceptorRepository receptorRepository,
-                         IngredienteRepository ingredienteRepository) {
+                         IngredienteRepository ingredienteRepository,
+                         StatusDoacaoRepository statusDoacaoRepository) {
         this.doacaoRepository = doacaoRepository;
         this.doadorRepository = doadorRepository;
         this.receptorRepository = receptorRepository;
         this.ingredienteRepository = ingredienteRepository;
+        this.statusDoacaoRepository = statusDoacaoRepository;
     }
 
     @Transactional
     public DoacaoResponseDTO registrar(DoacaoDTO dto) {
-        if (dto.getQuantidade() == null || dto.getQuantidade() <= 0) {
-            throw new IllegalArgumentException("A quantidade deve ser maior que zero.");
+        if (dto.getItens() == null || dto.getItens().isEmpty()) {
+            throw new IllegalArgumentException("Informe ao menos um item na doação.");
         }
 
         Doador doador = doadorRepository.findById(dto.getDoadorId())
                 .orElseThrow(() -> new RecursoNaoEncontradoException(
                         "Doador não encontrado: " + dto.getDoadorId()));
-        Ingrediente ingrediente = ingredienteRepository.findById(dto.getIngredienteId())
-                .orElseThrow(() -> new RecursoNaoEncontradoException(
-                        "Ingrediente não encontrado: " + dto.getIngredienteId()));
 
         Doacao doacao = new Doacao();
-        doacao.setQuantidade(dto.getQuantidade());
         doacao.setDoador(doador);
-        doacao.setIngrediente(ingrediente);
+        doacao.setStatus(statusInicial());
 
         if (dto.getReceptorId() != null) {
             Receptor receptor = receptorRepository.findById(dto.getReceptorId())
@@ -57,14 +57,39 @@ public class DoacaoService {
             doacao.setReceptor(receptor);
         }
 
-        Doacao salva = doacaoRepository.save(doacao);
+        Set<Long> jaInformados = new HashSet<>();
+        for (ItemDoacaoDTO itemDto : dto.getItens()) {
+            if (itemDto.getQuantidade() == null || itemDto.getQuantidade().compareTo(BigDecimal.ZERO) <= 0) {
+                throw new IllegalArgumentException("A quantidade deve ser maior que zero.");
+            }
+            if (!jaInformados.add(itemDto.getIngredienteId())) {
+                throw new RegraNegocioException(
+                        "Ingrediente repetido na doação: " + itemDto.getIngredienteId());
+            }
+            Ingrediente ingrediente = ingredienteRepository.findById(itemDto.getIngredienteId())
+                    .orElseThrow(() -> new RecursoNaoEncontradoException(
+                            "Ingrediente não encontrado: " + itemDto.getIngredienteId()));
+            doacao.adicionarItem(new ItemDoacao(ingrediente, itemDto.getQuantidade()));
+        }
+
+        return paraResposta(doacaoRepository.save(doacao));
+    }
+
+    private StatusDoacao statusInicial() {
+        return statusDoacaoRepository.findByDescricao(StatusDoacao.PENDENTE)
+                .orElseGet(() -> statusDoacaoRepository.save(new StatusDoacao(StatusDoacao.PENDENTE)));
+    }
+
+    private DoacaoResponseDTO paraResposta(Doacao d) {
+        List<DoacaoResponseDTO.Item> itens = d.getItens().stream()
+                .map(i -> new DoacaoResponseDTO.Item(i.getIngrediente().getId(), i.getQuantidade()))
+                .toList();
         return new DoacaoResponseDTO(
-                salva.getId(),
-                salva.getQuantidade(),
-                salva.getStatus(),
-                salva.getDataCriacao(),
-                doador.getId(),
-                salva.getReceptor() != null ? salva.getReceptor().getId() : null,
-                ingrediente.getId());
+                d.getId(),
+                d.getStatus().getDescricao(),
+                d.getDataDoacao(),
+                d.getDoador().getId(),
+                d.getReceptor() != null ? d.getReceptor().getId() : null,
+                itens);
     }
 }
