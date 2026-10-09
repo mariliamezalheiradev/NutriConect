@@ -4,33 +4,30 @@ Sistema de gestão desenvolvido para apoiar Organizações Não Governamentais (
 
 ## Índice
 
-- [Sobre o Projeto](#sobre-o-projeto)
-- [Contextualização: por que o ODS 2](#contextualização-por-que-o-ods-2-fome-zero-e-agricultura-sustentável)
-- [O Problema](#o-problema-desperdício-de-alimentos-no-comércio-local-e-vulnerabilidade-das-ongs)
-- [Objetivo do Sistema](#objetivo-do-sistema)
-- [Público-Alvo](#público-alvo)
-- [Inteligência Artificial no Aplicativo](#inteligência-artificial-no-aplicativo)
-- [Modelagem do Sistema (UML)](#modelagem-do-sistema-uml)
-- [Funcionalidades](#funcionalidades)
-- [Tecnologias Utilizadas](#tecnologias-utilizadas)
-- [Instalação](#instalação)
-- [Como Usar](#como-usar)
-- [Contribuição](#contribuição)
-- [Licença](#licença)
-
----
-
+* [Sobre o Projeto](#sobre-o-projeto)
+* [Contextualização: por que o ODS 2](#contextualização-por-que-o-ods-2-fome-zero-e-agricultura-sustentável)
+* [O Problema](#o-problema-desperdício-de-alimentos-no-comércio-local-e-vulnerabilidade-das-ongs)
+* [Objetivo do Sistema](#objetivo-do-sistema)
+* [Público Alvo](#público-alvo)
+* [Inteligência Artificial no Aplicativo](#inteligência-artificial-iagenerativareceitas)
+* [Modelagem do Sistema (UML)](#modelagem-do-sistema-uml)
+* [Arquitetura do Sistema (Modelo C4)](#arquitetura-do-sistema-modelo-c4)
+* [Funcionalidades](#funcionalidades)
+* [Tecnologias Utilizadas](#tecnologias-utilizadas)
+* [Instalação](#instalação)
+* [Como Usar](#como-usar)
+* [Contribuição](#contribuição)
 ## Sobre o Projeto
 
-Este repositório contém o código-fonte de um sistema de gestão desenvolvido para apoiar Organizações Não Governamentais (ONGs) no processo de captação, organização e distribuição de alimentos doados por comércios locais. O sistema busca reduzir o desperdício alimentar e fortalecer a capacidade operacional de instituições que atuam diretamente no combate à fome.
+Este repositório contém o código fonte de um sistema de gestão desenvolvido para apoiar Organizações Não Governamentais (ONGs) no processo de captação, organização e distribuição de alimentos doados por comércios locais. O sistema busca reduzir o desperdício alimentar e fortalecer a capacidade operacional de instituições que atuam diretamente no combate à fome.
 
 ## Contextualização: por que o ODS 2 (Fome Zero e Agricultura Sustentável)?
 
-A escolha do Objetivo de Desenvolvimento Sustentável (ODS) 2 — Fome Zero e Agricultura Sustentável, definido pela Agenda 2030 da ONU — se justifica pela conexão direta entre o problema identificado e as metas propostas por esse objetivo.
+A escolha do Objetivo de Desenvolvimento Sustentável (ODS) 2, Fome Zero e Agricultura Sustentável, definido pela Agenda 2030 da ONU, se justifica pela conexão direta entre o problema identificado e as metas propostas por esse objetivo.
 
-O ODS 2 não trata apenas da produção de alimentos, mas também da garantia de acesso a alimentação adequada e da redução de perdas ao longo de toda a cadeia produtiva e de distribuição. Entre suas metas, destaca-se o compromisso de reduzir pela metade o desperdício de alimentos per capita mundial nos níveis de varejo e consumo, além de diminuir as perdas na cadeia de produção e abastecimento.
+O ODS 2 não trata apenas da produção de alimentos, mas também da garantia de acesso a alimentação adequada e da redução de perdas ao longo de toda a cadeia produtiva e de distribuição. Entre suas metas, destaca se o compromisso de reduzir pela metade o desperdício de alimentos per capita mundial nos níveis de varejo e consumo, além de diminuir as perdas na cadeia de produção e abastecimento.
 
-No contexto local, observa-se um paradoxo recorrente: enquanto estabelecimentos comerciais descartam diariamente alimentos ainda próprios para consumo, famílias em situação de insegurança alimentar continuam sem acesso regular à comida. Esse projeto se propõe a atuar exatamente nessa lacuna, funcionando como uma ponte tecnológica entre a oferta (comércios com excedentes) e a demanda (ONGs que atendem populações vulneráveis), contribuindo diretamente para as metas do ODS 2.
+No contexto local, observa se um paradoxo recorrente: enquanto estabelecimentos comerciais descartam diariamente alimentos ainda próprios para consumo, famílias em situação de insegurança alimentar continuam sem acesso regular à comida. Esse projeto se propõe a atuar exatamente nessa lacuna, funcionando como uma ponte tecnológica entre a oferta (comércios com excedentes) e a demanda (ONGs que atendem populações vulneráveis), contribuindo diretamente para as metas do ODS 2.
 
 ## O Problema: Desperdício de Alimentos no Comércio Local e Vulnerabilidade das ONGs
 
@@ -38,10 +35,10 @@ No contexto local, observa-se um paradoxo recorrente: enquanto estabelecimentos 
 
 Supermercados, feiras, padarias, restaurantes e outros estabelecimentos comerciais descartam, diariamente, grandes volumes de alimentos que ainda estão em condições adequadas para consumo. Esse desperdício ocorre por diversos motivos, entre eles:
 
-- **Vencimento de prazos comerciais**, muitas vezes anteriores à data real de validade;
-- **Excesso de produção ou compra**, gerando sobras não comercializadas;
-- **Padrões estéticos de mercado**, que descartam alimentos com aparência fora do "padrão", mesmo estando próprios para consumo;
-- **Ausência de processos estruturados de doação**, que fazem com que o descarte se torne o caminho mais simples e imediato para o comerciante.
+* Vencimento de prazos comerciais, muitas vezes anteriores à data real de validade;
+* Excesso de produção ou compra, gerando sobras não comercializadas;
+* Padrões estéticos de mercado, que descartam alimentos com aparência fora do padrão, mesmo estando próprios para consumo;
+* Ausência de processos estruturados de doação, que fazem com que o descarte se torne o caminho mais simples e imediato para o comerciante.
 
 Esse cenário resulta em perdas econômicas para os comércios, impacto ambiental significativo (como emissão de gases de efeito estufa por alimentos em decomposição em aterros) e, sobretudo, no desperdício de um recurso que poderia estar suprindo necessidades básicas da população.
 
@@ -49,31 +46,31 @@ Esse cenário resulta em perdas econômicas para os comércios, impacto ambienta
 
 Do outro lado dessa cadeia, muitas ONGs que atuam na distribuição de alimentos e no combate à fome enfrentam desafios estruturais significativos:
 
-- **Dependência de doações irregulares**, sem previsibilidade de volume, tipo ou frequência;
-- **Falta de recursos tecnológicos** para gerenciar cadastros de beneficiários, estoque de doações e logística de distribuição;
-- **Processos manuais e descentralizados**, que dificultam o registro de informações, a comunicação com doadores e a tomada de decisão;
-- **Limitação de equipe e infraestrutura**, o que reduz a capacidade de resposta rápida a excedentes disponíveis nos comércios.
+* Dependência de doações irregulares, sem previsibilidade de volume, tipo ou frequência;
+* Falta de recursos tecnológicos para gerenciar cadastros de beneficiários, estoque de doações e logística de distribuição;
+* Processos manuais e descentralizados, que dificultam o registro de informações, a comunicação com doadores e a tomada de decisão;
+* Limitação de equipe e infraestrutura, o que reduz a capacidade de resposta rápida a excedentes disponíveis nos comércios.
 
-Essa combinação de fatores — desperdício de um lado e escassez de recursos de gestão do outro — evidencia a necessidade de uma solução que organize, sistematize e facilite essa conexão, otimizando o aproveitamento de alimentos e fortalecendo a atuação das ONGs junto às comunidades que atendem.
+Essa combinação de fatores evidencia a necessidade de uma solução que organize, sistematize e facilite essa conexão, otimizando o aproveitamento de alimentos e fortalecendo a atuação das ONGs junto às comunidades que atendem.
 
 ## Objetivo do Sistema
 
 Diante desse cenário, o sistema desenvolvido neste projeto tem como objetivo oferecer às ONGs uma ferramenta de gestão que permita:
 
-- Registrar e organizar doações recebidas de comércios locais;
-- Gerenciar estoque de alimentos de forma simples e acessível;
-- Acompanhar a distribuição para beneficiários;
-- Facilitar a comunicação e o histórico de parcerias com doadores.
+* Registrar e organizar doações recebidas de comércios locais;
+* Gerenciar estoque de alimentos de forma simples e acessível;
+* Acompanhar a distribuição para beneficiários;
+* Facilitar a comunicação e o histórico de parcerias com doadores.
 
-Com isso, busca-se reduzir o desperdício de alimentos, fortalecer a capacidade operacional das ONGs e contribuir de forma concreta para as metas do ODS 2 no contexto local.
+Com isso, busca se reduzir o desperdício de alimentos, fortalecer a capacidade operacional das ONGs e contribuir de forma concreta para as metas do ODS 2 no contexto local.
 
-## Público-Alvo
+## Público Alvo
 
-Dentro do projeto NutriConect, existem dois principais públicos-alvo: os **Doadores** e os **Receptores**. Embora possuam necessidades e objetivos diferentes, ambos estão diretamente relacionados à proposta do aplicativo, que busca criar uma ponte entre alimentos que poderiam ser desperdiçados e pessoas ou instituições que necessitam desses recursos.
+Dentro do projeto NutriConect, existem dois principais públicos alvo: os Doadores e os Receptores. Embora possuam necessidades e objetivos diferentes, ambos estão diretamente relacionados à proposta do aplicativo, que busca criar uma ponte entre alimentos que poderiam ser desperdiçados e pessoas ou instituições que necessitam desses recursos.
 
 ### Doadores
 
-O primeiro público-alvo é formado pelos doadores, que podem ser comerciantes, feirantes, supermercados locais, pequenos estabelecimentos e também moradores que possuam alimentos próprios para consumo que não serão mais utilizados. Esses usuários terão um papel fundamental no funcionamento do NutriConect, pois serão responsáveis por disponibilizar os alimentos que poderão ser destinados a instituições e comunidades em situação de vulnerabilidade social.
+O primeiro público alvo é formado pelos doadores, que podem ser comerciantes, feirantes, supermercados locais, pequenos estabelecimentos e também moradores que possuam alimentos próprios para consumo que não serão mais utilizados. Esses usuários terão um papel fundamental no funcionamento do NutriConect, pois serão responsáveis por disponibilizar os alimentos que poderão ser destinados a instituições e comunidades em situação de vulnerabilidade social.
 
 Entre as principais características desse público está a necessidade de encontrar uma forma simples, rápida e segura de realizar doações, evitando que alimentos ainda próprios para consumo sejam descartados. No caso de comerciantes e estabelecimentos, por exemplo, podem existir produtos próximos da data de validade, alimentos que não atendem mais aos padrões comerciais de aparência ou itens que não foram vendidos dentro do período esperado, mas que ainda apresentam condições adequadas para consumo.
 
@@ -81,91 +78,270 @@ O aplicativo pretende facilitar esse processo, permitindo que o doador informe q
 
 ### Receptores
 
-O segundo público-alvo é formado pelos receptores, que incluem gestores de Organizações Não Governamentais (ONGs), abrigos, cozinhas comunitárias, projetos sociais e outras instituições que atendam pessoas em situação de vulnerabilidade social.
+O segundo público alvo é formado pelos receptores, que incluem gestores de Organizações Não Governamentais (ONGs), abrigos, cozinhas comunitárias, projetos sociais e outras instituições que atendam pessoas em situação de vulnerabilidade social.
 
 Esse público enfrenta, em muitos casos, dificuldades relacionadas à falta de recursos financeiros para a aquisição regular de alimentos, além dos desafios para encontrar doações e organizar sua logística de recebimento. Por esse motivo, o NutriConect busca oferecer uma maneira mais direta de localizar alimentos disponíveis para doação e estabelecer contato com possíveis doadores.
 
-Para os receptores, o aplicativo poderá facilitar a identificação de oportunidades de doação de acordo com suas necessidades, localização e capacidade de recebimento. Isso contribui para que os alimentos sejam destinados de maneira mais eficiente, reduzindo o tempo entre a oferta e o recebimento da doação.
-
-### Relação entre os públicos
-
-A principal característica do público-alvo do NutriConect é justamente a conexão entre esses dois grupos. De um lado, existem pessoas e estabelecimentos que possuem alimentos excedentes e que, sem uma alternativa adequada, poderiam acabar sendo descartados. Do outro, existem instituições que necessitam desses alimentos para atender pessoas em situação de vulnerabilidade.
-
-Nesse contexto, o NutriConect atua como uma ponte entre quem pode doar e quem precisa receber, tornando o processo mais organizado, acessível e eficiente. A proposta não é apenas reduzir o desperdício de alimentos, mas também fortalecer a colaboração entre comerciantes, moradores e instituições sociais, transformando um problema cotidiano em uma oportunidade de gerar impacto positivo na comunidade.
-
-## Inteligência Artificial no Aplicativo
-
-O aplicativo utiliza duas abordagens complementares de Inteligência Artificial para combater o desperdício de alimentos e promover a segurança alimentar:
-
-### 1. Algoritmo de Matching Geográfico por Raio (Localização de ONGs)
-
-Mapeia e conecta pessoas que precisam de alimento às ONGs parceiras mais próximas para retirada imediata:
-
-- **Mapeamento:** Cadastro geolocalizado de ONGs parceiras com pontos de coleta e distribuição.
-- **Busca por Proximidade:** Identificação da localização do usuário e cálculo do raio de distância até os pontos de distribuição.
-- **Recomendação Inteligente:** Priorização das ONGs mais próximas com itens disponíveis para facilitar o deslocamento.
-
-### 2. IA Generativa de Receitas (Visão Computacional e Culinária)
-
-Ajuda o usuário a aproveitar ingredientes em casa antes que vençam:
-
-- **Reconhecimento por Foto:** Identificação automática dos alimentos a partir de uma foto tirada pelo usuário.
-- **Geração de Receitas:** Sugestões personalizadas de preparo prático e rápido com base nos ingredientes detectados.
-- **Aproveitamento Total:** Foco em consumo consciente e desperdício zero.
-
 ## Modelagem do Sistema (UML)
 
-### Especificação das Entidades e Métodos
+* **Entidade (Classe Base):** Centraliza os dados cadastrais gerais e geolocalização (id: int, razaoSocial: String, cnpj: String, cep: String, telefone: String, endereco: String, latitude: double, longitude: double).
+* **Usuario:** Gerencia autenticação e papéis de acesso no sistema (id: int, authId: String, nome: String, email: String, papel: String) com o método fazerLogin(): boolean.
+* **Doador (Especialização de Entidade):** Representa o doador da plataforma, contendo o atributo de negócio tipoComercio: Enum.
+* **ONG (Especialização de Entidade):** Representa a instituição receptora com registroSocial: String e limiteReservasAtivas: int.
+* **Serviços de Localização:** O ServicoGeocodificacao faz a conversão via buscarCoordenadasPorCep(cep: String): Coordenadas, enquanto o ServicoGeolocalizacao realiza o cálculo via calcularDistanciaHaversine(...) e a ordenação de feed por proximidade via ordenarFeedPorProximidade(...).
 
-- **Usuario** *(classe abstrata)*: centraliza os dados cadastrais básicos e os métodos de autenticação, servindo de base para as especializações `Doador` e `ONG`.
-  - Atributos: `id: int`, `nome: String`, `email: String`, `telefone: String`, `endereco: String`
-  - Métodos: `fazerLogin(): boolean`, `atualizarCadastro(): void`
+### Diagrama do Banco de Dados (modelo conceitual)
 
-- **Doador** *(especialização de Usuario)*: representa o doador cadastrado na plataforma — comerciantes, feirantes, supermercados ou moradores.
-  - Atributos: `cnpj: String`, `tipoComercio: Enum`
-  - Métodos: `cadastrarAlimento(): void`, `confirmarRetirada(): void`
+Proposta de modelagem relacional elaborada pelo grupo:
 
-- **ONG** *(especialização de Usuario)*: representa a instituição receptora.
-  - Atributos: `registroSocial: String`, `capArmazenamento: double`, `necessidadeUrgente: String`
-  - Métodos: `solicitarDoacao(): void`, `gerarReceitaComIA(): void`
+![Diagrama do banco de dados](docs/diagrama-banco-de-dados.drawio.png)
 
-- **Alimento**: mapeia os insumos doados no sistema, contando com controle de segurança alimentar.
-  - Atributos: `id: int`, `nome: String`, `quantidade: double`, `unidadeMedida: String`, `dataVencimento: Date`, `statusPerecivel: boolean`
-  - Métodos: `verificarValidade(): boolean`
+> **Observação:** as entidades JPA implementam este diagrama (10 tabelas: `tb_usuario`, `tb_doador`, `tb_receptor`, `tb_doacao`, `tb_status_doacao`, `tb_item_doacao`, `tb_ingrediente`, `tb_estoque`, `tb_receita` e `tb_receita_ingrediente`). Pequenas diferenças: `doador` e `receptor` compartilham o `id` do `usuario` (herança JPA, equivalente à relação 1:1 do diagrama), e foram mantidos os campos extras `doador.documento`, `receptor.cnpj`, `receptor.endereco` e `ingrediente.categoria`.
 
-- **Doação**: representa o registro de cada doação realizada entre um Doador e uma ONG.
-  - Atributos: `id: int`, `dataDoacao: Date`, `status: String`
-  - Métodos: `registrarDoacao(): void`, `confirmarRetirada(): void`
+### Material de referência
 
-- **GerenciadorIA**: módulo utilitário da plataforma responsável pelas regras de Matching Geográfico e pela IA Generativa de Receitas, para evitar o desperdício de alimentos.
-  - Atributos: `modeloIA: String`
-  - Métodos: `calcularMelhorMatch(): void`, `sugerirReceitaNutritiva(): void`
+* [`docs/nutriconect-esqueleto-diana.zip`](docs/nutriconect-esqueleto-diana.zip): esqueleto Spring Boot elaborado pela Diana (pacote `br.com.nutriconect`), com um `GlobalExceptionHandler` e exemplos de controllers. Serve como consulta e **não faz parte da aplicação**; o tratamento de erros em uso está em `com.nutriconect.exception`.
+* [`docs/REVISAO-REPOSITORIO.md`](docs/REVISAO-REPOSITORIO.md): histórico da revisão do repositório, com o status de cada problema encontrado.
 
-### Diagrama de Classes UML
+## Inteligência Artificial (IAGenerativaReceitas)
 
-<img width="859" height="836" alt="Diagrama de Classes NutriConect" src="https://github.com/user-attachments/assets/4567fde9-d02f-402b-b828-0170973a18ae" />
+Um dos grandes diferenciais do projeto é a integração com Inteligência Artificial Generativa, focada no Aproveitamento Total dos Alimentos e no combate ao desperdício.
 
+### Como Funciona
+
+Enquanto o sistema gerencia as doações e a logística de estoque, o serviço de IA auxilia as ONGs e doadores a reaproveitarem ao máximo os insumos disponíveis (incluindo sobras próprias para consumo, talos e cascas).
+
+* **Entrada de Dados:** O usuário ou ONG seleciona ou digita a lista de ingredientes disponíveis em mãos (ex: arroz de ontem, casca de abóbora, frango).
+* **Processamento:** A aplicação envia essa lista para a classe de serviço IAGenerativaReceitas.
+* **Resposta Criativa:** A IA processa os itens e retorna uma receita culinária passo a passo, criativa e nutritiva, evitando o descarte desnecessário de alimentos.
+
+## Arquitetura do Sistema (Modelo C4)
+
+Para garantir que todas as frentes de desenvolvimento (Frontend e Backend) estejam alinhadas e que a integração com os serviços de Inteligência Artificial seja viável e segura, a arquitetura do NutriConect foi documentada utilizando o Modelo C4.
+
+### Diagrama de Contexto (Nível 1)
+
+O diagrama de contexto ilustra a visão macro do NutriConect, mostrando nossos principais usuários (Doadores e Gestores de ONG) e como o nosso sistema interage com plataformas externas para entregar valor.
+
+> **Nota:** O Nível 1 demonstra a relação de atores externos com o ecossistema NutriConect.
+
+![c4 nível 1](docs/c4-nivel1.jpeg)
+
+### Diagrama de Contêineres (Nível 2)
+
+> **Nota:** O Nível 2 deste diagrama faz um zoom no nosso sistema, detalhando os grandes blocos de execução, suas tecnologias e como os dados fluem entre eles.
+
+![c4 nível 2](docs/c4-nivel2.jpeg)
+
+### Justificativas Técnicas
+
+As escolhas arquiteturais foram feitas pensando no crescimento sustentável da plataforma e na segurança dos dados:
+
+* **Backend em Java com Spring Boot:** A escolha deste ecossistema garante alta escalabilidade para lidar com um volume crescente de doações e acessos simultâneos. Além disso, oferece um módulo nativo rigoroso de segurança (Spring Security), essencial para proteger dados sensíveis de usuários e organizações.
+* **Consumo Isolado da Google Gemini API (Inteligência Artificial):** A comunicação com o Google AI Studio para a nossa geração de receitas focada no ODS 2 é feita exclusivamente pelo nosso servidor Backend (Java). Esse isolamento protege nossas chaves de API contra interceptação no lado do cliente e centraliza as regras de negócio. O aplicativo apenas interage com a nossa API, que por sua vez consome a IA e devolve o resultado seguro.
+* **Banco de Dados Relacional (PostgreSQL/MySQL):** Garante a integridade referencial complexa necessária para vincular de forma consistente os Doadores, ONGs, Estoques e Históricos de Transações.
+* **Integração com API de Geocodificação:** Vital para o nosso algoritmo de Matching Geográfico por Raio. O backend converte os CEPs cadastrados em coordenadas (Latitude e Longitude), permitindo que o sistema calcule a distância e sugira as ONGs mais próximas de forma eficiente.
 
 ## Funcionalidades
 
-_(Seção a ser detalhada)_
+### Disponíveis nesta versão
+* **Cadastro de doadores**, com senha criptografada (BCrypt) e verificação de e-mail duplicado.
+* **Login com Spring Security e token JWT**: as rotas, exceto o cadastro de doador e o login, exigem o token. Os papéis `DOADOR` e `RECEPTOR` definem o que cada usuário pode fazer; só um doador registra doações, e sempre em seu próprio nome.
+* **Cadastro e listagem de ingredientes** (nome, categoria, unidade e validade).
+* **Registro de doações com vários itens**: cada doação tem um doador, um ou mais itens (ingrediente + quantidade) e, opcionalmente, um receptor; nasce com o status `PENDENTE` (os status ficam em uma tabela própria).
+* **Geração de receitas com IA (Google Gemini)**: a partir de uma lista de ingredientes, devolve uma receita de aproveitamento total, alinhada ao ODS 2. Inclui tempo limite e novas tentativas automáticas quando o serviço está sobrecarregado.
+* **Validação de dados e respostas de erro padronizadas** em JSON (`400`, `404`, `405`, `422`, `500` e `503`), sem expor detalhes internos.
+* **Modelo de dados relacional alinhado ao diagrama do grupo**: usuário, doador, receptor, doação, item da doação, status da doação, ingrediente, estoque, receita e receita–ingrediente (10 tabelas).
+
+### Planejadas
+* Cadastro de receptores (ONGs) e gestão de estoque com data de validade.
+* Listagem, acompanhamento e atualização do status das doações.
+* Matching geográfico por raio, sugerindo as ONGs mais próximas do doador.
+* Salvar no banco as receitas geradas pela IA.
+* Interface (frontend) para doadores e ONGs.
 
 ## Tecnologias Utilizadas
 
-_(Seção a ser detalhada)_
+| Área | Tecnologia |
+|---|---|
+| Linguagem | Java 17 |
+| Framework | Spring Boot 3.2.5 (Spring Web, Spring Data JPA, Bean Validation) |
+| Banco de dados | PostgreSQL (produção/desenvolvimento) e H2 em memória (testes) |
+| Persistência | JPA / Hibernate |
+| Segurança | Spring Security (filtros, papéis), tokens JWT assinados com HS256 e BCrypt para senhas |
+| Inteligência Artificial | Google Gemini API, consumida apenas pelo backend |
+| Build | Maven |
+| Testes | JUnit 5, Mockito e Spring Test (`MockRestServiceServer`) |
+| Arquitetura e modelagem | Modelo C4 e diagramas UML (veja as seções acima) |
 
 ## Instalação
 
-_(Seção a ser detalhada)_
+### Pré-requisitos
+* **JDK 17 ou superior**
+* **PostgreSQL 15 ou superior** (testado com a 17)
+* **Maven 3.9+**, ou o IntelliJ IDEA, que já traz o Maven embutido
+* Uma **chave da API do Google Gemini** (criada no [Google AI Studio](https://aistudio.google.com/apikey)), necessária só para gerar receitas
+
+### 1. Clonar o repositório
+```bash
+git clone https://github.com/mariliamezalheiradev/NutriConect.git
+cd NutriConect
+```
+
+### 2. Criar o banco de dados
+No pgAdmin ou no `psql`:
+```sql
+CREATE DATABASE nutriconect;
+```
+As tabelas são criadas automaticamente na primeira execução.
+
+> **Já rodou uma versão anterior do projeto?** O modelo de dados mudou (por exemplo, `tb_doacao` agora tem itens e status em tabelas próprias). Como não há ferramenta de migração, recrie o banco antes de subir esta versão: no pgAdmin, apague o banco `nutriconect` e crie-o de novo, ou execute `DROP SCHEMA public CASCADE; CREATE SCHEMA public;` conectado a ele.
+
+### 3. Configurar as variáveis de ambiente
+Nenhum segredo fica no código: a aplicação lê tudo de variáveis de ambiente.
+
+| Variável | Obrigatória | Padrão | Descrição |
+|---|---|---|---|
+| `DB_URL` | não | `jdbc:postgresql://localhost:5432/nutriconect` | URL do banco |
+| `DB_USER` | não | `postgres` | Usuário do banco |
+| `DB_PASSWORD` | sim, se o usuário tiver senha | vazio | Senha do banco |
+| `GEMINI_API_KEY` | só para gerar receitas | vazio | Chave da API do Gemini |
+| `GEMINI_MODEL` | não | `gemini-flash-latest` | Modelo do Gemini, caso o padrão seja descontinuado |
+| `JWT_SECRET` | recomendada | gerada ao iniciar | Segredo que assina os tokens de login, com **no mínimo 32 caracteres**. Sem ela, a aplicação gera um segredo aleatório a cada início e os tokens deixam de valer ao reiniciar |
+| `JWT_EXPIRACAO_MINUTOS` | não | `60` | Validade do token, em minutos |
+
+> **Nunca** escreva a chave ou a senha em arquivos do projeto nem as envie ao Git.
+
+**Gerando o `JWT_SECRET`** (uma vez, e guarde o valor só no seu computador). No PowerShell:
+```powershell
+$b = New-Object byte[] 48; [Security.Cryptography.RandomNumberGenerator]::Create().GetBytes($b); [Convert]::ToBase64String($b)
+```
+ou, onde houver o `openssl` (Linux, macOS, Git Bash): `openssl rand -base64 48`. Se você trocar o segredo, os tokens já emitidos deixam de valer e é preciso fazer login de novo.
+
+### 4. Executar
+
+**Pelo IntelliJ IDEA**
+1. Abra a pasta do projeto (**File → Open**) e aguarde o Maven carregar as dependências.
+2. Abra `NutriConectApplication.java` e clique no triângulo verde ao lado do `main`.
+3. Em **Edit Configurations → Modify options → Environment variables**, informe, por exemplo:
+   `DB_PASSWORD=sua_senha;GEMINI_API_KEY=sua_chave;JWT_SECRET=seu_segredo`
+
+**Pelo terminal**
+
+Linux/macOS:
+```bash
+export DB_PASSWORD=sua_senha
+export GEMINI_API_KEY=sua_chave
+export JWT_SECRET=seu_segredo
+mvn spring-boot:run
+```
+Windows (PowerShell):
+```powershell
+$env:DB_PASSWORD = "sua_senha"
+$env:GEMINI_API_KEY = "sua_chave"
+$env:JWT_SECRET = "seu_segredo"
+mvn spring-boot:run
+```
+
+A aplicação sobe em `http://localhost:8080`. O console termina com `Started NutriConectApplication`.
+
+### 5. Executar os testes
+```bash
+mvn clean test
+```
+Os testes usam um banco H2 em memória e não precisam de PostgreSQL nem de chave do Gemini.
 
 ## Como Usar
 
-_(Seção a ser detalhada)_
+A API recebe e devolve JSON. Os exemplos abaixo usam `curl`; no IntelliJ você pode colar o mesmo conteúdo em um arquivo `.http`, e no Postman basta criar as requisições com o mesmo método, endereço e corpo.
+
+Com exceção do cadastro de doador e do login, **todas as rotas exigem o token** no cabeçalho `Authorization: Bearer <token>`.
+
+| Método | Endereço | Quem acessa | Função |
+|---|---|---|---|
+| `POST` | `/api/doadores` | público | Cadastra um doador |
+| `POST` | `/api/auth/login` | público | Faz login e devolve o token |
+| `POST` | `/api/ingredientes` | qualquer usuário logado | Cadastra um ingrediente |
+| `GET` | `/api/ingredientes` | qualquer usuário logado | Lista os ingredientes |
+| `POST` | `/api/doacoes` | somente `DOADOR` | Registra uma doação em nome do próprio doador |
+| `POST` | `/api/receitas/gerar` | qualquer usuário logado | Gera uma receita com IA |
+
+### Fluxo básico
+**1. Cadastrar um doador**
+```bash
+curl -X POST http://localhost:8080/api/doadores \
+  -H "Content-Type: application/json" \
+  -d '{"nome":"Mercado Bom Preço","email":"contato@bompreco.com","senha":"senha123","telefone":"11999990000","documento":"12345678000199"}'
+```
+Resposta (`201`): `{"id":1,"nome":"Mercado Bom Preço","email":"contato@bompreco.com"}`. A senha é guardada criptografada (BCrypt) e nunca é devolvida.
+
+**2. Fazer login**
+```bash
+curl -X POST http://localhost:8080/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"contato@bompreco.com","senha":"senha123"}'
+```
+Resposta (`200`): `{"token":"eyJ...","tipo":"Bearer","expiraEmSegundos":3600,"papel":"DOADOR"}`. Copie o valor de `token`; nos próximos passos ele vai no cabeçalho `Authorization`. Se o e-mail ou a senha estiverem errados, a resposta é `401` com a mesma mensagem nos dois casos.
+
+**3. Cadastrar um ingrediente**
+```bash
+curl -X POST http://localhost:8080/api/ingredientes \
+  -H "Authorization: Bearer SEU_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"nome":"Arroz","categoria":"Grãos","unidade":"kg","validade":"2026-12-31"}'
+```
+
+**4. Registrar uma doação** (use o `id` do ingrediente devolvido no passo anterior)
+```bash
+curl -X POST http://localhost:8080/api/doacoes \
+  -H "Authorization: Bearer SEU_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"itens":[{"ingredienteId":1,"quantidade":10.5}]}'
+```
+O doador é sempre o usuário logado, identificado pelo token. Se você enviar `doadorId`, ele precisa ser o seu próprio id, senão a resposta é `403`. Uma doação pode ter vários itens (um por ingrediente, sem repetir o mesmo ingrediente) e nasce com o status `PENDENTE`. O campo `receptorId` é opcional.
+
+**5. Gerar uma receita de aproveitamento total**
+```bash
+curl -X POST http://localhost:8080/api/receitas/gerar \
+  -H "Authorization: Bearer SEU_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"ingredientes":["arroz","frango","casca de abóbora"]}'
+```
+Resposta (`200`): `{"receita":"..."}`. A resposta da IA pode levar até cerca de 30 segundos.
+
+### Respostas de erro
+Todo erro volta em JSON, no mesmo formato:
+```json
+{
+  "timestamp": "2026-10-08T22:35:28.68",
+  "status": 422,
+  "erro": "Regra de negócio violada",
+  "mensagem": "Já existe um usuário com este e-mail.",
+  "caminho": "/api/doadores"
+}
+```
+Nos erros de validação, o objeto também traz `"campos"`, com a mensagem de cada campo inválido.
+
+| Código | Quando acontece |
+|---|---|
+| `400` | Campos inválidos ou ausentes, JSON malformado ou corpo ausente, parâmetro com tipo errado, doação sem itens, quantidade menor ou igual a zero |
+| `401` | Sem token, token inválido ou expirado, e-mail ou senha incorretos no login |
+| `403` | Usuário logado sem permissão: por exemplo, um receptor tentando registrar doação, ou um doador tentando doar em nome de outro |
+| `404` | Doador, ingrediente ou receptor informado não existe, ou o endereço não existe |
+| `405` | Método HTTP não aceito naquele endereço |
+| `422` | Regra de negócio violada: e-mail já cadastrado, ingrediente repetido na doação |
+| `500` | Erro inesperado. A resposta traz uma mensagem genérica e o detalhe fica só no log do servidor |
+| `503` | A IA não está configurada, falhou ou está sobrecarregada. Em caso de sobrecarga (`503` ou `429` do Google), o sistema tenta até 3 vezes antes de desistir |
+
+> **Segurança:** em qualquer ambiente real, defina `JWT_SECRET` com um valor longo e secreto e use HTTPS, porque o token viaja em cada requisição. Ainda não há limite de tentativas de login nem cadastro de receptor pela API.
 
 ## Contribuição
 
-_(Seção a ser detalhada)_
+Contribuições são bem-vindas! Para manter o projeto organizado:
 
-## Licença
-
-_(Seção a ser detalhada)_
+1. **Crie uma branch** a partir da `main`, com um nome que descreva o trabalho. Exemplos: `feature/cadastro-receptor`, `fix/validacao-doacao`, `docs/atualiza-readme`.
+2. **Faça commits pequenos e claros**, com o prefixo do tipo de mudança: `feat:`, `fix:`, `docs:`, `test:`, `refactor:` ou `chore:`.
+3. **Rode os testes** antes de enviar: `mvn clean test`. Eles precisam passar.
+4. **Não versione arquivos gerados nem segredos**: `target/`, `.idea/`, chaves de API e senhas ficam de fora (o `.gitignore` já cobre os principais). Use variáveis de ambiente.
+5. **Abra um Pull Request** para a `main`, descrevendo o que mudou e como foi testado. Sempre que existir uma issue relacionada, cite-a (por exemplo, `Closes #28`).
+6. Aguarde a revisão de pelo menos uma pessoa do grupo antes do merge.
