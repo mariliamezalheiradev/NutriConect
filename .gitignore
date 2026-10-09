@@ -22,3 +22,22 @@
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 replay_pid*
+
+# Build do Maven
+target/
+
+# IDEs
+.idea/
+*.iml
+.vscode/
+.settings/
+.classpath
+.project
+
+# Segredos e configuracao local (nunca versionar chaves de API)
+.env
+application-local.properties
+application-local.yml
+
+# Excecao: material de referencia versionado em docs/
+!docs/*.zip
