@@ -1,34 +1,24 @@
-package com.nutriconect.model;
+package com.nutriconect.dto;
 
-import jakarta.persistence.*;
-import java.io.Serializable;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
 import java.time.LocalDate;
 
-@Entity
-@Table(name = "tb_ingrediente")
-public class Ingrediente implements Serializable {
+public class IngredienteDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(nullable = false, length = 100)
+    @NotBlank(message = "O nome do ingrediente é obrigatório")
+    @Size(max = 100)
     private String nome;
 
-    /** Campo extra, não consta no diagrama conceitual. */
-    @Column(length = 50)
+    @Size(max = 50)
     private String categoria;
 
-    @Column(length = 20)
+    @Size(max = 20)
     private String unidade;
 
-    @Column
     private LocalDate validade;
 
-    public Ingrediente() {}
-
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
     public String getNome() { return nome; }
     public void setNome(String nome) { this.nome = nome; }
     public String getCategoria() { return categoria; }
