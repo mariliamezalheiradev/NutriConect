@@ -1,4 +1,4 @@
 package com.nutriconect.dto;
 
-public class Coordenadas {
+public record Coordenadas(double latitude, double longitude) {
 }
