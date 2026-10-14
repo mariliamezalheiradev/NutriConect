@@ -1,0 +1,17 @@
+### 1. Login (guarda o token automaticamente)
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{ "email": "contato@bompreco.com", "senha": "senha123" }
+
+> {%
+    client.global.set("token", response.body.token);
+%}
+
+### 2. Gerar receita com a IA   (esperado: 200; pode levar mais de 1 minuto)
+# @timeout 180
+POST http://localhost:8080/api/receitas/gerar
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{ "ingredientes": ["arroz", "feijão", "casca de abóbora"] }
