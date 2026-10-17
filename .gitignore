@@ -41,3 +41,8 @@ application-local.yml
 
 # Excecao: material de referencia versionado em docs/
 !docs/*.zip
+
+# Front-end
+node_modules/
+dist/
+.env
