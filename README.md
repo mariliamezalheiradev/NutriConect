@@ -146,7 +146,9 @@ As escolhas arquiteturais foram feitas pensando no crescimento sustentável da p
 
 ### Disponíveis nesta versão
 * **Cadastro de doadores**, com senha criptografada (BCrypt) e verificação de e-mail duplicado.
-* **Login com Spring Security e token JWT**: as rotas, exceto o cadastro de doador e o login, exigem o token. Os papéis `DOADOR` e `RECEPTOR` definem o que cada usuário pode fazer; só um doador registra doações, e sempre em seu próprio nome.
+* **Cadastro de receptores (ONGs) com geocodificação**: a ONG informa o CEP, o servidor converte o CEP em latitude e longitude pela AwesomeAPI (gratuita, sem chave) e guarda as coordenadas no banco.
+* **Busca de ONGs próximas**: dado o CEP do doador e um raio em km, devolve as ONGs dentro do raio, da mais perto para a mais longe, com a distância em linha reta (fórmula de Haversine).
+* **Login com Spring Security e token JWT**: as rotas, exceto o cadastro de doador, o cadastro de ONG e o login, exigem o token. Os papéis `DOADOR` e `RECEPTOR` definem o que cada usuário pode fazer; só um doador registra doações, e sempre em seu próprio nome.
 * **Cadastro e listagem de ingredientes** (nome, categoria, unidade e validade).
 * **Registro de doações com vários itens**: cada doação tem um doador, um ou mais itens (ingrediente + quantidade) e, opcionalmente, um receptor; nasce com o status `PENDENTE` (os status ficam em uma tabela própria).
 * **Geração de receitas com IA (Google Gemini)**: a partir de uma lista de ingredientes, devolve uma receita de aproveitamento total, alinhada ao ODS 2. Inclui tempo limite e novas tentativas automáticas quando o serviço está sobrecarregado.
@@ -154,9 +156,9 @@ As escolhas arquiteturais foram feitas pensando no crescimento sustentável da p
 * **Modelo de dados relacional alinhado ao diagrama do grupo**: usuário, doador, receptor, doação, item da doação, status da doação, ingrediente, estoque, receita e receita–ingrediente (10 tabelas).
 
 ### Planejadas
-* Cadastro de receptores (ONGs) e gestão de estoque com data de validade.
+* Gestão de estoque com data de validade.
 * Listagem, acompanhamento e atualização do status das doações.
-* Matching geográfico por raio, sugerindo as ONGs mais próximas do doador.
+* Sugerir a ONG mais próxima já no registro da doação (hoje a busca por proximidade é uma consulta separada).
 * Salvar no banco as receitas geradas pela IA.
 * Interface (frontend) para doadores e ONGs.
 
@@ -209,6 +211,7 @@ Nenhum segredo fica no código: a aplicação lê tudo de variáveis de ambiente
 | `GEMINI_MODEL` | não | `gemini-flash-latest` | Modelo do Gemini, caso o padrão seja descontinuado |
 | `JWT_SECRET` | recomendada | gerada ao iniciar | Segredo que assina os tokens de login, com **no mínimo 32 caracteres**. Sem ela, a aplicação gera um segredo aleatório a cada início e os tokens deixam de valer ao reiniciar |
 | `JWT_EXPIRACAO_MINUTOS` | não | `60` | Validade do token, em minutos |
+| `GEOCODIFICACAO_URL` | não | `https://cep.awesomeapi.com.br/json/` | Endereço da API que converte CEP em coordenadas. Só mude para trocar de API |
 
 > **Nunca** escreva a chave ou a senha em arquivos do projeto nem as envie ao Git.
 
@@ -255,11 +258,13 @@ Os testes usam um banco H2 em memória e não precisam de PostgreSQL nem de chav
 
 A API recebe e devolve JSON. Os exemplos abaixo usam `curl`; no IntelliJ você pode colar o mesmo conteúdo em um arquivo `.http`, e no Postman basta criar as requisições com o mesmo método, endereço e corpo.
 
-Com exceção do cadastro de doador e do login, **todas as rotas exigem o token** no cabeçalho `Authorization: Bearer <token>`.
+Com exceção do cadastro de doador, do cadastro de ONG e do login, **todas as rotas exigem o token** no cabeçalho `Authorization: Bearer <token>`.
 
 | Método | Endereço | Quem acessa | Função |
 |---|---|---|---|
 | `POST` | `/api/doadores` | público | Cadastra um doador |
+| `POST` | `/api/receptores` | público | Cadastra uma ONG e guarda as coordenadas do CEP |
+| `GET` | `/api/receptores/proximos` | qualquer usuário logado | Lista as ONGs dentro de um raio, da mais perto para a mais longe |
 | `POST` | `/api/auth/login` | público | Faz login e devolve o token |
 | `POST` | `/api/ingredientes` | qualquer usuário logado | Cadastra um ingrediente |
 | `GET` | `/api/ingredientes` | qualquer usuário logado | Lista os ingredientes |
@@ -309,6 +314,28 @@ curl -X POST http://localhost:8080/api/receitas/gerar \
 ```
 Resposta (`200`): `{"receita":"..."}`. A resposta da IA pode levar até cerca de 30 segundos.
 
+**6. Cadastrar uma ONG** (o CEP é convertido em coordenadas pela API de CEP)
+```bash
+curl -X POST http://localhost:8080/api/receptores \
+  -H "Content-Type: application/json" \
+  -d '{"nome":"Mesa Cheia","email":"mesa@ong.com","senha":"senha12345","cnpj":"12.345.678/0001-90","endereco":"Rua Direita, 120","cep":"01001-000"}'
+```
+Resposta (`201`): `{"id":2,"nome":"Mesa Cheia","email":"mesa@ong.com"}`. O CEP aceita com ou sem traço. Se o CEP não existir, a resposta é `404`; se a API de CEP estiver fora do ar, é `503`.
+
+**7. Buscar ONGs próximas** (precisa do token)
+```bash
+curl "http://localhost:8080/api/receptores/proximos?cep=01001-000&raioKm=10" \
+  -H "Authorization: Bearer SEU_TOKEN"
+```
+Resposta (`200`), da mais perto para a mais longe:
+```json
+[
+  {"id":2,"nome":"Mesa Cheia","endereco":"Rua Direita, 120","cep":"01001000","distanciaKm":0.0},
+  {"id":3,"nome":"Cozinha Solidária","endereco":"Av. Paulista, 1000","cep":"01310100","distanciaKm":2.52}
+]
+```
+O `raioKm` é opcional (padrão: 10) e vai de mais que 0 até 100. A distância é em linha reta entre os CEPs, não a distância percorrida. ONGs cadastradas sem coordenadas não aparecem na busca.
+
 ### Respostas de erro
 Todo erro volta em JSON, no mesmo formato:
 ```json
@@ -327,13 +354,13 @@ Nos erros de validação, o objeto também traz `"campos"`, com a mensagem de ca
 | `400` | Campos inválidos ou ausentes, JSON malformado ou corpo ausente, parâmetro com tipo errado, doação sem itens, quantidade menor ou igual a zero |
 | `401` | Sem token, token inválido ou expirado, e-mail ou senha incorretos no login |
 | `403` | Usuário logado sem permissão: por exemplo, um receptor tentando registrar doação, ou um doador tentando doar em nome de outro |
-| `404` | Doador, ingrediente ou receptor informado não existe, ou o endereço não existe |
+| `404` | Doador, ingrediente ou receptor informado não existe, CEP não encontrado, ou o endereço não existe |
 | `405` | Método HTTP não aceito naquele endereço |
 | `422` | Regra de negócio violada: e-mail já cadastrado, ingrediente repetido na doação |
 | `500` | Erro inesperado. A resposta traz uma mensagem genérica e o detalhe fica só no log do servidor |
-| `503` | A IA não está configurada, falhou ou está sobrecarregada. Em caso de sobrecarga (`503` ou `429` do Google), o sistema tenta até 3 vezes antes de desistir |
+| `503` | A IA não está configurada, falhou ou está sobrecarregada (em caso de sobrecarga, `503` ou `429` do Google, o sistema tenta até 3 vezes antes de desistir), ou a API de CEP está fora do ar |
 
-> **Segurança:** em qualquer ambiente real, defina `JWT_SECRET` com um valor longo e secreto e use HTTPS, porque o token viaja em cada requisição. Ainda não há limite de tentativas de login nem cadastro de receptor pela API.
+> **Segurança:** em qualquer ambiente real, defina `JWT_SECRET` com um valor longo e secreto e use HTTPS, porque o token viaja em cada requisição. Ainda não há limite de tentativas de login.
 
 ## Contribuição
 
