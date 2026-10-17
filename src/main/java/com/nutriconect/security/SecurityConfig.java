@@ -87,6 +87,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(a -> a
                         .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/doadores").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/receptores").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/doacoes").hasRole("DOADOR")
                         .requestMatchers("/error").permitAll()
                         .anyRequest().authenticated())

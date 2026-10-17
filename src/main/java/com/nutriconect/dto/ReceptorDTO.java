@@ -1,6 +1,7 @@
 package com.nutriconect.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 public class ReceptorDTO {
@@ -23,6 +24,10 @@ public class ReceptorDTO {
 
     @NotBlank(message = "O endereço é obrigatório")
     private String endereco;
+
+    @NotBlank(message = "O CEP é obrigatório")
+    @Pattern(regexp = "\\d{5}-?\\d{3}", message = "Informe um CEP válido")
+    private String cep;
 
     public String getNome() {
         return nome;
@@ -70,5 +75,13 @@ public class ReceptorDTO {
 
     public void setEndereco(String endereco) {
         this.endereco = endereco;
+    }
+
+    public String getCep() {
+        return cep;
+    }
+
+    public void setCep(String cep) {
+        this.cep = cep;
     }
 }

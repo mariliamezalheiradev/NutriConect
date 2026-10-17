@@ -134,7 +134,7 @@ public class GlobalExceptionHandler {
                 ex.getMessage(), req, null);
     }
 
-    // ---------- 503: IA fora do ar ----------
+    // ---------- 503: serviços externos fora do ar ----------
 
     /** As mensagens de {@link IAIndisponivelException} são escritas pela aplicação e não contêm dados sensíveis. */
     @ExceptionHandler(IAIndisponivelException.class)
@@ -142,6 +142,15 @@ public class GlobalExceptionHandler {
                                                              HttpServletRequest req) {
         log.error("Falha ao consultar a API de IA", ex);
         return montar(HttpStatus.SERVICE_UNAVAILABLE, "Serviço de IA indisponível",
+                ex.getMessage(), req, null);
+    }
+
+    /** A mensagem de {@link GeocodificacaoIndisponivelException} é escrita pela aplicação e não tem dados sensíveis. */
+    @ExceptionHandler(GeocodificacaoIndisponivelException.class)
+    public ResponseEntity<ErroResposta> tratarGeocodificacaoIndisponivel(GeocodificacaoIndisponivelException ex,
+                                                                         HttpServletRequest req) {
+        log.error("Falha ao consultar a API de CEP", ex);
+        return montar(HttpStatus.SERVICE_UNAVAILABLE, "Serviço de CEP indisponível",
                 ex.getMessage(), req, null);
     }
 
