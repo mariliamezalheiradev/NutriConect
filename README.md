@@ -17,6 +17,7 @@ Sistema de gestão desenvolvido para apoiar Organizações Não Governamentais (
 * [Instalação](#instalação)
 * [Como Usar](#como-usar)
 * [Contribuição](#contribuição)
+* [Segurança](#segurança)
 ## Sobre o Projeto
 
 Este repositório contém o código fonte de um sistema de gestão desenvolvido para apoiar Organizações Não Governamentais (ONGs) no processo de captação, organização e distribuição de alimentos doados por comércios locais. O sistema busca reduzir o desperdício alimentar e fortalecer a capacidade operacional de instituições que atuam diretamente no combate à fome.
@@ -372,3 +373,18 @@ Contribuições são bem-vindas! Para manter o projeto organizado:
 4. **Não versione arquivos gerados nem segredos**: `target/`, `.idea/`, chaves de API e senhas ficam de fora (o `.gitignore` já cobre os principais). Use variáveis de ambiente.
 5. **Abra um Pull Request** para a `main`, descrevendo o que mudou e como foi testado. Sempre que existir uma issue relacionada, cite-a (por exemplo, `Closes #28`).
 6. Aguarde a revisão de pelo menos uma pessoa do grupo antes do merge.
+
+## Segurança
+
+### CORS (Cross-Origin Resource Sharing)
+
+Para permitir a comunicação segura entre o front-end e a API, as seguintes origens estão liberadas:
+
+* `http://localhost:5173` (Vite)
+* `http://127.0.0.1:5173` (Vite)
+* `http://localhost:3000` (React)
+
+**Métodos permitidos:** `GET`, `POST`, `PUT`, `DELETE`, `OPTIONS`.
+**Cabeçalhos permitidos:** `Authorization`.
+
+A configuração de CORS é integrada ao Spring Security (junto com a autenticação JWT), garantindo que as requisições `OPTIONS` (preflight) não sejam bloqueadas, permitindo o correto funcionamento das chamadas do front-end.
