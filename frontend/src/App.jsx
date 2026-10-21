@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import Acesso from "./pages/Acesso";
 import Painel from "./pages/Painel";
-import NovaDoacao from "./components/NovaDoacao";
+import NovaDoacao from "./pages/NovaDoacao";
 
 function App() {
   return (
