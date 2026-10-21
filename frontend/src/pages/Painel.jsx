@@ -1,17 +1,14 @@
-import { Navigate } from "react-router-dom";
-import { lerToken } from "../services/api";
+import { Link } from 'react-router-dom';
 
-function Painel() {
-  if (!lerToken()) {
-    return <Navigate to="/" replace />;
-  }
-
+export default function Painel() {
   return (
-    <main>
-      <h1>Painel</h1>
-      <p>Painel do usuário. Será feito nas issues 5, 6 e 7.</p>
-    </main>
+    <div className="container">
+      <h1>Painel Principal</h1>
+      <div style={{ marginTop: '20px' }}>
+        <Link to="/nova-doacao" className="btn">
+          Registrar Nova Doação
+        </Link>
+      </div>
+    </div>
   );
 }
-
-export default Painel;
