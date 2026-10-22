@@ -1,49 +1,11 @@
+/* Cores, campos e botão vêm do tema em index.css; aqui fica só o layout do formulário. */
 .login-form {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
   width: 100%;
-  max-width: 22rem;
+  max-width: 24rem;
 }
 
-.login-form label {
-  font-weight: 600;
-}
-
-.login-form input {
-  padding: 0.6rem 0.75rem;
-  border: 1px solid #b8b8b8;
-  border-radius: 6px;
-  font-size: 1rem;
-}
-
-.login-form input:focus-visible,
-.login-form button:focus-visible {
-  outline: 3px solid #2f6fed;
-  outline-offset: 2px;
-}
-
-.login-form button {
-  margin-top: 0.75rem;
-  padding: 0.7rem;
-  border: 0;
-  border-radius: 6px;
-  background: #1f7a4d;
-  color: #fff;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.login-form button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.login-form__erro {
-  margin: 0.25rem 0 0;
-  padding: 0.6rem 0.75rem;
-  border-radius: 6px;
-  background: #fdecea;
-  color: #8a1f17;
+.login-form .mensagem-erro {
+  margin: 0 0 var(--esp-2);
 }
