@@ -1,5 +1,7 @@
 # NutriConect
 
+> 🎥 **Vídeo de demonstração:** [assista aqui](COLE_O_LINK_AQUI)
+
 Sistema de gestão desenvolvido para apoiar Organizações Não Governamentais (ONGs) no processo de captação, organização e distribuição de alimentos doados por comércios locais. O sistema busca reduzir o desperdício alimentar e fortalecer a capacidade operacional de instituições que atuam diretamente no combate à fome.
 
 ## Índice
@@ -16,6 +18,7 @@ Sistema de gestão desenvolvido para apoiar Organizações Não Governamentais (
 * [Tecnologias Utilizadas](#tecnologias-utilizadas)
 * [Instalação](#instalação)
 * [Como Usar](#como-usar)
+* [Front-end](#front-end)
 * [Contribuição](#contribuição)
 * [Segurança](#segurança)
 ## Sobre o Projeto
@@ -155,13 +158,13 @@ As escolhas arquiteturais foram feitas pensando no crescimento sustentável da p
 * **Geração de receitas com IA (Google Gemini)**: a partir de uma lista de ingredientes, devolve uma receita de aproveitamento total, alinhada ao ODS 2. Inclui tempo limite e novas tentativas automáticas quando o serviço está sobrecarregado.
 * **Validação de dados e respostas de erro padronizadas** em JSON (`400`, `404`, `405`, `422`, `500` e `503`), sem expor detalhes internos.
 * **Modelo de dados relacional alinhado ao diagrama do grupo**: usuário, doador, receptor, doação, item da doação, status da doação, ingrediente, estoque, receita e receita–ingrediente (10 tabelas).
+* **Interface web (front-end)** para doadores e ONGs: login, cadastros, busca de ONGs próximas, ingredientes, registro de doações e geração de receitas com IA. Veja a seção [Front-end](#front-end).
 
 ### Planejadas
 * Gestão de estoque com data de validade.
 * Listagem, acompanhamento e atualização do status das doações.
 * Sugerir a ONG mais próxima já no registro da doação (hoje a busca por proximidade é uma consulta separada).
 * Salvar no banco as receitas geradas pela IA.
-* Interface (frontend) para doadores e ONGs.
 
 ## Tecnologias Utilizadas
 
@@ -169,6 +172,7 @@ As escolhas arquiteturais foram feitas pensando no crescimento sustentável da p
 |---|---|
 | Linguagem | Java 17 |
 | Framework | Spring Boot 3.2.5 (Spring Web, Spring Data JPA, Bean Validation) |
+| Front-end | React com Vite, Node.js 18+ |
 | Banco de dados | PostgreSQL (produção/desenvolvimento) e H2 em memória (testes) |
 | Persistência | JPA / Hibernate |
 | Segurança | Spring Security (filtros, papéis), tokens JWT assinados com HS256 e BCrypt para senhas |
@@ -362,6 +366,34 @@ Nos erros de validação, o objeto também traz `"campos"`, com a mensagem de ca
 | `503` | A IA não está configurada, falhou ou está sobrecarregada (em caso de sobrecarga, `503` ou `429` do Google, o sistema tenta até 3 vezes antes de desistir), ou a API de CEP está fora do ar |
 
 > **Segurança:** em qualquer ambiente real, defina `JWT_SECRET` com um valor longo e secreto e use HTTPS, porque o token viaja em cada requisição. Ainda não há limite de tentativas de login.
+
+## Front-end
+
+A interface web consome a API descrita em [Como Usar](#como-usar).
+
+### Como subir o front
+
+Pré-requisitos: **Node.js 18+** e o back-end rodando em `http://localhost:8080`.
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+O front sobe em `http://localhost:5173`, uma das origens liberadas no [CORS](#cors-cross-origin-resource-sharing) do back-end.
+
+### Telas e rotas da API
+
+| Tela | Rotas da API usadas |
+|---|---|
+| Login | `POST /api/auth/login` |
+| Cadastro de doador | `POST /api/doadores` |
+| Cadastro de ONG | `POST /api/receptores` |
+| Busca de ONGs próximas | `GET /api/receptores/proximos` |
+| Ingredientes | `GET /api/ingredientes`, `POST /api/ingredientes` |
+| Registro de doação | `POST /api/doacoes` |
+| Receita com IA | `POST /api/receitas/gerar` |
 
 ## Contribuição
 
