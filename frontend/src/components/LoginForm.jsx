@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { api, salvarToken } from "../services/api";
+import { api, salvarToken, removerToken } from "../services/api";
 import "./LoginForm.css";
 
 export default function LoginForm() {
@@ -16,20 +16,20 @@ export default function LoginForm() {
     setCarregando(true);
 
     try {
+      // Um token antigo (vencido) faria o back-end recusar o login com 401.
+      removerToken();
       const dados = await api("/api/auth/login", {
         method: "POST",
         body: JSON.stringify({ email, senha }),
       });
+      if (!dados?.token) {
+        throw new Error("Resposta inesperada do servidor. Tente novamente.");
+      }
       salvarToken(dados.token);
       navigate("/painel");
     } catch (e) {
-      if (e.status === 401) {
-        setErro("E-mail ou senha incorretos.");
-      } else if (e.status === undefined) {
-        setErro("Não foi possível conectar à API. Verifique se o back-end está rodando.");
-      } else {
-        setErro(e.message);
-      }
+      // As mensagens já vêm prontas do back-end ou do módulo da API.
+      setErro(e.message);
     } finally {
       setCarregando(false);
     }
