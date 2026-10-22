@@ -58,7 +58,7 @@ export default function LoginForm() {
       />
 
       {erro && (
-        <p className="login-form__erro" role="alert">
+        <p className="mensagem-erro" role="alert">
           {erro}
         </p>
       )}
