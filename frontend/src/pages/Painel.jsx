@@ -1,17 +1,23 @@
-import { Navigate } from "react-router-dom";
-import { lerToken } from "../services/api";
+import React, { useState } from 'react';
+import BuscaOngs from '../components/BuscaOngs';
 
-function Painel() {
-  if (!lerToken()) {
-    return <Navigate to="/" replace />;
-  }
+export default function Painel() {
+    const [ongSelecionada, setOngSelecionada] = useState(null);
 
-  return (
-    <main>
-      <h1>Painel</h1>
-      <p>Painel do usuário. Será feito nas issues 5, 6 e 7.</p>
-    </main>
-  );
+    const handleSelecionarOng = (ong) => {
+        setOngSelecionada(ong);
+        console.log('ONG selecionada:', ong);
+    };
+
+    return (
+        <div style={{ padding: '20px' }}>
+            <h1>Painel de Doações</h1>
+            {ongSelecionada && (
+                <p style={{ color: 'green' }}>
+                    <strong>ONG Selecionada:</strong> {ongSelecionada.nome || ongSelecionada.razaoSocial}
+                </p>
+            )}
+            <BuscaOngs onSelecionarOng={handleSelecionarOng} />
+        </div>
+    );
 }
-
-export default Painel;

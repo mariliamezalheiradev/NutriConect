@@ -5,116 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="dde12ed6-43b0-4913-94d1-5f1f10dfa9b3" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/docs/REVISAO-REPOSITORIO.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/diagrama-banco-de-dados.drawio.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/nutriconect-esqueleto-diana.zip" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/.env.example" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/.oxlintrc.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/README.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/index.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/package-lock.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/package.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/public/favicon.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/public/icons.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/App.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/components/.gitkeep" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/index.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/main.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/pages/.gitkeep" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/pages/Acesso.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/pages/Painel.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/services/api.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/vite.config.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nutriconect/NutriConectApplication.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nutriconect/config/AppConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nutriconect/config/StatusDoacaoInicializador.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nutriconect/controller/AuthController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nutriconect/controller/DoacaoController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nutriconect/controller/DoadorController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nutriconect/controller/IngredienteController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nutriconect/controller/ReceitaController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nutriconect/controller/ReceptorController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nutriconect/dto/Coordenadas.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nutriconect/dto/DoacaoDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nutriconect/dto/DoacaoResponseDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nutriconect/dto/DoadorDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nutriconect/dto/EstoqueDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nutriconect/dto/GerarReceitaRequestDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nutriconect/dto/IngredienteDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nutriconect/dto/ItemDoacaoDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nutriconect/dto/LoginRequestDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nutriconect/dto/ReceitaDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nutriconect/dto/ReceptorDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nutriconect/dto/ReceptorProximoDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nutriconect/dto/TokenResponseDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nutriconect/dto/UsuarioDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nutriconect/dto/UsuarioResponseDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nutriconect/exception/AcessoNegadoException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nutriconect/exception/CredenciaisInvalidasException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nutriconect/exception/ErroResposta.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nutriconect/exception/GeocodificacaoIndisponivelException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nutriconect/exception/GlobalExceptionHandler.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nutriconect/exception/IAIndisponivelException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nutriconect/exception/RecursoNaoEncontradoException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nutriconect/exception/RegraNegocioException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nutriconect/model/ItemDoacao.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nutriconect/model/ReceitaIngrediente.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nutriconect/model/ReceitaIngredienteId.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nutriconect/repository/DoacaoRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nutriconect/repository/DoadorRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nutriconect/repository/EstoqueRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nutriconect/repository/IngredienteRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nutriconect/repository/ItemDoacaoRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nutriconect/repository/ReceitaIngredienteRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nutriconect/repository/ReceitaRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nutriconect/repository/ReceptorRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nutriconect/repository/StatusDoacaoRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nutriconect/repository/UsuarioRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nutriconect/security/JwtService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nutriconect/security/RestAccessDeniedHandler.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nutriconect/security/RestAuthenticationEntryPoint.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nutriconect/security/SecurityConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nutriconect/security/UsuarioLogado.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nutriconect/service/AuthService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nutriconect/service/DoacaoService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nutriconect/service/DoadorService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nutriconect/service/IAGenerativaReceitas.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nutriconect/service/IngredienteService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nutriconect/service/ReceptorService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nutriconect/service/ServicoGeocodificacao.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/nutriconect/service/ServicoGeolocalizacao.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/com/nutriconect/controller/DoacaoControllerTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/com/nutriconect/exception/GlobalExceptionHandlerTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/com/nutriconect/repository/DoacaoRepositoryTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/com/nutriconect/repository/DoadorRepositoryTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/com/nutriconect/repository/EstoqueRepositoryTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/com/nutriconect/repository/IngredienteRepositoryTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/com/nutriconect/repository/ReceitaRepositoryTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/com/nutriconect/repository/ReceptorRepositoryTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/com/nutriconect/repository/StatusDoacaoRepositoryTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/com/nutriconect/repository/UsuarioRepositoryTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/com/nutriconect/security/AuthIntegracaoTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/com/nutriconect/security/CorsTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/com/nutriconect/service/AuthServiceTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/com/nutriconect/service/DoacaoServiceTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/com/nutriconect/service/DoadorServiceTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/com/nutriconect/service/IAGenerativaReceitasTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/com/nutriconect/service/ServicoGeocodificacaoTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/com/nutriconect/service/ServicoGeolocalizacaoTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/.keep" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nutriconect/model/Doacao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nutriconect/model/Doacao.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nutriconect/model/Estoque.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nutriconect/model/Estoque.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nutriconect/model/Ingrediente.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nutriconect/model/Ingrediente.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nutriconect/model/Receita.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nutriconect/model/Receita.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nutriconect/model/Receptor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nutriconect/model/Receptor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nutriconect/model/StatusDoacao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nutriconect/model/StatusDoacao.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/nutriconect/model/Usuario.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/nutriconect/model/Usuario.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/components/BuscaOngs.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/Painel.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/Painel.jsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -133,7 +26,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "git-widget-placeholder": "Merging feature/frontend-busca-ongs",
+    "git-widget-placeholder": "feature/frontend-busca-ongs",
     "node.js.selected.package.tslint": "(autodetect)"
   }
 }]]></component>
