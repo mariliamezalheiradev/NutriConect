@@ -1,20 +1,37 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { api } from "../services/api";
 
 function GerarReceita() {
+  const [lista, setLista] = useState([]);
+  const [selecionados, setSelecionados] = useState([]);
   const [extras, setExtras] = useState("");
   const [carregando, setCarregando] = useState(false);
   const [receita, setReceita] = useState("");
   const [erro, setErro] = useState("");
 
+  useEffect(() => {
+    api("/api/ingredientes")
+      .then((dados) => setLista(Array.isArray(dados) ? dados : []))
+      .catch(() => setLista([]));
+  }, []);
+
+  function alternar(nome) {
+    setSelecionados((atual) =>
+      atual.includes(nome)
+        ? atual.filter((i) => i !== nome)
+        : [...atual, nome]
+    );
+  }
+
   async function gerar() {
-    const ingredientes = extras
+    const digitados = extras
       .split(",")
       .map((i) => i.trim())
       .filter(Boolean);
+    const ingredientes = [...selecionados, ...digitados];
 
     if (ingredientes.length === 0) {
-      setErro("Digite pelo menos um ingrediente.");
+      setErro("Escolha ou digite pelo menos um ingrediente.");
       return;
     }
 
@@ -49,8 +66,27 @@ function GerarReceita() {
     <section>
       <h2>Gerar receita com IA</h2>
 
+      {lista.length > 0 && (
+        <div>
+          <p>Escolha os ingredientes:</p>
+          {lista.map((item) => {
+            const nome = typeof item === "string" ? item : item.nome;
+            return (
+              <label key={nome} style={{ display: "block" }}>
+                <input
+                  type="checkbox"
+                  checked={selecionados.includes(nome)}
+                  onChange={() => alternar(nome)}
+                />{" "}
+                {nome}
+              </label>
+            );
+          })}
+        </div>
+      )}
+
       <label>
-        Ingredientes (separados por vírgula):
+        Outros ingredientes (separados por vírgula):
         <input
           type="text"
           value={extras}
