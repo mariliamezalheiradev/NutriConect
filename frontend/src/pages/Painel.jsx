@@ -1,14 +1,11 @@
-import { Link } from 'react-router-dom';
+import React from 'react';
+import NovaDoacao from '../components/NovaDoacao';
 
 export default function Painel() {
   return (
-    <div className="container">
+    <div style={{ padding: '20px' }}>
       <h1>Painel Principal</h1>
-      <div style={{ marginTop: '20px' }}>
-        <Link to="/nova-doacao" className="btn">
-          Registrar Nova Doação
-        </Link>
-      </div>
+      <NovaDoacao />
     </div>
   );
 }
