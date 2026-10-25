@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Navigate } from "react-router-dom";
 import { lerToken } from "../services/api";
 import BuscaOngs from "../components/BuscaOngs";
+import NovaDoacao from "../components/NovaDoacao";
 
 function Painel() {
   const [ongSelecionada, setOngSelecionada] = useState(null);
@@ -25,6 +26,8 @@ function Painel() {
           <p>{ongSelecionada.endereco}</p>
         </div>
       )}
+
+      <NovaDoacao receptorId={ongSelecionada?.id} />
     </main>
   );
 }

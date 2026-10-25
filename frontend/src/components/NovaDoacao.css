@@ -1,0 +1,16 @@
+.nova-doacao {
+  margin-top: var(--esp-3);
+}
+
+.nova-doacao__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--esp-2);
+}
+
+.nova-doacao__item button {
+  width: auto;
+  min-width: 0;
+  flex-shrink: 0;
+}
