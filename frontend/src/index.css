@@ -102,7 +102,7 @@ label {
   font-weight: 600;
 }
  
-input,
+input:not([type="checkbox"]):not([type="radio"]),
 select,
 textarea {
   width: 100%;
@@ -115,7 +115,16 @@ textarea {
   border: 1px solid var(--borda);
   border-radius: var(--raio);
 }
- 
+
+input[type="checkbox"],
+input[type="radio"] {
+  width: 1.25rem;
+  height: 1.25rem;
+  margin: 0 0.5rem 0 0;
+  vertical-align: middle;
+  accent-color: var(--verde-700);
+}
+
 textarea {
   min-height: 6rem;
   resize: vertical;
