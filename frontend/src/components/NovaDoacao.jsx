@@ -1,186 +1,208 @@
-import React, { useState, useEffect } from 'react';
-import { api } from '../services/api';
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { api, removerToken } from "../services/api";
+import "./NovaDoacao.css";
 
 export default function NovaDoacao({ receptorId, onSucesso }) {
+  const navigate = useNavigate();
   const [ingredientes, setIngredientes] = useState([]);
-  const [ingredienteId, setIngredienteId] = useState('');
-  const [quantidade, setQuantidade] = useState('');
+  const [ingredienteId, setIngredienteId] = useState("");
+  const [quantidade, setQuantidade] = useState("");
   const [itens, setItens] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [mensagem, setMensagem] = useState('');
-  const [erro, setErro] = useState('');
+  const [carregando, setCarregando] = useState(false);
+  const [mensagem, setMensagem] = useState("");
+  const [erro, setErro] = useState("");
 
-  // 1. Carregar lista de ingredientes
   useEffect(() => {
     async function carregarIngredientes() {
       try {
-        const data = await api('/api/ingredientes');
-        setIngredientes(data || []);
+        const dados = await api("/api/ingredientes");
+        setIngredientes(dados || []);
       } catch (e) {
-        setErro('Erro ao carregar lista de ingredientes.');
+        if (e.status === 401) {
+          // Token vencido ou inválido: volta para o login.
+          removerToken();
+          navigate("/", { replace: true });
+          return;
+        }
+        setErro("Erro ao carregar a lista de ingredientes.");
       }
     }
     carregarIngredientes();
-  }, []);
+  }, [navigate]);
 
-  // Ingrediente selecionado atualmente para mostrar a unidade de medida
+  // Token vencido ou inválido: volta para o login.
+  function sessaoExpirada() {
+    removerToken();
+    navigate("/", { replace: true });
+  }
+
   const ingredienteSelecionado = ingredientes.find(
     (i) => String(i.id) === String(ingredienteId)
   );
 
-  // 2. Adicionar item à lista local (impedindo duplicados)
-  const handleAdicionarItem = (e) => {
-    e.preventDefault();
-    setErro('');
-    setMensagem('');
+  function adicionarItem(evento) {
+    evento.preventDefault();
+    setErro("");
+    setMensagem("");
 
     if (!ingredienteId) {
-      setErro('Selecione um ingrediente.');
+      setErro("Selecione um ingrediente.");
       return;
     }
 
     const qtdNum = Number(quantidade);
     if (!quantidade || qtdNum <= 0) {
-      setErro('Informe uma quantidade válida maior que zero.');
+      setErro("Informe uma quantidade válida maior que zero.");
       return;
     }
 
-    // Verificar se ingrediente já foi adicionado
-    const jaExiste = itens.some((item) => String(item.ingredienteId) === String(ingredienteId));
+    const jaExiste = itens.some(
+      (item) => String(item.ingredienteId) === String(ingredienteId)
+    );
     if (jaExiste) {
-      setErro('Este ingrediente já foi adicionado à doação.');
+      setErro("Este ingrediente já foi adicionado à doação.");
       return;
     }
 
-    const novoItem = {
-      ingredienteId: Number(ingredienteId),
-      nome: ingredienteSelecionado?.nome || 'Ingrediente',
-      unidade: ingredienteSelecionado?.unidadeMedida || ingredienteSelecionado?.unidade || '',
-      quantidade: qtdNum
-    };
+    setItens([
+      ...itens,
+      {
+        ingredienteId: Number(ingredienteId),
+        nome: ingredienteSelecionado?.nome || "Ingrediente",
+        unidade: ingredienteSelecionado?.unidade || "",
+        quantidade: qtdNum,
+      },
+    ]);
+    setIngredienteId("");
+    setQuantidade("");
+  }
 
-    setItens([...itens, novoItem]);
-    setIngredienteId('');
-    setQuantidade('');
-  };
-
-  // 3. Remover item da lista
-  const handleRemoverItem = (idParaRemover) => {
+  function removerItem(idParaRemover) {
     setItens(itens.filter((item) => item.ingredienteId !== idParaRemover));
-  };
+  }
 
-  // 4. Submeter a doação para a API
-  const handleRegistrarDoacao = async () => {
-    setLoading(true);
-    setMensagem('');
-    setErro('');
+  async function registrarDoacao() {
+    setErro("");
+    setMensagem("");
 
     if (itens.length === 0) {
-      setErro('Adicione pelo menos um item para registrar a doação.');
-      setLoading(false);
+      setErro("Adicione pelo menos um item para registrar a doação.");
       return;
     }
 
-    // Estrutura exigida pela Issue: { itens: [{ ingredienteId, quantidade }], receptorId }
+    setCarregando(true);
+
     const payload = {
       itens: itens.map((item) => ({
         ingredienteId: item.ingredienteId,
-        quantidade: item.quantidade
+        quantidade: item.quantidade,
       })),
-      receptorId: receptorId ? Number(receptorId) : null
+      receptorId: receptorId ? Number(receptorId) : null,
     };
 
     try {
-      // Formato exigido pelo projeto: api("/api/doacoes", { method: "POST", body: JSON.stringify(payload) })
-      await api('/api/doacoes', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(payload)
+      await api("/api/doacoes", {
+        method: "POST",
+        body: JSON.stringify(payload),
       });
 
-      setMensagem('Doação registrada');
+      setMensagem("Doação registrada com sucesso!");
       setItens([]);
       if (onSucesso) onSucesso();
     } catch (e) {
-      const status = e.status;
-
-      if (status === 400) {
-        setErro('Erro na requisição: certifique-se de adicionar itens com quantidade maior que zero.');
-      } else if (status === 403) {
-        setErro('Apenas usuários doadores podem registrar doações.');
-      } else if (status === 401) {
-        setErro('Sessão expirada. Faça login novamente.');
+      if (e.status === 401) {
+        sessaoExpirada();
+        return;
+      }
+      if (e.status === 403) {
+        setErro("Apenas usuários doadores podem registrar doações.");
+      } else if (!e.status) {
+        setErro(e.message);
+      } else if (e.status === 400 || e.status === 422 || e.status === 404) {
+        // Mensagem do back-end (validação, regra de negócio, item inexistente).
+        setErro(e.message);
       } else {
-        setErro('Erro ao registrar doação. Tente novamente.');
+        setErro("Erro ao registrar a doação. Tente novamente.");
       }
     } finally {
-      setLoading(false);
+      setCarregando(false);
     }
-  };
+  }
 
   return (
-    <div style={{ padding: '20px', border: '1px solid #ddd', borderRadius: '8px', marginTop: '20px' }}>
-      <h2>Registrar Doação</h2>
+    <section className="nova-doacao">
+      <h2>Registrar doação</h2>
 
-      {mensagem && <p style={{ color: 'green', fontWeight: 'bold' }}>{mensagem}</p>}
-      {erro && <p style={{ color: 'red' }}>{erro}</p>}
+      {mensagem && (
+        <p className="mensagem-sucesso" role="status">
+          {mensagem}
+        </p>
+      )}
+      {erro && (
+        <p className="mensagem-erro" role="alert">
+          {erro}
+        </p>
+      )}
 
-      {/* Formulário de Seleção */}
-      <form onSubmit={handleAdicionarItem} style={{ display: 'flex', gap: '10px', alignItems: 'center', marginBottom: '15px' }}>
+      <form onSubmit={adicionarItem}>
+        <label htmlFor="doacao-ingrediente">Ingrediente</label>
         <select
+          id="doacao-ingrediente"
           value={ingredienteId}
           onChange={(e) => setIngredienteId(e.target.value)}
         >
           <option value="">Selecione um ingrediente</option>
           {ingredientes.map((ing) => (
             <option key={ing.id} value={ing.id}>
-              {ing.nome} {ing.unidadeMedida ? `(${ing.unidadeMedida})` : ing.unidade ? `(${ing.unidade})` : ''}
+              {ing.nome}
+              {ing.unidade ? ` (${ing.unidade})` : ""}
             </option>
           ))}
         </select>
 
+        <label htmlFor="doacao-quantidade">
+          Quantidade{ingredienteSelecionado?.unidade
+            ? ` (${ingredienteSelecionado.unidade})`
+            : ""}
+        </label>
         <input
+          id="doacao-quantidade"
           type="number"
-          placeholder="Quantidade"
+          inputMode="decimal"
+          min="0.01"
+          step="any"
           value={quantidade}
           onChange={(e) => setQuantidade(e.target.value)}
-          min="1"
-          step="any"
         />
 
-        {ingredienteSelecionado && (
-          <span>{ingredienteSelecionado.unidadeMedida || ingredienteSelecionado.unidade || ''}</span>
-        )}
-
-        <button type="submit">Adicionar Item</button>
+        <button type="submit">Adicionar item</button>
       </form>
 
-      {/* Lista de Itens Adicionados */}
       {itens.length > 0 && (
-        <div style={{ marginBottom: '15px' }}>
-          <h3>Itens da Doação:</h3>
-          <ul>
+        <div>
+          <h3>Itens da doação</h3>
+          <ul className="lista">
             {itens.map((item) => (
-              <li key={item.ingredienteId} style={{ marginBottom: '5px' }}>
-                {item.nome}: {item.quantidade} {item.unidade} {' '}
-                <button type="button" onClick={() => handleRemoverItem(item.ingredienteId)}>
+              <li key={item.ingredienteId} className="nova-doacao__item">
+                <span>
+                  {item.nome}: {item.quantidade} {item.unidade}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => removerItem(item.ingredienteId)}
+                >
                   Remover
                 </button>
               </li>
             ))}
           </ul>
 
-          <button
-            onClick={handleRegistrarDoacao}
-            disabled={loading}
-            style={{ padding: '10px 20px', backgroundColor: '#28a745', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
-          >
-            {loading ? 'Enviando...' : 'Concluir e Registrar Doação'}
+          <button onClick={registrarDoacao} disabled={carregando}>
+            {carregando ? "Enviando..." : "Concluir e registrar doação"}
           </button>
         </div>
       )}
-    </div>
+    </section>
   );
 }

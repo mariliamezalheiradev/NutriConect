@@ -1,11 +1,35 @@
-import React from 'react';
-import NovaDoacao from '../components/NovaDoacao';
+import { useState } from "react";
+import { Navigate } from "react-router-dom";
+import { lerToken } from "../services/api";
+import BuscaOngs from "../components/BuscaOngs";
+import NovaDoacao from "../components/NovaDoacao";
 
-export default function Painel() {
+function Painel() {
+  const [ongSelecionada, setOngSelecionada] = useState(null);
+
+  if (!lerToken()) {
+    return <Navigate to="/" replace />;
+  }
+
   return (
-    <div style={{ padding: '20px' }}>
-      <h1>Painel Principal</h1>
-      <NovaDoacao />
-    </div>
+    <main className="container">
+      <h1>Painel</h1>
+
+      <BuscaOngs onSelecionarOng={setOngSelecionada} />
+
+      {ongSelecionada && (
+        <div className="mensagem-sucesso" role="status">
+          <h3>ONG selecionada para a doação</h3>
+          <p>
+            <strong>{ongSelecionada.nome}</strong>
+          </p>
+          <p>{ongSelecionada.endereco}</p>
+        </div>
+      )}
+
+      <NovaDoacao receptorId={ongSelecionada?.id} />
+    </main>
   );
 }
+
+export default Painel;

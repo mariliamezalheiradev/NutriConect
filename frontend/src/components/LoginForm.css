@@ -1,0 +1,11 @@
+/* Cores, campos e botão vêm do tema em index.css; aqui fica só o layout do formulário. */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 24rem;
+}
+
+.login-form .mensagem-erro {
+  margin: 0 0 var(--esp-2);
+}
