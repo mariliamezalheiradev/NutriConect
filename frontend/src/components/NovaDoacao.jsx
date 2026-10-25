@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { api, removerToken } from "../services/api";
 import "./NovaDoacao.css";
@@ -13,6 +13,12 @@ export default function NovaDoacao({ receptorId, onSucesso }) {
   const [mensagem, setMensagem] = useState("");
   const [erro, setErro] = useState("");
 
+  // Token vencido ou inválido: volta para o login.
+  const sessaoExpirada = useCallback(() => {
+    removerToken();
+    navigate("/", { replace: true });
+  }, [navigate]);
+
   useEffect(() => {
     async function carregarIngredientes() {
       try {
@@ -20,22 +26,14 @@ export default function NovaDoacao({ receptorId, onSucesso }) {
         setIngredientes(dados || []);
       } catch (e) {
         if (e.status === 401) {
-          // Token vencido ou inválido: volta para o login.
-          removerToken();
-          navigate("/", { replace: true });
+          sessaoExpirada();
           return;
         }
         setErro("Erro ao carregar a lista de ingredientes.");
       }
     }
     carregarIngredientes();
-  }, [navigate]);
-
-  // Token vencido ou inválido: volta para o login.
-  function sessaoExpirada() {
-    removerToken();
-    navigate("/", { replace: true });
-  }
+  }, [sessaoExpirada]);
 
   const ingredienteSelecionado = ingredientes.find(
     (i) => String(i.id) === String(ingredienteId)
@@ -142,6 +140,13 @@ export default function NovaDoacao({ receptorId, onSucesso }) {
       {erro && (
         <p className="mensagem-erro" role="alert">
           {erro}
+        </p>
+      )}
+
+      {!receptorId && (
+        <p role="status">
+          Nenhuma ONG selecionada: a doação será registrada sem ONG de destino.
+          Para escolher uma, use a busca acima.
         </p>
       )}
 
