@@ -1,20 +1,22 @@
-
 import { useState } from "react";
 import { api } from "../services/api";
+import "./CadastroForm.css";
+
+const FORM_VAZIO = {
+  nome: "",
+  email: "",
+  senha: "",
+  telefone: "",
+  documento: "",
+  cnpj: "",
+  endereco: "",
+  cep: "",
+};
 
 function CadastroForm() {
   const [tipo, setTipo] = useState("doador");
-  const [form, setForm] = useState({
-    nome: "",
-    email: "",
-    senha: "",
-    telefone: "",
-    documento: "",
-    cnpj: "",
-    endereco: "",
-    cep: "",
-  });
-  const [mensagem, setMensagem] = useState("");
+  const [form, setForm] = useState(FORM_VAZIO);
+  const [mensagem, setMensagem] = useState(null);
   const [erros, setErros] = useState({});
   const [carregando, setCarregando] = useState(false);
 
@@ -25,9 +27,15 @@ function CadastroForm() {
     });
   }
 
+  function escolherTipo(novoTipo) {
+    setTipo(novoTipo);
+    setMensagem(null);
+    setErros({});
+  }
+
   async function cadastrar(evento) {
     evento.preventDefault();
-    setMensagem("");
+    setMensagem(null);
     setErros({});
     setCarregando(true);
 
@@ -47,39 +55,33 @@ function CadastroForm() {
     }
 
     try {
-      await api(
-        tipo === "doador"
-          ? "/api/doadores"
-          : "/api/receptores",
-        {
-          method: "POST",
-          body: JSON.stringify(dados),
-        }
-      );
-
-      setMensagem("Conta criada com sucesso!");
-      setForm({
-        nome: "",
-        email: "",
-        senha: "",
-        telefone: "",
-        documento: "",
-        cnpj: "",
-        endereco: "",
-        cep: "",
+      await api(tipo === "doador" ? "/api/doadores" : "/api/receptores", {
+        method: "POST",
+        body: JSON.stringify(dados),
       });
+
+      setMensagem({
+        tipo: "sucesso",
+        texto: "Conta criada com sucesso! Agora entre com seu e-mail e senha.",
+      });
+      setForm(FORM_VAZIO);
     } catch (erro) {
       if (erro.status === 400) {
         setErros(erro.campos || {});
-        setMensagem("Confira os campos informados.");
-      } else if (erro.status === 422) {
-        setMensagem("Este e-mail já está cadastrado.");
+        setMensagem({ tipo: "erro", texto: "Confira os campos informados." });
       } else if (erro.status === 404) {
-        setMensagem("CEP não encontrado.");
+        setMensagem({ tipo: "erro", texto: "CEP não encontrado." });
       } else if (erro.status === 503) {
-        setMensagem("Serviço indisponível. Tente novamente.");
+        setMensagem({
+          tipo: "erro",
+          texto: "Serviço indisponível. Tente novamente.",
+        });
       } else {
-        setMensagem(erro.message || "Erro ao criar a conta.");
+        // 422 e demais erros: a mensagem vem do back-end (ex.: e-mail já cadastrado).
+        setMensagem({
+          tipo: "erro",
+          texto: erro.message || "Erro ao criar a conta.",
+        });
       }
     } finally {
       setCarregando(false);
@@ -91,7 +93,7 @@ function CadastroForm() {
     if (!erro) return null;
 
     return (
-      <small role="alert">
+      <small className="cadastro__erro-campo" role="alert">
         {Array.isArray(erro) ? erro.join(", ") : erro}
       </small>
     );
@@ -101,69 +103,68 @@ function CadastroForm() {
     <section>
       <h2>Criar conta</h2>
 
-      <div>
+      <div className="cadastro__tipos" role="group" aria-label="Tipo de cadastro">
         <button
           type="button"
+          aria-pressed={tipo === "doador"}
           disabled={carregando}
-          onClick={() => {
-            setTipo("doador");
-            setMensagem("");
-            setErros({});
-          }}
+          onClick={() => escolherTipo("doador")}
         >
           Sou doador
         </button>
 
         <button
           type="button"
+          aria-pressed={tipo === "ong"}
           disabled={carregando}
-          onClick={() => {
-            setTipo("ong");
-            setMensagem("");
-            setErros({});
-          }}
+          onClick={() => escolherTipo("ong")}
         >
           Sou ONG
         </button>
       </div>
 
       <form onSubmit={cadastrar}>
-        <label htmlFor="nome">Nome</label>
+        <label htmlFor="cad-nome">Nome</label>
         <input
-          id="nome"
+          id="cad-nome"
           name="nome"
+          autoComplete="name"
           value={form.nome}
           onChange={atualizarCampo}
           required
         />
         {erroDo("nome")}
 
-        <label htmlFor="email">E-mail</label>
+        <label htmlFor="cad-email">E-mail</label>
         <input
-          id="email"
+          id="cad-email"
           name="email"
           type="email"
+          autoComplete="email"
           value={form.email}
           onChange={atualizarCampo}
           required
         />
         {erroDo("email")}
 
-        <label htmlFor="senha">Senha</label>
+        <label htmlFor="cad-senha">Senha</label>
         <input
-          id="senha"
+          id="cad-senha"
           name="senha"
           type="password"
+          autoComplete="new-password"
           value={form.senha}
           onChange={atualizarCampo}
           required
         />
         {erroDo("senha")}
 
-        <label htmlFor="telefone">Telefone</label>
+        <label htmlFor="cad-telefone">Telefone</label>
         <input
-          id="telefone"
+          id="cad-telefone"
           name="telefone"
+          type="tel"
+          autoComplete="tel"
           value={form.telefone}
           onChange={atualizarCampo}
           required
@@ -172,10 +173,11 @@ function CadastroForm() {
 
         {tipo === "doador" ? (
           <>
-            <label htmlFor="documento">Documento</label>
+            <label htmlFor="cad-documento">Documento</label>
             <input
-              id="documento"
+              id="cad-documento"
               name="documento"
+              autoComplete="off"
               value={form.documento}
               onChange={atualizarCampo}
               required
@@ -184,30 +186,37 @@ function CadastroForm() {
           </>
         ) : (
           <>
-            <label htmlFor="cnpj">CNPJ</label>
+            <label htmlFor="cad-cnpj">CNPJ</label>
             <input
-              id="cnpj"
+              id="cad-cnpj"
               name="cnpj"
+              autoComplete="off"
               value={form.cnpj}
               onChange={atualizarCampo}
               required
             />
             {erroDo("cnpj")}
 
-            <label htmlFor="endereco">Endereço</label>
+            <label htmlFor="cad-endereco">Endereço</label>
             <input
-              id="endereco"
+              id="cad-endereco"
               name="endereco"
+              autoComplete="street-address"
               value={form.endereco}
               onChange={atualizarCampo}
               required
             />
             {erroDo("endereco")}
 
-            <label htmlFor="cep">CEP</label>
+            <label htmlFor="cad-cep">CEP</label>
             <input
-              id="cep"
+              id="cad-cep"
               name="cep"
+              inputMode="numeric"
+              autoComplete="postal-code"
+              placeholder="00000-000"
+              pattern="\d{5}-?\d{3}"
+              title="Digite os 8 números do CEP"
               value={form.cep}
               onChange={atualizarCampo}
               required
@@ -221,7 +230,16 @@ function CadastroForm() {
         </button>
       </form>
 
-      {mensagem && <p role="status">{mensagem}</p>}
+      {mensagem && (
+        <p
+          className={
+            mensagem.tipo === "erro" ? "mensagem-erro" : "mensagem-sucesso"
+          }
+          role={mensagem.tipo === "erro" ? "alert" : "status"}
+        >
+          {mensagem.texto}
+        </p>
+      )}
     </section>
   );
 }
