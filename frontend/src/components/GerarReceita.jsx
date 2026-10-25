@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
-import { api } from "../services/api";
+import { useNavigate } from "react-router-dom";
+import { api, removerToken } from "../services/api";
 
 function GerarReceita() {
+  const navigate = useNavigate();
   const [lista, setLista] = useState([]);
   const [selecionados, setSelecionados] = useState([]);
   const [extras, setExtras] = useState("");
@@ -44,14 +46,24 @@ function GerarReceita() {
         method: "POST",
         body: JSON.stringify({ ingredientes }),
       });
-      setReceita(
-        typeof resposta === "string" ? resposta : resposta?.receita || ""
-      );
+      const texto =
+        typeof resposta === "string" ? resposta : resposta?.receita || "";
+      if (texto) {
+        setReceita(texto);
+      } else {
+        setErro("A IA não devolveu uma receita. Tente novamente.");
+      }
     } catch (e) {
+      if (e.status === 401) {
+        // Token vencido ou inválido: volta para o login.
+        removerToken();
+        navigate("/", { replace: true });
+        return;
+      }
       if (e.status === 503) {
         setErro("A IA está ocupada, tente de novo em instantes.");
-      } else if (e.status === 401) {
-        setErro("Sua sessão expirou. Faça login novamente.");
+      } else if (e.status === 400) {
+        setErro(e.message);
       } else if (!e.status) {
         setErro("Não foi possível conectar à API. Verifique se o back-end está rodando.");
       } else {
@@ -71,8 +83,9 @@ function GerarReceita() {
           <p>Escolha os ingredientes:</p>
           {lista.map((item) => {
             const nome = typeof item === "string" ? item : item.nome;
+            const chave = typeof item === "string" ? item : item.id ?? item.nome;
             return (
-              <label key={nome} style={{ display: "block" }}>
+              <label key={chave} style={{ display: "block" }}>
                 <input
                   type="checkbox"
                   checked={selecionados.includes(nome)}
@@ -98,8 +111,12 @@ function GerarReceita() {
         Gerar receita
       </button>
 
-      {carregando && <p>Gerando receita...</p>}
-      {erro && <p role="alert">{erro}</p>}
+      {carregando && <p role="status">Gerando receita...</p>}
+      {erro && (
+        <p className="mensagem-erro" role="alert">
+          {erro}
+        </p>
+      )}
       {receita && <p style={{ whiteSpace: "pre-wrap" }}>{receita}</p>}
     </section>
   );
