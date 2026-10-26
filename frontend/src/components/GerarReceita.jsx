@@ -2,6 +2,16 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { api, removerToken } from "../services/api";
 
+// A API pode devolver ingredientes como texto ou como objeto { id, nome }.
+function nomeDe(item) {
+  return typeof item === "string" ? item : item.nome;
+}
+
+// A chave identifica o ingrediente (o id, quando existe), para que dois com o mesmo nome não marquem juntos.
+function chaveDe(item) {
+  return typeof item === "string" ? item : item.id ?? item.nome;
+}
+
 function GerarReceita() {
   const navigate = useNavigate();
   const [lista, setLista] = useState([]);
@@ -17,11 +27,11 @@ function GerarReceita() {
       .catch(() => setLista([]));
   }, []);
 
-  function alternar(nome) {
+  function alternar(chave) {
     setSelecionados((atual) =>
-      atual.includes(nome)
-        ? atual.filter((i) => i !== nome)
-        : [...atual, nome]
+      atual.includes(chave)
+        ? atual.filter((i) => i !== chave)
+        : [...atual, chave]
     );
   }
 
@@ -30,7 +40,10 @@ function GerarReceita() {
       .split(",")
       .map((i) => i.trim())
       .filter(Boolean);
-    const ingredientes = [...selecionados, ...digitados];
+    const marcados = lista
+      .filter((item) => selecionados.includes(chaveDe(item)))
+      .map(nomeDe);
+    const ingredientes = [...new Set([...marcados, ...digitados])];
 
     if (ingredientes.length === 0) {
       setErro("Escolha ou digite pelo menos um ingrediente.");
@@ -82,16 +95,15 @@ function GerarReceita() {
         <div>
           <p>Escolha os ingredientes:</p>
           {lista.map((item) => {
-            const nome = typeof item === "string" ? item : item.nome;
-            const chave = typeof item === "string" ? item : item.id ?? item.nome;
+            const chave = chaveDe(item);
             return (
-              <label key={chave} style={{ display: "block" }}>
+              <label key={chave}>
                 <input
                   type="checkbox"
-                  checked={selecionados.includes(nome)}
-                  onChange={() => alternar(nome)}
+                  checked={selecionados.includes(chave)}
+                  onChange={() => alternar(chave)}
                 />{" "}
-                {nome}
+                {nomeDe(item)}
               </label>
             );
           })}
