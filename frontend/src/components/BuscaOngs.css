@@ -35,6 +35,13 @@
     flex: 1;
   }
 
+  /* Na linha, o botão não pode ocupar a largura toda (regra "form button" do tema). */
+  .busca-ongs__form button {
+    width: auto;
+    min-width: 0;
+    flex-shrink: 0;
+  }
+
   .busca-ongs__item {
     flex-direction: row;
     justify-content: space-between;
