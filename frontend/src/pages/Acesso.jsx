@@ -1,4 +1,3 @@
-
 import LoginForm from "../components/LoginForm";
 import CadastroForm from "../components/CadastroForm";
 

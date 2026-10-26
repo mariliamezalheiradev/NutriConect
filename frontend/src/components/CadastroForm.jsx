@@ -69,15 +69,8 @@ function CadastroForm() {
       if (erro.status === 400) {
         setErros(erro.campos || {});
         setMensagem({ tipo: "erro", texto: "Confira os campos informados." });
-      } else if (erro.status === 404) {
-        setMensagem({ tipo: "erro", texto: "CEP não encontrado." });
-      } else if (erro.status === 503) {
-        setMensagem({
-          tipo: "erro",
-          texto: "Serviço indisponível. Tente novamente.",
-        });
       } else {
-        // 422 e demais erros: a mensagem vem do back-end (ex.: e-mail já cadastrado).
+        // 404 (CEP), 422 (ex.: e-mail já cadastrado), 503 e demais: a mensagem vem do back-end.
         setMensagem({
           tipo: "erro",
           texto: erro.message || "Erro ao criar a conta.",
@@ -127,6 +120,7 @@ function CadastroForm() {
         <label htmlFor="cad-nome">Nome</label>
         <input
           id="cad-nome"
+          maxLength={100}
           name="nome"
           autoComplete="name"
           value={form.nome}
@@ -162,6 +156,7 @@ function CadastroForm() {
         <label htmlFor="cad-telefone">Telefone</label>
         <input
           id="cad-telefone"
+          maxLength={20}
           name="telefone"
           type="tel"
           autoComplete="tel"
@@ -176,6 +171,7 @@ function CadastroForm() {
             <label htmlFor="cad-documento">Documento</label>
             <input
               id="cad-documento"
+              maxLength={18}
               name="documento"
               autoComplete="off"
               value={form.documento}
@@ -189,6 +185,7 @@ function CadastroForm() {
             <label htmlFor="cad-cnpj">CNPJ</label>
             <input
               id="cad-cnpj"
+              maxLength={18}
               name="cnpj"
               autoComplete="off"
               value={form.cnpj}
