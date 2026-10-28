@@ -6,20 +6,19 @@
   --fundo: #f7faf6;
   --branco: #ffffff;
   --borda: #c5d4c3;
-
+ 
   --erro: #b3261e;
   --erro-fundo: #fdecea;
   --sucesso: #1b5e20;
   --sucesso-fundo: #e6f4ea;
-
-
+ 
   --fonte: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --raio: 8px;
   --esp-1: 0.5rem;
   --esp-2: 1rem;
   --esp-3: 1.5rem;
   --esp-4: 2rem;
-
+ 
   font-family: var(--fonte);
   font-size: 16px;
   line-height: 1.5;
@@ -27,28 +26,87 @@
   background: var(--fundo);
   color-scheme: light;
 }
-
-* { box-sizing: border-box; }
-
+ 
+/* ---------- Base ---------- */
+ 
+* {
+  box-sizing: border-box;
+}
+ 
 body {
   margin: 0;
   min-height: 100vh;
 }
-
-h1, h2, h3 { color: var(--verde-900); line-height: 1.2; }
-
-
+ 
+h1,
+h2,
+h3 {
+  margin: 0 0 var(--esp-2);
+  color: var(--verde-900);
+  line-height: 1.2;
+}
+ 
+h1 {
+  margin: var(--esp-3) 0 var(--esp-2);
+  font-size: clamp(1.75rem, 6vw, 2.5rem);
+  text-align: center;
+}
+ 
+h2 {
+  font-size: clamp(1.35rem, 4.5vw, 1.75rem);
+}
+ 
+p {
+  margin: 0 0 var(--esp-2);
+}
+ 
+a {
+  color: var(--verde-700);
+  text-underline-offset: 3px;
+}
+ 
+a:hover {
+  color: var(--verde-800);
+}
+ 
+img {
+  max-width: 100%;
+  height: auto;
+}
+ 
+/* ---------- Layout ---------- */
+ 
 .container {
   width: 100%;
   max-width: 480px;
   margin: 0 auto;
-  padding: var(--esp-2);
+  padding: var(--esp-3) var(--esp-2);
 }
-
-label { display: block; margin-bottom: 0.25rem; font-weight: 600; }
-
-input, select, textarea {
+ 
+/* Formulário vira um cartão centralizado */
+form {
   width: 100%;
+  max-width: 480px;
+  margin: 0 auto var(--esp-2);
+  padding: var(--esp-3);
+  background: var(--branco);
+  border: 1px solid var(--borda);
+  border-radius: var(--raio);
+}
+ 
+/* ---------- Campos ---------- */
+ 
+label {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-weight: 600;
+}
+ 
+input:not([type="checkbox"]):not([type="radio"]),
+select,
+textarea {
+  width: 100%;
+  min-height: 44px;
   padding: 0.75rem;
   margin-bottom: var(--esp-2);
   font: inherit;
@@ -58,24 +116,76 @@ input, select, textarea {
   border-radius: var(--raio);
 }
 
+input[type="checkbox"],
+input[type="radio"] {
+  width: 1.25rem;
+  height: 1.25rem;
+  margin: 0 0.5rem 0 0;
+  vertical-align: middle;
+  accent-color: var(--verde-700);
+}
 
-button, .btn {
+textarea {
+  min-height: 6rem;
+  resize: vertical;
+}
+ 
+input::placeholder,
+textarea::placeholder {
+  color: #5f6f65;
+}
+ 
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--verde-700);
+}
+ 
+:focus-visible {
+  outline: 3px solid #1a73e8;
+  outline-offset: 2px;
+}
+ 
+/* ---------- Botões ---------- */
+ 
+button,
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   width: 100%;
   min-height: 44px;
   padding: 0.75rem 1rem;
   font: inherit;
   font-weight: 600;
   color: var(--branco);
+  text-decoration: none;
   background: var(--verde-700);
   border: 0;
   border-radius: var(--raio);
   cursor: pointer;
+  transition: background-color 0.15s ease;
 }
-button:hover, .btn:hover { background: var(--verde-800); }
-button:disabled { opacity: 0.6; cursor: not-allowed; }
-
-
-.lista { list-style: none; padding: 0; margin: 0; }
+ 
+button:hover,
+.btn:hover {
+  color: var(--branco);
+  background: var(--verde-800);
+}
+ 
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+ 
+/* ---------- Lista ---------- */
+ 
+.lista {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+ 
 .lista li {
   padding: var(--esp-2);
   margin-bottom: var(--esp-1);
@@ -83,42 +193,78 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
   border: 1px solid var(--borda);
   border-radius: var(--raio);
 }
-
-
-.mensagem-erro {
+ 
+/* ---------- Mensagens ---------- */
+ 
+.mensagem-erro,
+.mensagem-sucesso {
+  margin: 0 0 var(--esp-2);
   padding: 0.75rem;
+  border-left: 4px solid;
+  border-radius: var(--raio);
+}
+ 
+.mensagem-erro {
   color: var(--erro);
   background: var(--erro-fundo);
-  border-left: 4px solid var(--erro);
-  border-radius: var(--raio);
 }
+ 
 .mensagem-sucesso {
-  padding: 0.75rem;
   color: var(--sucesso);
   background: var(--sucesso-fundo);
-  border-left: 4px solid var(--sucesso);
-  border-radius: var(--raio);
 }
-
-
+ 
+/* ---------- Carregando ---------- */
+ 
 .carregando {
-  display: inline-block;
+  display: block;
   width: 1.25rem;
   height: 1.25rem;
+  margin: var(--esp-2) auto;
   border: 3px solid var(--verde-100);
   border-top-color: var(--verde-700);
   border-radius: 50%;
   animation: girar 0.8s linear infinite;
 }
-@keyframes girar { to { transform: rotate(360deg); } }
-
-:focus-visible {
-  outline: 3px solid #1a73e8;
-  outline-offset: 2px;
+ 
+@keyframes girar {
+  to {
+    transform: rotate(360deg);
+  }
 }
-input:focus, select:focus, textarea:focus { border-color: var(--verde-700); }
-
+ 
+@media (prefers-reduced-motion: reduce) {
+  .carregando {
+    animation-duration: 3s;
+  }
+ 
+  button,
+  .btn {
+    transition: none;
+  }
+}
+ 
+/* ---------- Computador ---------- */
+ 
 @media (min-width: 768px) {
-  .container { max-width: 720px; padding: var(--esp-4); }
-  button, .btn { width: auto; min-width: 160px; }
+  .container {
+    max-width: 720px;
+    padding: var(--esp-4);
+  }
+ 
+  form {
+    padding: var(--esp-4);
+  }
+ 
+  /* fora de formulário, o botão fica do tamanho do texto */
+  button,
+  .btn {
+    width: auto;
+    min-width: 160px;
+  }
+ 
+  form button {
+    width: 100%;
+  }
 }
+ 
