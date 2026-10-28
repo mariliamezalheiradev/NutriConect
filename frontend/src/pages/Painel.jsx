@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Navigate } from "react-router-dom";
 import { lerToken } from "../services/api";
+import GerarReceita from "../components/GerarReceita";
 import BuscaOngs from "../components/BuscaOngs";
 
 function Painel() {
@@ -13,6 +14,7 @@ function Painel() {
   return (
     <main className="container">
       <h1>Painel</h1>
+      <GerarReceita />
 
       <BuscaOngs onSelecionarOng={setOngSelecionada} />
 
