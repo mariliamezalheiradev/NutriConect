@@ -1,43 +1,11 @@
-/* Cores, campos, botões e lista vêm do tema em index.css; aqui fica só o layout da busca. */
-.busca-ongs {
-  margin-bottom: var(--esp-3);
-}
-
-/* Mantém o botão afastado da lista e alinhado com os campos, que têm margem embaixo no tema. */
-.busca-ongs__form button {
-  margin-bottom: var(--esp-2);
-}
-
+/* O visual (cartão, colunas, lista e botões) vem do index.css; aqui fica só o status de carregando. */
 .busca-ongs__status {
   display: flex;
   align-items: center;
   gap: var(--esp-1);
+  margin: 0 0 var(--esp-2);
 }
 
-.busca-ongs__item {
-  display: flex;
-  flex-direction: column;
-  gap: var(--esp-1);
-}
-
-.busca-ongs__endereco {
-  margin: 0.25rem 0;
-}
-
-@media (min-width: 768px) {
-  .busca-ongs__form {
-    display: flex;
-    gap: var(--esp-2);
-    align-items: flex-end;
-  }
-
-  .busca-ongs__form > div {
-    flex: 1;
-  }
-
-  .busca-ongs__item {
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-  }
+.busca-ongs__status .carregando {
+  margin: 0;
 }

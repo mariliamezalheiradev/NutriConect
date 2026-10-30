@@ -3,8 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { api, removerToken } from "../services/api";
 import "./BuscaOngs.css";
 
-// Baseado no componente da PR #59 (Heloiza), adaptado ao módulo da API e ao tema.
-export default function BuscaOngs({ onSelecionarOng }) {
+export default function BuscaOngs({ onSelecionarOng, ongSelecionada }) {
   const navigate = useNavigate();
   const [cep, setCep] = useState("");
   const [raioKm, setRaioKm] = useState(10);
@@ -41,77 +40,93 @@ export default function BuscaOngs({ onSelecionarOng }) {
     }
   }
 
-  return (
-    <section className="busca-ongs">
-      <h2>Buscar ONGs próximas</h2>
+  const textoVazio =
+    buscou && !erro
+      ? "Nenhuma ONG encontrada nesse raio."
+      : "As ONGs próximas aparecem aqui, depois da busca.";
 
-      <form className="busca-ongs__form" onSubmit={buscar}>
-        <div>
+  return (
+    <div className="cartao">
+      <div className="col-form">
+        <h2>ONGs perto de você</h2>
+
+        <form onSubmit={buscar}>
           <label htmlFor="cep">CEP</label>
           <input
             id="cep"
             type="text"
             inputMode="numeric"
             placeholder="00000-000"
+            maxLength={9}
             value={cep}
             onChange={(e) => setCep(e.target.value)}
             pattern="\d{5}-?\d{3}"
             title="Digite os 8 números do CEP"
             required
           />
-        </div>
 
-        <div>
-          <label htmlFor="raio">Raio (km)</label>
+          <label htmlFor="raio">
+            Raio de busca: <span className="saida">{raioKm} km</span>
+          </label>
           <input
             id="raio"
-            type="number"
+            type="range"
             min="1"
             max="100"
             value={raioKm}
             onChange={(e) => setRaioKm(e.target.value)}
-            required
           />
-        </div>
 
-        <button type="submit" disabled={carregando}>
-          {carregando ? "Buscando..." : "Buscar"}
-        </button>
-      </form>
+          <button className="btn full" type="submit" disabled={carregando} style={{ marginTop: 14 }}>
+            {carregando ? "Buscando..." : "Buscar ONGs"}
+          </button>
+        </form>
+      </div>
 
-      {carregando && (
-        <p className="busca-ongs__status">
-          <span className="carregando" aria-hidden="true" /> Carregando ONGs próximas...
-        </p>
-      )}
+      <div className="col-saida">
+        <h3 className="col-titulo">Resultado</h3>
 
-      {erro && (
-        <p className="mensagem-erro" role="alert">
-          {erro}
-        </p>
-      )}
+        {carregando && (
+          <p className="busca-ongs__status">
+            <span className="carregando" aria-hidden="true" /> Carregando ONGs próximas...
+          </p>
+        )}
 
-      {!carregando && buscou && !erro && ongs.length === 0 && (
-        <p>Nenhuma ONG encontrada nesse raio.</p>
-      )}
+        {erro && (
+          <p className="mensagem-erro" role="alert">
+            {erro}
+          </p>
+        )}
 
-      {ongs.length > 0 && (
-        <ul className="lista">
-          {ongs.map((ong) => (
-            <li key={ong.id} className="busca-ongs__item">
-              <div>
-                <strong>{ong.nome}</strong>
-                <p className="busca-ongs__endereco">{ong.endereco}</p>
-                <small>Distância: {ong.distanciaKm.toFixed(1)} km</small>
-              </div>
+        {!carregando && (
+          <ul className="lista" aria-live="polite" data-vazio={textoVazio}>
+            {ongs.map((ong, i) => {
+              const escolhida = ongSelecionada?.id === ong.id;
 
-              <button type="button" onClick={() => onSelecionarOng?.(ong)}>
-                Escolher
-              </button>
-            </li>
-          ))}
-        </ul>
-      )}
-    </section>
+              return (
+                <li key={ong.id} className="item" style={{ animationDelay: `${i * 60}ms` }}>
+                  <div>
+                    <b>
+                      {i + 1} · {ong.nome}
+                    </b>
+                    <small>
+                      {ong.distanciaKm.toFixed(1).replace(".", ",")} km · {ong.endereco}
+                    </small>
+                  </div>
+
+                  <button
+                    type="button"
+                    className={"chip" + (escolhida ? " on" : "")}
+                    onClick={() => onSelecionarOng?.(ong)}
+                  >
+                    {escolhida ? "Escolhida" : "Escolher"}
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        )}
+      </div>
+    </div>
   );
 }

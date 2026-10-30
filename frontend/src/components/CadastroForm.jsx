@@ -13,8 +13,8 @@ const FORM_VAZIO = {
   cep: "",
 };
 
-function CadastroForm() {
-  const [tipo, setTipo] = useState("doador");
+function CadastroForm({ tipoInicial = "doador" }) {
+  const [tipo, setTipo] = useState(tipoInicial);
   const [form, setForm] = useState(FORM_VAZIO);
   const [mensagem, setMensagem] = useState(null);
   const [erros, setErros] = useState({});
@@ -94,29 +94,33 @@ function CadastroForm() {
 
   return (
     <section>
-      <h2>Criar conta</h2>
-
-      <div className="cadastro__tipos" role="group" aria-label="Tipo de cadastro">
-        <button
-          type="button"
-          aria-pressed={tipo === "doador"}
-          disabled={carregando}
-          onClick={() => escolherTipo("doador")}
-        >
-          Sou doador
-        </button>
-
-        <button
-          type="button"
-          aria-pressed={tipo === "ong"}
-          disabled={carregando}
-          onClick={() => escolherTipo("ong")}
-        >
-          Sou ONG
-        </button>
-      </div>
-
       <form onSubmit={cadastrar}>
+        <div className="segmento" role="radiogroup" aria-label="Tipo de cadastro">
+          <label>
+            <input
+              type="radio"
+              name="tipo"
+              value="doador"
+              checked={tipo === "doador"}
+              disabled={carregando}
+              onChange={() => escolherTipo("doador")}
+            />
+            Sou doador
+          </label>
+
+          <label>
+            <input
+              type="radio"
+              name="tipo"
+              value="ong"
+              checked={tipo === "ong"}
+              disabled={carregando}
+              onChange={() => escolherTipo("ong")}
+            />
+            Sou ONG
+          </label>
+        </div>
+
         <label htmlFor="cad-nome">Nome</label>
         <input
           id="cad-nome"
