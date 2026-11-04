@@ -4,6 +4,7 @@ import { lerToken, removerToken } from "../services/api";
 import Topo from "../components/Topo";
 import Icone from "../components/Icone";
 import BuscaOngs from "../components/BuscaOngs";
+import GerarReceita from "../components/GerarReceita";
 
 const SECOES = [
   { id: "ongs", titulo: "ONGs perto", rotulo: "ONGs", icone: "pino", texto: "Encontre quem recebe doações na sua região" },
@@ -86,8 +87,7 @@ function Painel() {
             {secao === "receita" && (
               <div className="secao">
                 <div className="cartao">
-                  <h2>Gerar receita</h2>
-                  <div className="vazio-card">Esta tela ainda está sendo feita pelo grupo.</div>
+                  <GerarReceita />
                 </div>
               </div>
             )}
