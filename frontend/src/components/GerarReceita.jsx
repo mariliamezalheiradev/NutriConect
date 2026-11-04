@@ -119,17 +119,17 @@ function GerarReceita() {
         />
       </label>
 
-      <button onClick={gerar} disabled={carregando}>
+      <button className="btn" type="button" onClick={gerar} disabled={carregando}>
         Gerar receita
       </button>
 
       {carregando && <p role="status">Gerando receita...</p>}
       {erro && (
-        <p className="mensagem-erro" role="alert">
+        <p className="erro" role="alert">
           {erro}
         </p>
       )}
-      {receita && <p style={{ whiteSpace: "pre-wrap" }}>{receita}</p>}
+      {receita && <p className="receita" style={{ whiteSpace: "pre-wrap" }}>{receita}</p>}
     </section>
   );
 }
