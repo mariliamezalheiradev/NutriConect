@@ -133,12 +133,12 @@ export default function NovaDoacao({ receptorId, onSucesso }) {
       <h2>Registrar doação</h2>
 
       {mensagem && (
-        <p className="mensagem-sucesso" role="status">
+        <p className="nova-doacao__sucesso" role="status">
           {mensagem}
         </p>
       )}
       {erro && (
-        <p className="mensagem-erro" role="alert">
+        <p className="erro" role="alert">
           {erro}
         </p>
       )}
@@ -181,7 +181,7 @@ export default function NovaDoacao({ receptorId, onSucesso }) {
           onChange={(e) => setQuantidade(e.target.value)}
         />
 
-        <button type="submit">Adicionar item</button>
+        <button className="btn" type="submit">Adicionar item</button>
       </form>
 
       {itens.length > 0 && (
@@ -194,6 +194,7 @@ export default function NovaDoacao({ receptorId, onSucesso }) {
                   {item.nome}: {item.quantidade} {item.unidade}
                 </span>
                 <button
+                  className="btn sm line"
                   type="button"
                   onClick={() => removerItem(item.ingredienteId)}
                 >
@@ -203,7 +204,7 @@ export default function NovaDoacao({ receptorId, onSucesso }) {
             ))}
           </ul>
 
-          <button onClick={registrarDoacao} disabled={carregando}>
+          <button className="btn" type="button" onClick={registrarDoacao} disabled={carregando}>
             {carregando ? "Enviando..." : "Concluir e registrar doação"}
           </button>
         </div>

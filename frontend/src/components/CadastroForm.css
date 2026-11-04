@@ -1,0 +1,28 @@
+.cadastro__tipos {
+  display: flex;
+  gap: var(--esp-1);
+  margin-bottom: var(--esp-2);
+}
+
+.cadastro__tipos button {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Botão do tipo que não está escolhido: contorno em vez de preenchido. */
+.cadastro__tipos button[aria-pressed="false"] {
+  color: var(--verde-700);
+  background: var(--branco);
+  border: 2px solid var(--verde-700);
+}
+
+.cadastro__tipos button[aria-pressed="false"]:hover {
+  color: var(--verde-800);
+  background: var(--verde-100);
+}
+
+.cadastro__erro-campo {
+  display: block;
+  margin: calc(var(--esp-1) * -1) 0 var(--esp-2);
+  color: var(--erro);
+}
