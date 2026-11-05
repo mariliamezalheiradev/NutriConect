@@ -4,6 +4,7 @@ import { lerToken, removerToken } from "../services/api";
 import Topo from "../components/Topo";
 import Icone from "../components/Icone";
 import BuscaOngs from "../components/BuscaOngs";
+import NovaDoacao from "../components/NovaDoacao";
 import GerarReceita from "../components/GerarReceita";
 
 const SECOES = [
@@ -78,8 +79,7 @@ function Painel() {
             {secao === "doar" && (
               <div className="secao">
                 <div className="cartao">
-                  <h2>Nova doação</h2>
-                  <div className="vazio-card">Esta tela ainda está sendo feita pelo grupo.</div>
+                  <NovaDoacao receptorId={ongSelecionada?.id} />
                 </div>
               </div>
             )}

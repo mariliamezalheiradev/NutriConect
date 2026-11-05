@@ -1,0 +1,25 @@
+.nova-doacao {
+  margin-top: 24px;
+}
+
+.nova-doacao__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.nova-doacao__item button {
+  width: auto;
+  min-width: 0;
+  flex-shrink: 0;
+}
+
+.nova-doacao__sucesso {
+  background: var(--brand-soft);
+  color: var(--brand);
+  border-radius: 10px;
+  padding: 10px 12px;
+  margin-top: 14px;
+  font-weight: 500;
+}
