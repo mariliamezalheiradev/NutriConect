@@ -133,7 +133,7 @@ export default function NovaDoacao({ receptorId, onSucesso }) {
       <h2>Registrar doação</h2>
 
       {mensagem && (
-        <p className="nova-doacao__sucesso" role="status">
+        <p className="mensagem-sucesso" role="status">
           {mensagem}
         </p>
       )}
