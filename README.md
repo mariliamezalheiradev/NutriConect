@@ -2,7 +2,15 @@
 
 Sistema de gestão desenvolvido para apoiar Organizações Não Governamentais (ONGs) no processo de captação, organização e distribuição de alimentos doados por comércios locais. O sistema busca reduzir o desperdício alimentar e fortalecer a capacidade operacional de instituições que atuam diretamente no combate à fome.
 
+## 🎥 Vídeo explicativo (Entrega 4)
+
+> **▶️ [Assista ao vídeo do NutriConect](COLE_AQUI_O_LINK_DO_VIDEO)**
+>
+> Em 3 a 5 minutos, a equipe mostra as telas do aplicativo funcionando, apresenta o código do front-end e explica como ele se comunica com a API (back-end).
+
 ## Índice
+
+* [Vídeo explicativo (Entrega 4)](#-vídeo-explicativo-entrega-4)
 
 * [Sobre o Projeto](#sobre-o-projeto)
 * [Contextualização: por que o ODS 2](#contextualização-por-que-o-ods-2-fome-zero-e-agricultura-sustentável)
@@ -155,13 +163,32 @@ As escolhas arquiteturais foram feitas pensando no crescimento sustentável da p
 * **Geração de receitas com IA (Google Gemini)**: a partir de uma lista de ingredientes, devolve uma receita de aproveitamento total, alinhada ao ODS 2. Inclui tempo limite e novas tentativas automáticas quando o serviço está sobrecarregado.
 * **Validação de dados e respostas de erro padronizadas** em JSON (`400`, `404`, `405`, `422`, `500` e `503`), sem expor detalhes internos.
 * **Modelo de dados relacional alinhado ao diagrama do grupo**: usuário, doador, receptor, doação, item da doação, status da doação, ingrediente, estoque, receita e receita–ingrediente (10 tabelas).
+* **Front-end em React (2 telas)**, que consome a API do back-end:
+  * **Acesso** (`/`): apresentação do projeto, com login e cadastro de doador ou ONG.
+  * **Painel** (`/painel`, só para quem fez login): buscar ONGs próximas pelo CEP, registrar uma nova doação e gerar uma receita com IA.
+
+### Como o front-end se comunica com a API
+Todas as chamadas passam pela função `api()` em [`frontend/src/services/api.js`](frontend/src/services/api.js), que usa o `fetch` do navegador:
+
+1. Monta a URL a partir de `VITE_API_URL` (padrão `http://localhost:8080`) e envia o corpo em JSON.
+2. Depois do login, o token JWT devolvido pela API fica no `localStorage` e vai no cabeçalho `Authorization: Bearer <token>` de cada requisição.
+3. Se a API responde com erro, a mensagem padronizada do back-end (campo `mensagem`) é mostrada na tela.
+
+| Tela / componente | Método | Endereço |
+|---|---|---|
+| Login (`LoginForm`) | `POST` | `/api/auth/login` |
+| Cadastro (`CadastroForm`) | `POST` | `/api/doadores` ou `/api/receptores` |
+| ONGs perto (`BuscaOngs`) | `GET` | `/api/receptores/proximos` |
+| Nova doação (`NovaDoacao`) | `GET` / `POST` | `/api/ingredientes` / `/api/doacoes` |
+| Gerar receita (`GerarReceita`) | `GET` / `POST` | `/api/ingredientes` / `/api/receitas/gerar` |
+
+O back-end libera o endereço do front-end local por CORS (veja [Segurança](#segurança)), e a chave do Gemini nunca chega ao navegador: o front-end só conversa com a nossa API.
 
 ### Planejadas
 * Gestão de estoque com data de validade.
 * Listagem, acompanhamento e atualização do status das doações.
 * Sugerir a ONG mais próxima já no registro da doação (hoje a busca por proximidade é uma consulta separada).
 * Salvar no banco as receitas geradas pela IA.
-* Interface (frontend) para doadores e ONGs.
 
 ## Tecnologias Utilizadas
 
@@ -173,7 +200,8 @@ As escolhas arquiteturais foram feitas pensando no crescimento sustentável da p
 | Persistência | JPA / Hibernate |
 | Segurança | Spring Security (filtros, papéis), tokens JWT assinados com HS256 e BCrypt para senhas |
 | Inteligência Artificial | Google Gemini API, consumida apenas pelo backend |
-| Build | Maven |
+| Front-end | React 19, React Router e Vite |
+| Build | Maven (back-end) e npm (front-end) |
 | Testes | JUnit 5, Mockito e Spring Test (`MockRestServiceServer`) |
 | Arquitetura e modelagem | Modelo C4 e diagramas UML (veja as seções acima) |
 
@@ -184,6 +212,7 @@ As escolhas arquiteturais foram feitas pensando no crescimento sustentável da p
 * **PostgreSQL 15 ou superior** (testado com a 17)
 * **Maven 3.9+**, ou o IntelliJ IDEA, que já traz o Maven embutido
 * Uma **chave da API do Google Gemini** (criada no [Google AI Studio](https://aistudio.google.com/apikey)), necessária só para gerar receitas
+* **Node.js LTS** (já traz o npm), para rodar o front-end
 
 ### 1. Clonar o repositório
 ```bash
@@ -249,7 +278,19 @@ mvn spring-boot:run
 
 A aplicação sobe em `http://localhost:8080`. O console termina com `Started NutriConectApplication`.
 
-### 5. Executar os testes
+### 5. Executar o front-end
+Com o back-end rodando, abra outro terminal:
+```bash
+cd frontend
+npm install
+cp .env.example .env
+npm run dev
+```
+No Windows (cmd), use `copy .env.example .env` no lugar do `cp`. O `.env` define `VITE_API_URL`, o endereço da API (padrão `http://localhost:8080`).
+
+O aplicativo abre em `http://localhost:5173`. Cadastre-se como doador, faça login e use o Painel.
+
+### 6. Executar os testes
 ```bash
 mvn clean test
 ```
