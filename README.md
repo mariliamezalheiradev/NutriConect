@@ -429,3 +429,27 @@ Para permitir a comunicação segura entre o front-end e a API, as seguintes ori
 **Cabeçalhos permitidos:** `Authorization`.
 
 A configuração de CORS é integrada ao Spring Security (junto com a autenticação JWT), garantindo que as requisições `OPTIONS` (preflight) não sejam bloqueadas, permitindo o correto funcionamento das chamadas do front-end.
+
+
+## NutriConect como SaaS
+**O que é SaaS?** SaaS (Software como Serviço) significa que o usuário usa o sistema pela internet, sem instalar servidor nem banco de dados no próprio computador. Basta abrir o navegador e acessar.
+
+**Onde cada parte roda:**
+
+- **Front-end:** no aparelho do usuário (navegador).
+- **API (back-end):** no Render.
+- **Banco de dados:** no Supabase.
+- **Inteligência artificial:** no Google Gemini.
+
+**Por que isso ajuda uma ONG pequena:** ela não precisa de computador servidor, de técnico nem de manutenção. A IA fica disponível sem a ONG instalar nada.
+
+**O que muda para o projeto:** quando atualizamos a API, a atualização vale para todos os usuários ao mesmo tempo.
+
+### Fluxo
+
+``` 
+App (navegador) -> API (Render) -> Banco (Supabase)
+                        |
+                        v
+                  Google Gemini 
+```
