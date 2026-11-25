@@ -428,4 +428,36 @@ Para permitir a comunicação segura entre o front-end e a API, as seguintes ori
 **Métodos permitidos:** `GET`, `POST`, `PUT`, `DELETE`, `OPTIONS`.
 **Cabeçalhos permitidos:** `Authorization`.
 
-A configuração de CORS é integrada ao Spring Security (junto com a autenticação JWT), garantindo que as requisições `OPTIONS` (preflight) não sejam bloqueadas, permitindo o correto funcionamento das chamadas do front-end.
+A configuração de CORS é integrada ao Spring Security (junto com a autenticação JWT), garantindo que as requisições `OPTIONS` (preflight) não sejam bloqueadas, permitindo o correto funcionamento das chamadas do front-end.## Deploy na nuvem
+
+A API roda no Render e o banco PostgreSQL no Supabase. O Render precisa das variáveis abaixo, cadastradas no painel do serviço (os valores não ficam neste repositório).
+
+| Variável | Para que serve | De onde vem o valor |
+|---|---|---|
+| `DB_URL` | Endereço JDBC de conexão com o PostgreSQL | Supabase, conexão "Session pooler", no formato `jdbc:postgresql://...` |
+| `DB_USER` | Usuário do banco de dados | Supabase, dados da conexão (Session pooler) |
+| `DB_PASSWORD` | Senha do banco de dados | Definida ao criar o projeto no Supabase |
+| `JWT_SECRET` | Chave que assina e valida os tokens JWT de login | Gerada só para a nuvem (diferente da usada localmente) |
+| `GEMINI_API_KEY` | Chave de acesso à API do Google Gemini (receitas com IA) | Painel do Google AI Studio |
+| `PORT` | Porta em que a API recebe requisições | Definida automaticamente pelo Render |
+
+### Por que os segredos ficam no painel do Render
+
+Senhas e chaves dentro do código vão para o GitHub, e qualquer pessoa com acesso ao repositório (ou ao histórico dele) poderia usá-las. No painel do Render, os valores ficam guardados no ambiente do servidor e são entregues à aplicação só na hora de rodar, como variáveis de ambiente. Assim, se um segredo vazar ou precisar ser trocado, basta atualizar no painel, sem mexer no código.
+
+## Deploy na nuvem
+
+A API roda no Render e o banco PostgreSQL no Supabase. O Render precisa das variáveis abaixo, cadastradas no painel do serviço (os valores não ficam neste repositório).
+
+| Variável | Para que serve | De onde vem o valor |
+|---|---|---|
+| `DB_URL` | Endereço JDBC de conexão com o PostgreSQL | Supabase, conexão "Session pooler", no formato `jdbc:postgresql://...` |
+| `DB_USER` | Usuário do banco de dados | Supabase, dados da conexão (Session pooler) |
+| `DB_PASSWORD` | Senha do banco de dados | Definida ao criar o projeto no Supabase |
+| `JWT_SECRET` | Chave que assina e valida os tokens JWT de login | Gerada só para a nuvem (diferente da usada localmente) |
+| `GEMINI_API_KEY` | Chave de acesso à API do Google Gemini (receitas com IA) | Painel do Google AI Studio |
+| `PORT` | Porta em que a API recebe requisições | Definida automaticamente pelo Render |
+
+### Por que os segredos ficam no painel do Render
+
+Senhas e chaves dentro do código vão para o GitHub, e qualquer pessoa com acesso ao repositório (ou ao histórico dele) poderia usá-las. No painel do Render, os valores ficam guardados no ambiente do servidor e são entregues à aplicação só na hora de rodar, como variáveis de ambiente. Assim, se um segredo vazar ou precisar ser trocado, basta atualizar no painel, sem mexer no código.
