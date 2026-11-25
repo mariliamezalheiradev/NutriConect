@@ -23,6 +23,7 @@ Sistema de gestão desenvolvido para apoiar Organizações Não Governamentais (
 * [Funcionalidades](#funcionalidades)
 * [Tecnologias Utilizadas](#tecnologias-utilizadas)
 * [Instalação](#instalação)
+* [Deploy na nuvem](#deploy-na-nuvem)
 * [Como Usar](#como-usar)
 * [Contribuição](#contribuição)
 * [Segurança](#segurança)
@@ -295,6 +296,28 @@ O aplicativo abre em `http://localhost:5173`. Cadastre-se como doador, faça log
 mvn clean test
 ```
 Os testes usam um banco H2 em memória e não precisam de PostgreSQL nem de chave do Gemini.
+
+## Deploy na nuvem
+
+A API roda no **Render** (a partir do `Dockerfile` da raiz do projeto) e o banco PostgreSQL roda no **Supabase**. Todas as configurações e segredos ficam nas **variáveis de ambiente** do painel do Render, e **nenhum valor real** aparece neste repositório.
+
+| Variável | Para que serve | De onde vem o valor |
+|---|---|---|
+| `DB_URL` | Endereço do banco, no formato `jdbc:postgresql://<host-do-pooler>:5432/postgres?sslmode=require` | Supabase: botão **Connect** → **Connection string** → **JDBC** → **Session pooler** |
+| `DB_USER` | Usuário do banco (no pooler tem a forma `postgres.<código-do-projeto>`) | Supabase, na mesma tela da `DB_URL` |
+| `DB_PASSWORD` | Senha do banco | A senha definida ao criar o projeto no Supabase |
+| `JWT_SECRET` | Segredo que assina os tokens de login (mínimo de 32 caracteres) | Gerado **só para a nuvem**, diferente do usado no computador (veja "Gerando o `JWT_SECRET`" na seção de instalação) |
+| `GEMINI_API_KEY` | Chave da API do Gemini, usada para gerar receitas | Google AI Studio |
+| `PORT` | Porta em que a API escuta | O próprio Render define esta variável; não é preciso cadastrá-la |
+
+As variáveis opcionais (`GEMINI_MODEL`, `JWT_EXPIRACAO_MINUTOS` e `GEOCODIFICACAO_URL`) estão descritas na seção de instalação.
+
+**Por que os segredos ficam no painel do Render e não no código?** Tudo o que vai para o GitHub fica visível no histórico do repositório, e uma senha ou chave publicada ali precisa ser considerada vazada. Guardando os valores só no painel do Render, o código pode ser público e os segredos podem ser trocados sem alterar o projeto, bastando editar a variável e reiniciar o serviço.
+
+**Cuidados com o plano gratuito**
+* Use o **Session pooler** do Supabase na `DB_URL`, e não a conexão direta: a conexão direta só funciona por IPv6, que o Render gratuito não tem.
+* No Render gratuito, a API **dorme** depois de 15 minutos sem uso e a primeira requisição demora cerca de 50 segundos. Abra a URL da API alguns minutos antes de uma demonstração.
+* O Supabase gratuito **pausa** o projeto depois de 7 dias sem uso. Para reativar, entre no painel e clique em **Restore**.
 
 ## Como Usar
 
