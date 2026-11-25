@@ -20,6 +20,7 @@ Sistema de gestão desenvolvido para apoiar Organizações Não Governamentais (
 * [Inteligência Artificial no Aplicativo](#inteligência-artificial-iagenerativareceitas)
 * [Modelagem do Sistema (UML)](#modelagem-do-sistema-uml)
 * [Arquitetura do Sistema (Modelo C4)](#arquitetura-do-sistema-modelo-c4)
+* [NutriConect como SaaS](#nutriconect-como-saas)
 * [Funcionalidades](#funcionalidades)
 * [Tecnologias Utilizadas](#tecnologias-utilizadas)
 * [Instalação](#instalação)
@@ -150,6 +151,30 @@ As escolhas arquiteturais foram feitas pensando no crescimento sustentável da p
 * **Consumo Isolado da Google Gemini API (Inteligência Artificial):** A comunicação com o Google AI Studio para a nossa geração de receitas focada no ODS 2 é feita exclusivamente pelo nosso servidor Backend (Java). Esse isolamento protege nossas chaves de API contra interceptação no lado do cliente e centraliza as regras de negócio. O aplicativo apenas interage com a nossa API, que por sua vez consome a IA e devolve o resultado seguro.
 * **Banco de Dados Relacional (PostgreSQL/MySQL):** Garante a integridade referencial complexa necessária para vincular de forma consistente os Doadores, ONGs, Estoques e Históricos de Transações.
 * **Integração com API de Geocodificação:** Vital para o nosso algoritmo de Matching Geográfico por Raio. O backend converte os CEPs cadastrados em coordenadas (Latitude e Longitude), permitindo que o sistema calcule a distância e sugira as ONGs mais próximas de forma eficiente.
+
+## NutriConect como SaaS
+
+**O que é SaaS?** SaaS (Software como Serviço) significa que o usuário usa o sistema pela internet, sem instalar servidor nem banco de dados no próprio computador. No NutriConect, a API e o banco de dados ficam hospedados na nuvem, e o usuário só usa o front-end.
+
+**Onde cada parte roda:**
+
+- **Front-end:** no aparelho do usuário (navegador).
+- **API (back-end):** no Render.
+- **Banco de dados (PostgreSQL):** no Supabase.
+- **Inteligência artificial:** no Google Gemini.
+
+**Por que isso ajuda uma ONG pequena:** ela não precisa de computador servidor, de técnico nem de manutenção. A IA fica disponível sem a ONG instalar nada.
+
+**O que muda para o projeto:** quando atualizamos a API, a atualização vale para todos os usuários ao mesmo tempo.
+
+### Fluxo
+
+```text
+App (navegador) -> API (Render) -> Banco (Supabase)
+                        |
+                        v
+                  Google Gemini
+```
 
 ## Funcionalidades
 
